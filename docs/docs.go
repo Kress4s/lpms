@@ -128,6 +128,90 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/reserve/projects": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取储备库项目列表",
+                "tags": [
+                    "储备库 - 项目"
+                ],
+                "summary": "获取储备库项目列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "请求页",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页大小",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "description": "ReserveFilterParam",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.ReserveFilterParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询储备库项目列表成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/vo.DataPagination"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/vo.ListReserveProResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "用户登录",
@@ -182,6 +266,18 @@ const docTemplate_swagger = `{
         }
     },
     "definitions": {
+        "vo.DataPagination": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "数据"
+                },
+                "pagination": {
+                    "description": "分页信息",
+                    "$ref": "#/definitions/vo.Pagination"
+                }
+            }
+        },
         "vo.Error": {
             "type": "object",
             "properties": {
@@ -202,6 +298,10 @@ const docTemplate_swagger = `{
         "vo.InvestDetail": {
             "type": "object",
             "properties": {
+                "total": {
+                    "description": "资金类别 总投资",
+                    "type": "number"
+                },
                 "value": {
                     "description": "投资数额",
                     "type": "number"
@@ -228,7 +328,33 @@ const docTemplate_swagger = `{
                 },
                 "type": {
                     "description": "投资类型",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.ListReserveProResp": {
+            "type": "object",
+            "properties": {
+                "construct_subject": {
                     "type": "string"
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "project_type": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         },
@@ -259,6 +385,56 @@ const docTemplate_swagger = `{
                 "token_type": {
                     "description": "认证类型",
                     "type": "string"
+                }
+            }
+        },
+        "vo.Pagination": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "请求页",
+                    "type": "integer"
+                },
+                "page_size": {
+                    "description": "页大小",
+                    "type": "integer"
+                },
+                "total_count": {
+                    "description": "数据总条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.ReserveFilterParam": {
+            "type": "object",
+            "properties": {
+                "construct_subject": {
+                    "description": "建设主体",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "项目级别",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "项目名称",
+                    "type": "string"
+                },
+                "period": {
+                    "description": "计划周期",
+                    "type": "integer"
+                },
+                "plan_begin": {
+                    "description": "计划开始时间",
+                    "type": "string"
+                },
+                "project_type": {
+                    "description": "项目类型",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
                 }
             }
         },
@@ -306,7 +482,7 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "investment_detail": {
-                    "description": "资金详情 eg:\n\"[{\\\"type\\\":0, \\\"total\\\":100, \\\"detail\\\":[{\\\"year\\\": \\\"2022\\\",\\\"value\\\":20}, {\\\"year\\\": \\\"2023\\\",\\\"value\\\":30}, ...]}, {}...]\"\ntype说明： 0:区财政;1:自筹;2:其他",
+                    "description": "资金详情 eg:\n\"[{\\\"type\\\":0, \\\"total\\\":100, \\\"detail\\\":[{\\\"total\\\": 100,\\\"year\\\": \\\"2022\\\",\\\"value\\\":20}, {\\\"total\\\": 100,\\\"year\\\": \\\"2023\\\",\\\"value\\\":30}, ...]}, {}...]\"\ntype说明： 0:区财政;1:自筹;2:其他",
                     "type": "string"
                 },
                 "is_land_use": {
@@ -336,6 +512,10 @@ const docTemplate_swagger = `{
                 "no_conform_use_plan": {
                     "description": "不符合土地利用规划面积",
                     "type": "number"
+                },
+                "period": {
+                    "description": "建设周期",
+                    "type": "integer"
                 },
                 "phone": {
                     "description": "联系人手机号",
@@ -431,8 +611,11 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "investment_detail": {
-                    "description": "资金详情 eg:\n\"[{'type':0, 'total':100, 'detail':[{'year': '2022','value':20}, {'year': '2023','value':30}, ...]}, {}...]\"\ntype说明： 0:区财政;1:自筹;2:其他",
-                    "$ref": "#/definitions/vo.InvestmentDetail"
+                    "description": "资金详情",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.InvestmentDetail"
+                    }
                 },
                 "is_land_use": {
                     "description": "是否有用地情况",
@@ -461,6 +644,10 @@ const docTemplate_swagger = `{
                 "no_conform_use_plan": {
                     "description": "不符合土地利用规划面积",
                     "type": "number"
+                },
+                "period": {
+                    "description": "建设周期",
+                    "type": "integer"
                 },
                 "phone": {
                     "description": "联系人手机号",
