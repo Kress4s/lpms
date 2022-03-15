@@ -74,5 +74,5 @@ func (rh *ReserveHandler) Get(ctx iris.Context) mvc.Result {
 // BeforeActivation 初始化路由
 func (rh *ReserveHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPost, "/project", "Create")
-	b.Handle(iris.MethodGet, "/project", "Get")
+	b.Handle(iris.MethodGet, "/project/{id:string}", "Get")
 }

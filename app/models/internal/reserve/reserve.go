@@ -43,6 +43,10 @@ type ReservePro struct {
 	Status                  int             `gorm:"column:status;type:integer;comment:项目状态 0:草稿,1:已入库,2:前期计划;3:已发文"`
 }
 
+type InvestDetail struct {
+	Info json.RawMessage `gorm:"column:info"`
+}
+
 func (b *ReservePro) BeforeCreate(tx *gorm.DB) error {
 	now := time.Now()
 	b.CreateAt = now
@@ -58,35 +62,3 @@ func (b *ReservePro) BeforeUpdate(tx *gorm.DB) error {
 func (ReservePro) TableName() string {
 	return tables.Reserve
 }
-
-/*
-[{
-"type":0,
-"total":100,
-"detail":[
-{
-"time": "2022",
-"value":20
-},
-{
-"time":"2023",
-"value":80
-}
-]
-},
-{
-"type":1,
-"total":100,
-"detail":[
-{
-"time": "2022",
-"value":20
-},
-{
-"time":"2023",
-"value":80
-}
-]
-}
-]
-*/

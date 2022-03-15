@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"lpms/app/models"
+	"lpms/app/models/tables"
 	"lpms/app/response"
 	"lpms/exception"
 	"sync"
@@ -26,6 +27,7 @@ func GetReserveRepo() ReserveRepo {
 type ReserveRepo interface {
 	Create(db *gorm.DB, reserve *models.ReservePro) exception.Exception
 	Get(db *gorm.DB, id int64) (*models.ReservePro, exception.Exception)
+	GetInvestDetail(db *gorm.DB, id int64) ([]models.InvestDetail, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	Delete(db *gorm.DB, id int64) exception.Exception
 }
@@ -44,6 +46,15 @@ func (rri *ReserveRepoImpl) Get(db *gorm.DB, id int64) (*models.ReservePro, exce
 		return nil, exception.Wrap(response.ExceptionDatabase, res.Error)
 	}
 	return &reserve, nil
+}
+
+func (rri *ReserveRepoImpl) GetInvestDetail(db *gorm.DB, id int64) ([]models.InvestDetail, exception.Exception) {
+	info := make([]models.InvestDetail, 0)
+	tx := db.Table(tables.Reserve).Select("json_array_elements (investment_detail::json) as info").Where("id = ?", id).Scan(&info)
+	if tx.Error != nil {
+		return nil, exception.Wrap(response.ExceptionDatabase, tx.Error)
+	}
+	return info, nil
 }
 
 func (rri *ReserveRepoImpl) Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception {

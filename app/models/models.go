@@ -7,7 +7,8 @@ import (
 )
 
 type (
-	Base       = common.Base
-	User       = user.User
-	ReservePro = reserve.ReservePro
+	Base         = common.Base
+	User         = user.User
+	ReservePro   = reserve.ReservePro
+	InvestDetail = reserve.InvestDetail
 )

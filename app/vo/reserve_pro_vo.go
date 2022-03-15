@@ -89,7 +89,7 @@ type ReserveReq struct {
 	// 征迁/土地费用
 	MoveLandComsumption *float64 `json:"move_land_comsumption"`
 	// 资金详情 eg:
-	// "[{\"type\":0, \"total\":100, \"detail\":[{\"year\": \"2022\",\"value\":20}, {\"year\": \"2023\",\"value\":30}, ...]}, {}...]"
+	// "[{\"type\":0, \"total\":100, \"detail\":[{\"total\": 100,\"year\": \"2022\",\"value\":20}, {\"total\": 100,\"year\": \"2023\",\"value\":30}, ...]}, {}...]"
 	// type说明： 0:区财政;1:自筹;2:其他
 	InvestmentDetail string `json:"investment_detail"`
 	// 前期工作联系人
@@ -188,10 +188,8 @@ type ReserveResp struct {
 	ProjectComsumption *float64 `json:"project_consumption"`
 	// 征迁/土地费用
 	MoveLandComsumption *float64 `json:"move_land_comsumption"`
-	// 资金详情 eg:
-	// "[{'type':0, 'total':100, 'detail':[{'year': '2022','value':20}, {'year': '2023','value':30}, ...]}, {}...]"
-	// type说明： 0:区财政;1:自筹;2:其他
-	InvestmentDetail *InvestmentDetail `json:"investment_detail"`
+	// 资金详情
+	InvestmentDetail []InvestmentDetail `json:"investment_detail"`
 	// 前期工作联系人
 	Contract string `json:"contract"`
 	// 联系人手机号
@@ -204,7 +202,7 @@ type ReserveResp struct {
 
 type InvestmentDetail struct {
 	// 投资类型
-	Type string `json:"type"`
+	Type int `json:"type"`
 	// 总投资
 	Total float64 `json:"total"`
 	// 投资情况数额细节
@@ -212,16 +210,22 @@ type InvestmentDetail struct {
 }
 
 type InvestDetail struct {
+	// 资金类别 总投资
+	Total float64 `json:"total"`
 	// 年份
 	Year string `json:"year"`
 	// 投资数额
 	Value float64 `json:"value"`
 }
 
-func NewReserveProResponse(r *models.ReservePro) (*ReserveResp, error) {
-	investment := new(InvestmentDetail)
-	if err := json.Unmarshal(r.InvestmentDetail, investment); err != nil {
-		return nil, err
+func NewReserveProResponse(r *models.ReservePro, invests []models.InvestDetail) (*ReserveResp, error) {
+	investment := make([]InvestmentDetail, 0, len(invests))
+	for i := range invests {
+		invest := InvestmentDetail{}
+		if err := json.Unmarshal([]byte(invests[i].Info), &invest); err != nil {
+			return nil, err
+		}
+		investment = append(investment, invest)
 	}
 	return &ReserveResp{
 		Level:                   r.Level,
