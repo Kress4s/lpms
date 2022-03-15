@@ -101,9 +101,34 @@ func (rh *ReserveHandler) List(ctx iris.Context) mvc.Result {
 	return response.JSON(resp)
 }
 
+// Create godoc
+// @Summary 删除储备库项目
+// @Description 删除储备库项目
+// @Tags 储备库 - 项目
+// @Param id path string true "储备库项目id"
+// @Success 200 "删除储备库项目成功"
+// @Failure 400 {object} vo.Error "请求参数错误"
+// @Failure 401 {object} vo.Error "当前用户登录令牌失效"
+// @Failure 403 {object} vo.Error "当前操作无权限"
+// @Failure 500 {object} vo.Error "服务器内部错误"
+// @Security ApiKeyAuth
+// @Router /api/v1/reserve/project/{id} [delete]
+func (rh *ReserveHandler) Delete(ctx iris.Context) mvc.Result {
+	id, err := ctx.Params().GetInt64(constant.ID)
+	if err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
+	}
+	ex := rh.Svc.Delete(id)
+	if ex != nil {
+		return response.Error(ex)
+	}
+	return response.OK()
+}
+
 // BeforeActivation 初始化路由
 func (rh *ReserveHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPost, "/project", "Create")
 	b.Handle(iris.MethodGet, "/project/{id:string}", "Get")
 	b.Handle(iris.MethodPost, "/projects", "List")
+	b.Handle(iris.MethodPost, "/project/{id:string}", "Delete")
 }

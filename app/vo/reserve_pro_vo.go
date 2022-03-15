@@ -265,6 +265,7 @@ func NewReserveProResponse(r *models.ReservePro, invests []models.InvestDetail) 
 }
 
 type ReserveFilterParam struct {
+	// 以下所有参数，有就传，无则不传
 	//项目名称
 	Name string `json:"name"`
 	// 项目级别
@@ -275,18 +276,18 @@ type ReserveFilterParam struct {
 	ConstructSubject string `json:"construct_subject"`
 	// 计划开始时间
 	PlanBegin string `json:"plan_begin"`
-	// 计划周期
+	// 计划周期(根据起止时间计算相差的月数)
 	Period *int `json:"period"`
 	// 状态
 	Status *int `json:"status"`
 }
 
 type ListReserveProResp struct {
-	ID               int64     `json:"id"`
-	Name             string    `json:"name"`
-	Level            *int      `json:"level"`
-	ProjectType      *int      `json:"project_type"`
-	ConstructSubject string    `json:"construct_subject"`
-	CreateAt         time.Time `json:"create_at"`
-	Status           int       `json:"status"`
+	ID               int64      `json:"id"`
+	Name             string     `json:"name"`
+	Level            *int       `json:"level"`
+	ProjectType      *int       `json:"project_type"`
+	ConstructSubject string     `json:"construct_subject"`
+	CreateAt         *time.Time `json:"create_at"`
+	Status           int        `json:"status"`
 }

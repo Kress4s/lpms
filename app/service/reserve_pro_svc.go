@@ -36,6 +36,7 @@ type ReserveService interface {
 	Get(id int64) (*vo.ReserveResp, exception.Exception)
 	List(params *vo.ReserveFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
 	// Update(openID string, id int64, param *vo.BlackIPUpdateReq) exception.Exception
+	Delete(id int64) exception.Exception
 }
 
 func (rsi *reserveServiceImpl) Create(openID string, param *vo.ReserveReq) exception.Exception {
@@ -73,9 +74,13 @@ func (rsi *reserveServiceImpl) List(params *vo.ReserveFilterParam, pageInfo *vo.
 			Level:            projects[i].Level,
 			ProjectType:      projects[i].ProjectType,
 			ConstructSubject: projects[i].ConstructSubject,
-			CreateAt:         projects[i].CreateAt,
+			CreateAt:         &projects[i].CreateAt,
 			Status:           projects[i].Status,
 		})
 	}
 	return vo.NewDataPagination(count, resp, pageInfo), nil
+}
+
+func (rsi *reserveServiceImpl) Delete(id int64) exception.Exception {
+	return rsi.repo.Delete(rsi.db, id)
 }
