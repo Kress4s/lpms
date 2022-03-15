@@ -36,6 +36,9 @@ github.com/aymerick/raymond/parser
 # github.com/blang/semver/v4 v4.0.0
 ## explicit; go 1.14
 github.com/blang/semver/v4
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+## explicit
+github.com/dgrijalva/jwt-go
 # github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385
 ## explicit
 github.com/eknkc/amber
@@ -85,9 +88,6 @@ github.com/goccy/go-json/internal/encoder/vm_color_indent
 github.com/goccy/go-json/internal/encoder/vm_indent
 github.com/goccy/go-json/internal/errors
 github.com/goccy/go-json/internal/runtime
-# github.com/golang-jwt/jwt/v4 v4.3.0
-## explicit; go 1.15
-github.com/golang-jwt/jwt/v4
 # github.com/golang/snappy v0.0.4
 ## explicit
 github.com/golang/snappy
@@ -111,8 +111,8 @@ github.com/iris-contrib/jade
 # github.com/iris-contrib/middleware/cors v0.0.0-20220301201128-27fa0f6a7d7e
 ## explicit; go 1.17
 github.com/iris-contrib/middleware/cors
-# github.com/iris-contrib/middleware/jwt v0.0.0-20220301201128-27fa0f6a7d7e
-## explicit; go 1.17
+# github.com/iris-contrib/middleware/jwt v0.0.0-20210110101738-6d0a4d799b5d
+## explicit; go 1.14
 github.com/iris-contrib/middleware/jwt
 # github.com/iris-contrib/schema v0.0.6
 ## explicit; go 1.14

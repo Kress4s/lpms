@@ -1,7 +1,9 @@
 package routes
 
 import (
+	v1 "lpms/app/handlers/v1"
 	"lpms/app/handlers/v1/auth"
+	"lpms/app/middlewares"
 	"lpms/config"
 
 	"github.com/iris-contrib/swagger/v12"
@@ -20,4 +22,11 @@ func RegisterRoutes(app *iris.Application) {
 	}
 	authApp := app.Party("/auth")
 	mvc.New(authApp).Handle(auth.NewLoginHandler())
+
+	party := app.Party("/api/v1")
+	party.Use(middlewares.Auth().Serve)
+
+	reserveParty := party.Party("/reserve")
+	reserveApp := mvc.New(reserveParty)
+	reserveApp.Handle(v1.NewReserveHandler())
 }

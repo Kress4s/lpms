@@ -14,6 +14,7 @@ var V0001InitTables = &gormigrate.Migration{
 		// 创建 操作人员表，角色表, 操作人员角色关联表，用户登录记录表
 		if err := tx.AutoMigrate(
 			models.User{},
+			models.ReservePro{},
 		); err != nil {
 			return err
 		}

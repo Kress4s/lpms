@@ -1,13 +1,10 @@
 package tools
 
 import (
+	"lpms/constant"
 	"time"
 
 	"github.com/iris-contrib/middleware/jwt"
-)
-
-const (
-	salt = "JS Secret"
 )
 
 func Token(userID int64, username string) (string, int64) {
@@ -20,6 +17,6 @@ func Token(userID int64, username string) (string, int64) {
 		"exp": exp,
 	})
 	// 使用设置的秘钥，签名生成jwt字符串
-	tokenString, _ := token.SignedString([]byte(salt))
+	tokenString, _ := token.SignedString([]byte(constant.Salt))
 	return tokenString, exp
 }

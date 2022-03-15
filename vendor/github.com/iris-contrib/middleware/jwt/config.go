@@ -1,6 +1,6 @@
 package jwt
 
-import "github.com/golang-jwt/jwt/v4"
+import "github.com/dgrijalva/jwt-go"
 
 const (
 	// DefaultContextKey jwt
