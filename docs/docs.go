@@ -126,6 +126,56 @@ const docTemplate_swagger = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "删除储备库项目",
+                "tags": [
+                    "储备库 - 项目"
+                ],
+                "summary": "删除储备库项目",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "储备库项目id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除储备库项目成功"
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/reserve/projects": {
@@ -417,11 +467,11 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "name": {
-                    "description": "项目名称",
+                    "description": "以下所有参数，有就传，无则不传\n项目名称",
                     "type": "string"
                 },
                 "period": {
-                    "description": "计划周期",
+                    "description": "计划周期(根据起止时间计算相差的月数)",
                     "type": "integer"
                 },
                 "plan_begin": {
