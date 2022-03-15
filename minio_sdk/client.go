@@ -1,4 +1,4 @@
-package miniosdk
+package minio_sdk
 
 import (
 	"github.com/minio/minio-go/v7"

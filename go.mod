@@ -4,9 +4,11 @@ go 1.17
 
 require (
 	github.com/go-gormigrate/gormigrate/v2 v2.0.0
+	github.com/goccy/go-json v0.9.4
 	github.com/iris-contrib/middleware/cors v0.0.0-20220301201128-27fa0f6a7d7e
 	github.com/iris-contrib/middleware/jwt v0.0.0-20210110101738-6d0a4d799b5d
 	github.com/kataras/iris/v12 v12.2.0-alpha9
+	github.com/minio/minio-go/v7 v7.0.23
 	github.com/pelletier/go-toml/v2 v2.0.0-beta.6
 	github.com/swaggo/swag v1.8.0
 	gorm.io/driver/postgres v1.3.1
@@ -26,6 +28,7 @@ require (
 	github.com/aymerick/raymond v2.0.3-0.20180322193309-b565731e1464+incompatible // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
+	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/flosch/pongo2/v4 v4.0.2 // indirect
@@ -36,7 +39,6 @@ require (
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.1.0 // indirect
-	github.com/goccy/go-json v0.9.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/uuid v1.3.0 // indirect
@@ -63,18 +65,24 @@ require (
 	github.com/kataras/pio v0.0.10 // indirect
 	github.com/kataras/sitemap v0.0.5 // indirect
 	github.com/kataras/tunnel v0.0.3 // indirect
+	github.com/klauspost/cpuid v1.3.1 // indirect
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mediocregopher/radix/v3 v3.8.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.18 // indirect
+	github.com/minio/md5-simd v1.1.0 // indirect
+	github.com/minio/sha256-simd v0.1.1 // indirect
+	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/nats-io/jwt/v2 v2.2.1-0.20220113022732-58e87895b296 // indirect
 	github.com/nats-io/nats.go v1.13.1-0.20220121202836-972a071d373d // indirect
 	github.com/nats-io/nkeys v0.3.0 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
+	github.com/rs/xid v1.2.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/schollz/closestmatch v2.1.0+incompatible // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/tdewolff/minify/v2 v2.10.0 // indirect
 	github.com/tdewolff/parse/v2 v2.5.27 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

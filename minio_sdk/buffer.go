@@ -1,4 +1,4 @@
-package miniosdk
+package minio_sdk
 
 import "io"
 
