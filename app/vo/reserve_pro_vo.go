@@ -89,7 +89,7 @@ type ReserveReq struct {
 	// 征迁/土地费用
 	MoveLandComsumption *float64 `json:"move_land_comsumption"`
 	// 资金详情 eg:
-	// "[{'type':0, 'total':100, 'detail':[{'year': '2022','value':20}, {'year': '2023','value':30}, ...]}, {}...]"
+	// "[{\"type\":0, \"total\":100, \"detail\":[{\"year\": \"2022\",\"value\":20}, {\"year\": \"2023\",\"value\":30}, ...]}, {}...]"
 	// type说明： 0:区财政;1:自筹;2:其他
 	InvestmentDetail string `json:"investment_detail"`
 	// 前期工作联系人
