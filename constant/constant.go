@@ -12,3 +12,8 @@ const (
 	PageSize   = "page_size"
 	TextSearch = "keywords"
 )
+
+// http request
+const (
+	ID = "id"
+)
