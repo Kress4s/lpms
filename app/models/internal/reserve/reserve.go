@@ -1,10 +1,11 @@
 package reserve
 
 import (
-	"encoding/json"
 	"lpms/app/models/internal/common"
 	"lpms/app/models/tables"
 	"time"
+
+	"github.com/goccy/go-json"
 
 	"gorm.io/gorm"
 )
@@ -28,6 +29,7 @@ type ReservePro struct {
 	Add                     *float64        `gorm:"column:add;type:numeric;comment:新增建设用地"`
 	NoConformUsePlan        *float64        `gorm:"column:no_conform_use_plan;type:numeric;comment:不符合土地利用规划面积"`
 	SiteRed                 *int            `gorm:"column:site_red;type:integer;comment:选址红线 0:有拆迁,1:无拆迁"`
+	SitePhoto               string          `gorm:"column:site_photo;type:varchar(40);comment:无拆迁照片"`
 	NeedCollect             *float64        `gorm:"column:need_collect;type:numeric;comment:需征地面积"`
 	NeedPeopleMove          *int            `gorm:"column:need_people_move;type:integer;comment:需拆迁农户/居民数(人)"`
 	CompanyBusiness         *int            `gorm:"column:company_business;type:integer;comment:企/事业单位(家)"`

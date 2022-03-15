@@ -12,9 +12,10 @@
 package vo
 
 import (
-	"encoding/json"
 	"lpms/app/models"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // type LandUseReq struct {
@@ -69,6 +70,8 @@ type ReserveReq struct {
 	NoConformUsePlan *float64 `json:"no_conform_use_plan"`
 	// 选址红线 0:有拆迁,1:无拆迁
 	SiteRed *int `json:"site_red"`
+	// 无拆迁照片
+	SitePhoto string `json:"site_photo"`
 	// 需征地面积
 	NeedCollect *float64 `json:"need_collect"`
 	// 需拆迁农户/居民数(人)
@@ -113,6 +116,7 @@ func (r *ReserveReq) ToModel(openID string) *models.ReservePro {
 		Add:                     r.Add,
 		NoConformUsePlan:        r.NoConformUsePlan,
 		SiteRed:                 r.SiteRed,
+		SitePhoto:               r.SitePhoto,
 		NeedCollect:             r.NeedCollect,
 		NeedPeopleMove:          r.NeedPeopleMove,
 		CompanyBusiness:         r.CompanyBusiness,
@@ -166,6 +170,8 @@ type ReserveResp struct {
 	NoConformUsePlan *float64 `json:"no_conform_use_plan"`
 	// 选址红线 0:有拆迁,1:无拆迁
 	SiteRed *int `json:"site_red"`
+	// 无拆迁照片
+	SitePhoto string `json:"site_photo"`
 	// 需征地面积
 	NeedCollect *float64 `json:"need_collect"`
 	// 需拆迁农户/居民数(人)
@@ -185,7 +191,7 @@ type ReserveResp struct {
 	// 资金详情 eg:
 	// "[{'type':0, 'total':100, 'detail':[{'year': '2022','value':20}, {'year': '2023','value':30}, ...]}, {}...]"
 	// type说明： 0:区财政;1:自筹;2:其他
-	InvestmentDetail string `json:"investment_detail"`
+	InvestmentDetail *InvestmentDetail `json:"investment_detail"`
 	// 前期工作联系人
 	Contract string `json:"contract"`
 	// 联系人手机号
@@ -196,7 +202,27 @@ type ReserveResp struct {
 	CreateAt string `json:"create_at"`
 }
 
-func NewReserveProResponse(r *models.ReservePro) *ReserveResp {
+type InvestmentDetail struct {
+	// 投资类型
+	Type string `json:"type"`
+	// 总投资
+	Total float64 `json:"total"`
+	// 投资情况数额细节
+	Detail []InvestDetail `json:"detail"`
+}
+
+type InvestDetail struct {
+	// 年份
+	Year string `json:"year"`
+	// 投资数额
+	Value float64 `json:"value"`
+}
+
+func NewReserveProResponse(r *models.ReservePro) (*ReserveResp, error) {
+	investment := new(InvestmentDetail)
+	if err := json.Unmarshal(r.InvestmentDetail, investment); err != nil {
+		return nil, err
+	}
 	return &ReserveResp{
 		Level:                   r.Level,
 		Name:                    r.Name,
@@ -214,6 +240,7 @@ func NewReserveProResponse(r *models.ReservePro) *ReserveResp {
 		Add:                     r.Add,
 		NoConformUsePlan:        r.NoConformUsePlan,
 		SiteRed:                 r.SiteRed,
+		SitePhoto:               r.SitePhoto,
 		NeedCollect:             r.NeedCollect,
 		NeedPeopleMove:          r.NeedPeopleMove,
 		CompanyBusiness:         r.CompanyBusiness,
@@ -221,8 +248,8 @@ func NewReserveProResponse(r *models.ReservePro) *ReserveResp {
 		TotalInvestment:         r.TotalInvestment,
 		ProjectComsumption:      r.ProjectComsumption,
 		MoveLandComsumption:     r.MoveLandComsumption,
-		// InvestmentDetail:        r.InvestmentDetail,
-		Contract: r.Contract,
-		Phone:    r.Phone,
-	}
+		InvestmentDetail:        investment,
+		Contract:                r.Contract,
+		Phone:                   r.Phone,
+	}, nil
 }
