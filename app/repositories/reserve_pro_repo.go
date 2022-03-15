@@ -4,6 +4,7 @@ import (
 	"lpms/app/models"
 	"lpms/app/models/tables"
 	"lpms/app/response"
+	"lpms/app/vo"
 	"lpms/exception"
 	"sync"
 
@@ -27,6 +28,7 @@ func GetReserveRepo() ReserveRepo {
 type ReserveRepo interface {
 	Create(db *gorm.DB, reserve *models.ReservePro) exception.Exception
 	Get(db *gorm.DB, id int64) (*models.ReservePro, exception.Exception)
+	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam) (int64, []models.ReservePro, exception.Exception)
 	GetInvestDetail(db *gorm.DB, id int64) ([]models.InvestDetail, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	Delete(db *gorm.DB, id int64) exception.Exception
@@ -46,6 +48,36 @@ func (rri *ReserveRepoImpl) Get(db *gorm.DB, id int64) (*models.ReservePro, exce
 		return nil, exception.Wrap(response.ExceptionDatabase, res.Error)
 	}
 	return &reserve, nil
+}
+
+func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam) (int64, []models.ReservePro, exception.Exception) {
+	data := make([]models.ReservePro, 0)
+	tx := db.Table(tables.Reserve).Select("id, name, level, project_type, construct_subject, create_at, status")
+	if params.Name != "" {
+		tx = tx.Where("name = ?", params.Name)
+	}
+	if params.Level != nil {
+		tx = tx.Where("level = ?", params.Level)
+	}
+	if params.ProjectType != nil {
+		tx = tx.Where("project_type = ?", params.ProjectType)
+	}
+	if params.ConstructSubject != "" {
+		tx = tx.Where("construct_subject = ?", params.ConstructSubject)
+	}
+	if params.PlanBegin != "" {
+		tx = tx.Where("plan_begin < ?", params.PlanBegin)
+	}
+	if params.Period != nil {
+		tx = tx.Where("period > ?", params.Period)
+	}
+	if params.Status != nil {
+		tx = tx.Where("status = ?", params.Status)
+	}
+	count := int64(0)
+	tx = tx.Limit(pageInfo.PageSize).Offset(pageInfo.Offset()).
+		Scan(&data).Limit(-1).Offset(-1).Count(&count)
+	return count, data, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
 
 func (rri *ReserveRepoImpl) GetInvestDetail(db *gorm.DB, id int64) ([]models.InvestDetail, exception.Exception) {

@@ -50,6 +50,8 @@ type ReserveReq struct {
 	ProjectType *int `json:"project_type"`
 	// 计划开工时间
 	PlanBegin *time.Time `json:"plan_begin"`
+	// 建设周期
+	Period *int `json:"period"`
 	// 重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型
 	PointType *int `json:"point_type"`
 	// 实施类型 0:新开工,1:续建
@@ -106,6 +108,7 @@ func (r *ReserveReq) ToModel(openID string) *models.ReservePro {
 		ConstructSite:           r.ConstructSite,
 		ProjectType:             r.ProjectType,
 		PlanBegin:               r.PlanBegin,
+		Period:                  r.Period,
 		PointType:               r.PointType,
 		ImplementType:           r.ImplementType,
 		ConstructContentScope:   r.ConstructContentScope,
@@ -150,6 +153,8 @@ type ReserveResp struct {
 	ProjectType *int `json:"project_type"`
 	// 计划开工时间
 	PlanBegin *time.Time `json:"plan_begin"`
+	// 建设周期
+	Period *int `json:"period"`
 	// 重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型
 	PointType *int `json:"point_type"`
 	// 实施类型 0:新开工,1:续建
@@ -234,6 +239,7 @@ func NewReserveProResponse(r *models.ReservePro, invests []models.InvestDetail) 
 		ConstructSite:           r.ConstructSite,
 		ProjectType:             r.ProjectType,
 		PlanBegin:               r.PlanBegin,
+		Period:                  r.Period,
 		PointType:               r.PointType,
 		ImplementType:           r.ImplementType,
 		ConstructContentScope:   r.ConstructContentScope,
@@ -256,4 +262,31 @@ func NewReserveProResponse(r *models.ReservePro, invests []models.InvestDetail) 
 		Contract:                r.Contract,
 		Phone:                   r.Phone,
 	}, nil
+}
+
+type ReserveFilterParam struct {
+	//项目名称
+	Name string `json:"name"`
+	// 项目级别
+	Level *int `json:"level"`
+	// 项目类型
+	ProjectType *int `json:"project_type"`
+	// 建设主体
+	ConstructSubject string `json:"construct_subject"`
+	// 计划开始时间
+	PlanBegin string `json:"plan_begin"`
+	// 计划周期
+	Period *int `json:"period"`
+	// 状态
+	Status *int `json:"status"`
+}
+
+type ListReserveProResp struct {
+	ID               int64     `json:"id"`
+	Name             string    `json:"name"`
+	Level            *int      `json:"level"`
+	ProjectType      *int      `json:"project_type"`
+	ConstructSubject string    `json:"construct_subject"`
+	CreateAt         time.Time `json:"create_at"`
+	Status           int       `json:"status"`
 }

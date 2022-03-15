@@ -15,5 +15,12 @@ const (
 
 // http request
 const (
-	ID = "id"
+	ID               = "id"
+	Name             = "name"
+	Level            = "level"
+	ProjectType      = "project_type"
+	ConstructSubject = "construct_subject"
+	BeginAt          = "begin_at"
+	EndAt            = "end_at"
+	Status           = "status"
 )

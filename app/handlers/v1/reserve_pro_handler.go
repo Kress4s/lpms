@@ -71,8 +71,39 @@ func (rh *ReserveHandler) Get(ctx iris.Context) mvc.Result {
 	return response.JSON(resp)
 }
 
+// Create godoc
+// @Summary 获取储备库项目列表
+// @Description 获取储备库项目列表
+// @Tags 储备库 - 项目
+// @Param page query int false "请求页"
+// @Param page_size query int false "页大小"
+// @Param parameters body vo.ReserveFilterParam true "ReserveFilterParam"
+// @Success 200 {object} vo.DataPagination{data=[]vo.ListReserveProResp} "查询储备库项目列表成功"
+// @Failure 400 {object} vo.Error "请求参数错误"
+// @Failure 401 {object} vo.Error "当前用户登录令牌失效"
+// @Failure 403 {object} vo.Error "当前操作无权限"
+// @Failure 500 {object} vo.Error "服务器内部错误"
+// @Security ApiKeyAuth
+// @Router /api/v1/reserve/projects [post]
+func (rh *ReserveHandler) List(ctx iris.Context) mvc.Result {
+	page, ex := handlers.GetPageInfo(ctx)
+	if ex != nil {
+		return response.Error(ex)
+	}
+	params := &vo.ReserveFilterParam{}
+	if err := ctx.ReadJSON(params); err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
+	}
+	resp, ex := rh.Svc.List(params, page)
+	if ex != nil {
+		return response.Error(ex)
+	}
+	return response.JSON(resp)
+}
+
 // BeforeActivation 初始化路由
 func (rh *ReserveHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPost, "/project", "Create")
 	b.Handle(iris.MethodGet, "/project/{id:string}", "Get")
+	b.Handle(iris.MethodPost, "/projects", "List")
 }
