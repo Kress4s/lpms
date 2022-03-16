@@ -4,7 +4,7 @@ package docs
 
 import "github.com/swaggo/swag"
 
-const docTemplate_swagger = `{
+const docTemplate = `{
     "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
@@ -45,6 +45,110 @@ const docTemplate_swagger = `{
                 "responses": {
                     "201": {
                         "description": "创建储备库项目成功"
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reserve/project/multi": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "批量删除储备库项目",
+                "tags": [
+                    "储备库 - 项目"
+                ],
+                "summary": "批量删除储备库项目",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "储备库项目id, ` + "`" + `,` + "`" + ` 连接",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "批量删除储备库项目成功"
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reserve/project/submit/multi": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "批量提报储备库项目",
+                "tags": [
+                    "储备库 - 项目"
+                ],
+                "summary": "批量提报储备库项目",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "储备库项目id, ` + "`" + `,` + "`" + ` 连接",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "批量提报储备库项目成功"
                     },
                     "400": {
                         "description": "请求参数错误",
@@ -145,6 +249,15 @@ const docTemplate_swagger = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "ReserveUpdateReq",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.ReserveUpdateReq"
+                        }
                     }
                 ],
                 "responses": {
@@ -200,6 +313,110 @@ const docTemplate_swagger = `{
                 "responses": {
                     "200": {
                         "description": "删除储备库项目成功"
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reserve/project/{id}/refer": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "提交储备库项目",
+                "tags": [
+                    "储备库 - 项目"
+                ],
+                "summary": "提交储备库项目",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "储备库项目id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "提交储备库项目成功"
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reserve/project/{id}/submit": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "提报储备库项目",
+                "tags": [
+                    "储备库 - 项目"
+                ],
+                "summary": "提报储备库项目",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "储备库项目id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "提报储备库项目成功"
                     },
                     "400": {
                         "description": "请求参数错误",
@@ -790,6 +1007,123 @@ const docTemplate_swagger = `{
                     "type": "string"
                 }
             }
+        },
+        "vo.ReserveUpdateReq": {
+            "type": "object",
+            "properties": {
+                "add": {
+                    "description": "新增建设用地",
+                    "type": "number"
+                },
+                "company_business": {
+                    "description": "企/事业单位(家)",
+                    "type": "integer"
+                },
+                "construct_basis_necessity": {
+                    "description": "建设依据及必要性",
+                    "type": "string"
+                },
+                "construct_content_scope": {
+                    "description": "建设内容及规模",
+                    "type": "string"
+                },
+                "construct_site": {
+                    "description": "建设地点",
+                    "type": "string"
+                },
+                "construct_subject": {
+                    "description": "建设主体",
+                    "type": "string"
+                },
+                "contract": {
+                    "description": "前期工作联系人",
+                    "type": "string"
+                },
+                "enter_db_type": {
+                    "description": "入库类别 0:A类,1:B类;2:C类",
+                    "type": "integer"
+                },
+                "implement_type": {
+                    "description": "实施类型 0:新开工,1:续建",
+                    "type": "integer"
+                },
+                "investment_detail": {
+                    "description": "资金详情 eg:\n\"[{\\\\\"type\\\\\":0, \\\\\"total\\\\\":100, \\\\\"detail\\\\\":[{\\\\\"total\\\\\": 100,\\\\\"year\\\\\": \\\\\"2022\\\\\",\\\\\"value\\\\\":20,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, {\\\\\"total\\\\\": 100,\\\\\"year\\\\\": \\\\\"2023\\\\\",\\\\\"value\\\\\":30,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, ...]}, {}...]\"\ntype说明： 0:区财政;1:自筹;2:其他",
+                    "type": "string"
+                },
+                "is_land_use": {
+                    "description": "是否有用地情况",
+                    "type": "boolean"
+                },
+                "level": {
+                    "description": "项目级别 0:区级,1:街镇级",
+                    "type": "integer"
+                },
+                "move_land_comsumption": {
+                    "description": "征迁/土地费用",
+                    "type": "number"
+                },
+                "name": {
+                    "description": "项目名称",
+                    "type": "string"
+                },
+                "need_collect": {
+                    "description": "需征地面积",
+                    "type": "number"
+                },
+                "need_people_move": {
+                    "description": "需拆迁农户/居民数(人)",
+                    "type": "integer"
+                },
+                "no_conform_use_plan": {
+                    "description": "不符合土地利用规划面积",
+                    "type": "number"
+                },
+                "period": {
+                    "description": "建设周期",
+                    "type": "integer"
+                },
+                "phone": {
+                    "description": "联系人手机号",
+                    "type": "string"
+                },
+                "plan_begin": {
+                    "description": "计划开工时间",
+                    "type": "string"
+                },
+                "point_type": {
+                    "description": "重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型",
+                    "type": "integer"
+                },
+                "project_consumption": {
+                    "description": "工程费用",
+                    "type": "number"
+                },
+                "project_type": {
+                    "description": "项目类型; 0:安置房,1:道路交通,2:市政设施;3:提升整治;4:卫生;5:五水共治;6:学校;7:其他",
+                    "type": "integer"
+                },
+                "site_photo": {
+                    "description": "无拆迁照片",
+                    "type": "string"
+                },
+                "site_red": {
+                    "description": "选址红线 0:有拆迁,1:无拆迁",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "总用亩",
+                    "type": "number"
+                },
+                "total_investment": {
+                    "description": "总投资",
+                    "type": "number"
+                },
+                "upload_cad_id": {
+                    "description": "CAD文件ID(上传文件接口返回的ID)",
+                    "type": "string"
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -810,7 +1144,7 @@ var SwaggerInfo = &swag.Spec{
 	Title:            "临安区政府投资项目管理后台API",
 	Description:      "临安区政府投资项目管理后台API",
 	InfoInstanceName: "swagger",
-	SwaggerTemplate:  docTemplate_swagger,
+	SwaggerTemplate:  docTemplate,
 }
 
 func init() {

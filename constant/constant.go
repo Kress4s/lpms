@@ -36,6 +36,6 @@ const (
 	EarlyPlan = 2
 	// 已发文
 	Posted = 3
-	// 实施库
+	// 已入政府项目实施库
 	Implementation = 4
 )

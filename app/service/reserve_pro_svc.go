@@ -41,6 +41,9 @@ type ReserveService interface {
 	Update(openID string, id int64, param *vo.ReserveUpdateReq) exception.Exception
 	Delete(id int64) exception.Exception
 	MultiDelete(ids string) exception.Exception
+	Refer(openID string, id int64) exception.Exception
+	Submission(openID string, id int64) exception.Exception
+	MultiSubmission(openID string, ids string) exception.Exception
 }
 
 func (rsi *reserveServiceImpl) Create(openID string, param *vo.ReserveReq) exception.Exception {
@@ -113,5 +116,31 @@ func (rsi *reserveServiceImpl) Refer(openID string, id int64) exception.Exceptio
 	return rsi.repo.Refer(rsi.db, id, map[string]interface{}{
 		"update_by": openID,
 		"status":    constant.EnteredDB,
+	})
+}
+
+func (rsi *reserveServiceImpl) Submission(openID string, id int64) exception.Exception {
+	return rsi.repo.Submission(rsi.db, id, map[string]interface{}{
+		"update_by": openID,
+		"status":    constant.EarlyPlan,
+	})
+}
+
+func (rsi *reserveServiceImpl) MultiSubmission(openID string, ids string) exception.Exception {
+	idslice := strings.Split(ids, ",")
+	if len(idslice) == 0 {
+		return exception.New(response.ExceptionInvalidRequestParameters, "无效参数")
+	}
+	did := make([]int64, 0, len(idslice))
+	for i := range idslice {
+		id, err := strconv.ParseUint(idslice[i], 10, 0)
+		if err != nil {
+			return exception.Wrap(response.ExceptionParseStringToInt64Error, err)
+		}
+		did = append(did, int64(id))
+	}
+	return rsi.repo.MultiSubmission(rsi.db, did, map[string]interface{}{
+		"update_by": openID,
+		"status":    constant.EarlyPlan,
 	})
 }

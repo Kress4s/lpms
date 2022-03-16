@@ -13,6 +13,7 @@ package vo
 
 import (
 	"lpms/app/models"
+	"lpms/constant"
 	"time"
 
 	"github.com/goccy/go-json"
@@ -128,7 +129,7 @@ func (r *ReserveReq) ToModel(openID string) *models.ReservePro {
 		InvestmentDetail:        json.RawMessage([]byte(r.InvestmentDetail)),
 		Contract:                r.Contract,
 		Phone:                   r.Phone,
-		Status:                  0,
+		Status:                  constant.Draft,
 		Base: models.Base{
 			UpdateBy: openID,
 			CreateBy: openID,
