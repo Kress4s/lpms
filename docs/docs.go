@@ -710,47 +710,6 @@ const docTemplate = `{
                 }
             }
         },
-        "vo.InvestDetail": {
-            "type": "object",
-            "properties": {
-                "comment": {
-                    "description": "备注",
-                    "type": "string"
-                },
-                "total": {
-                    "description": "资金类别 总投资",
-                    "type": "number"
-                },
-                "value": {
-                    "description": "投资数额",
-                    "type": "number"
-                },
-                "year": {
-                    "description": "年份",
-                    "type": "string"
-                }
-            }
-        },
-        "vo.InvestmentDetail": {
-            "type": "object",
-            "properties": {
-                "detail": {
-                    "description": "投资情况数额细节",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/vo.InvestDetail"
-                    }
-                },
-                "total": {
-                    "description": "总投资",
-                    "type": "number"
-                },
-                "type": {
-                    "description": "投资类型",
-                    "type": "integer"
-                }
-            }
-        },
         "vo.ListReserveProResp": {
             "type": "object",
             "properties": {
@@ -897,7 +856,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "investment_detail": {
-                    "description": "资金详情 eg:\n\"[{\\\\\"type\\\\\":0, \\\\\"total\\\\\":100, \\\\\"detail\\\\\":[{\\\\\"total\\\\\": 100,\\\\\"year\\\\\": \\\\\"2022\\\\\",\\\\\"value\\\\\":20,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, {\\\\\"total\\\\\": 100,\\\\\"year\\\\\": \\\\\"2023\\\\\",\\\\\"value\\\\\":30,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, ...]}, {}...]\"\ntype说明： 0:区财政;1:自筹;2:其他",
+                    "description": "资金详情 eg:\n\"[{\\\\\"type\\\\\":0, \\\\\"total\\\\\":100, \\\\\"detail\\\\\":{\\\\\"total\\\\\": 100,\\\\\"2022\\\\\": 20,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, {\\\\\"total\\\\\": 100,\\\\\"2023\\\\\": 30,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, ...}, {}...]\"\ntype说明： 0:区财政;1:自筹;2:其他",
                     "type": "string"
                 },
                 "is_land_use": {
@@ -1023,10 +982,7 @@ const docTemplate = `{
                 },
                 "investment_detail": {
                     "description": "资金详情",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/vo.InvestmentDetail"
-                    }
+                    "type": "string"
                 },
                 "is_land_use": {
                     "description": "是否有用地情况",
@@ -1146,7 +1102,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "investment_detail": {
-                    "description": "资金详情 eg:\n\"[{\\\\\"type\\\\\":0, \\\\\"total\\\\\":100, \\\\\"detail\\\\\":[{\\\\\"total\\\\\": 100,\\\\\"year\\\\\": \\\\\"2022\\\\\",\\\\\"value\\\\\":20,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, {\\\\\"total\\\\\": 100,\\\\\"year\\\\\": \\\\\"2023\\\\\",\\\\\"value\\\\\":30,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, ...]}, {}...]\"\ntype说明： 0:区财政;1:自筹;2:其他",
+                    "description": "资金详情 eg:\n\"[{\\\\\"type\\\\\":0, \\\\\"total\\\\\":100, \\\\\"detail\\\\\":{\\\\\"total\\\\\": 100,\\\\\"2022\\\\\": 20,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, {\\\\\"total\\\\\": 100,\\\\\"2023\\\\\": 30,\\\\\"comment\\\\\":\\\\\"xxx\\\\\"}, ...}, {}...]\"\ntype说明： 0:区财政;1:自筹;2:其他",
                     "type": "string"
                 },
                 "is_land_use": {

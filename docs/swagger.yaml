@@ -19,35 +19,6 @@ definitions:
       msg:
         type: string
     type: object
-  vo.InvestDetail:
-    properties:
-      comment:
-        description: 备注
-        type: string
-      total:
-        description: 资金类别 总投资
-        type: number
-      value:
-        description: 投资数额
-        type: number
-      year:
-        description: 年份
-        type: string
-    type: object
-  vo.InvestmentDetail:
-    properties:
-      detail:
-        description: 投资情况数额细节
-        items:
-          $ref: '#/definitions/vo.InvestDetail'
-        type: array
-      total:
-        description: 总投资
-        type: number
-      type:
-        description: 投资类型
-        type: integer
-    type: object
   vo.ListReserveProResp:
     properties:
       construct_subject:
@@ -156,7 +127,7 @@ definitions:
       investment_detail:
         description: |-
           资金详情 eg:
-          "[{\\"type\\":0, \\"total\\":100, \\"detail\\":[{\\"total\\": 100,\\"year\\": \\"2022\\",\\"value\\":20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"year\\": \\"2023\\",\\"value\\":30,\\"comment\\":\\"xxx\\"}, ...]}, {}...]"
+          "[{\\"type\\":0, \\"total\\":100, \\"detail\\":{\\"total\\": 100,\\"2022\\": 20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"2023\\": 30,\\"comment\\":\\"xxx\\"}, ...}, {}...]"
           type说明： 0:区财政;1:自筹;2:其他
         type: string
       is_land_use:
@@ -251,9 +222,7 @@ definitions:
         type: integer
       investment_detail:
         description: 资金详情
-        items:
-          $ref: '#/definitions/vo.InvestmentDetail'
-        type: array
+        type: string
       is_land_use:
         description: 是否有用地情况
         type: boolean
@@ -344,7 +313,7 @@ definitions:
       investment_detail:
         description: |-
           资金详情 eg:
-          "[{\\"type\\":0, \\"total\\":100, \\"detail\\":[{\\"total\\": 100,\\"year\\": \\"2022\\",\\"value\\":20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"year\\": \\"2023\\",\\"value\\":30,\\"comment\\":\\"xxx\\"}, ...]}, {}...]"
+          "[{\\"type\\":0, \\"total\\":100, \\"detail\\":{\\"total\\": 100,\\"2022\\": 20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"2023\\": 30,\\"comment\\":\\"xxx\\"}, ...}, {}...]"
           type说明： 0:区财政;1:自筹;2:其他
         type: string
       is_land_use:

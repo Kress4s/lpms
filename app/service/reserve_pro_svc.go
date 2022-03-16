@@ -56,11 +56,11 @@ func (rsi *reserveServiceImpl) Get(id int64) (*vo.ReserveResp, exception.Excepti
 	if ex != nil {
 		return nil, ex
 	}
-	investInfo, ex := rsi.repo.GetInvestDetail(rsi.db, id)
-	if ex != nil {
-		return nil, ex
-	}
-	resp, err := vo.NewReserveProResponse(reserve, investInfo)
+	// investInfo, ex := rsi.repo.GetInvestDetail(rsi.db, id)
+	// if ex != nil {
+	// 	return nil, ex
+	// }
+	resp, err := vo.NewReserveProResponse(reserve)
 	if err != nil {
 		return nil, exception.Wrap(response.ExceptionUnmarshalJSON, err)
 	}

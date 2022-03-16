@@ -90,7 +90,7 @@ type ReserveReq struct {
 	// 征迁/土地费用
 	MoveLandComsumption *float64 `json:"move_land_comsumption"`
 	// 资金详情 eg:
-	// "[{\\"type\\":0, \\"total\\":100, \\"detail\\":[{\\"total\\": 100,\\"year\\": \\"2022\\",\\"value\\":20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"year\\": \\"2023\\",\\"value\\":30,\\"comment\\":\\"xxx\\"}, ...]}, {}...]"
+	// "[{\\"type\\":0, \\"total\\":100, \\"detail\\":{\\"total\\": 100,\\"2022\\": 20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"2023\\": 30,\\"comment\\":\\"xxx\\"}, ...}, {}...]"
 	// type说明： 0:区财政;1:自筹;2:其他
 	InvestmentDetail string `json:"investment_detail"`
 	// 前期工作联系人
@@ -191,7 +191,7 @@ type ReserveResp struct {
 	// 征迁/土地费用
 	MoveLandComsumption *float64 `json:"move_land_comsumption"`
 	// 资金详情
-	InvestmentDetail []InvestmentDetail `json:"investment_detail"`
+	InvestmentDetail string `json:"investment_detail"`
 	// 前期工作联系人
 	Contract string `json:"contract"`
 	// 联系人手机号
@@ -222,15 +222,15 @@ type InvestDetail struct {
 	Comment string `json:"comment"`
 }
 
-func NewReserveProResponse(r *models.ReservePro, invests []models.InvestDetail) (*ReserveResp, error) {
-	investment := make([]InvestmentDetail, 0, len(invests))
-	for i := range invests {
-		invest := InvestmentDetail{}
-		if err := json.Unmarshal([]byte(invests[i].Info), &invest); err != nil {
-			return nil, err
-		}
-		investment = append(investment, invest)
-	}
+func NewReserveProResponse(r *models.ReservePro) (*ReserveResp, error) {
+	// investment := make([]InvestmentDetail, 0, len(invests))
+	// for i := range invests {
+	// 	invest := InvestmentDetail{}
+	// 	if err := json.Unmarshal([]byte(invests[i].Info), &invest); err != nil {
+	// 		return nil, err
+	// 	}
+	// 	investment = append(investment, invest)
+	// }
 	return &ReserveResp{
 		Level:                   r.Level,
 		Name:                    r.Name,
@@ -257,7 +257,7 @@ func NewReserveProResponse(r *models.ReservePro, invests []models.InvestDetail) 
 		TotalInvestment:         r.TotalInvestment,
 		ProjectComsumption:      r.ProjectComsumption,
 		MoveLandComsumption:     r.MoveLandComsumption,
-		InvestmentDetail:        investment,
+		InvestmentDetail:        string(r.InvestmentDetail),
 		Contract:                r.Contract,
 		Phone:                   r.Phone,
 	}, nil
@@ -343,7 +343,7 @@ type ReserveUpdateReq struct {
 	// 征迁/土地费用
 	MoveLandComsumption *float64 `json:"move_land_comsumption"`
 	// 资金详情 eg:
-	// "[{\\"type\\":0, \\"total\\":100, \\"detail\\":[{\\"total\\": 100,\\"year\\": \\"2022\\",\\"value\\":20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"year\\": \\"2023\\",\\"value\\":30,\\"comment\\":\\"xxx\\"}, ...]}, {}...]"
+	// "[{\\"type\\":0, \\"total\\":100, \\"detail\\":{\\"total\\": 100,\\"2022\\": 20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"2023\\": 30,\\"comment\\":\\"xxx\\"}, ...}, {}...]"
 	// type说明： 0:区财政;1:自筹;2:其他
 	InvestmentDetail string `json:"investment_detail"`
 	// 前期工作联系人
