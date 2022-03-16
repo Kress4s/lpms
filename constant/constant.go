@@ -16,6 +16,7 @@ const (
 // http request
 const (
 	ID               = "id"
+	IDS              = "ids"
 	Name             = "name"
 	Level            = "level"
 	ProjectType      = "project_type"
@@ -23,4 +24,18 @@ const (
 	BeginAt          = "begin_at"
 	EndAt            = "end_at"
 	Status           = "status"
+)
+
+// project status
+const (
+	// 草稿
+	Draft = 0
+	// 已入库
+	EnteredDB = 1
+	// 前期计划
+	EarlyPlan = 2
+	// 已发文
+	Posted = 3
+	// 实施库
+	Implementation = 4
 )

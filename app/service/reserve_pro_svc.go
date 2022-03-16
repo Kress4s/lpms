@@ -5,7 +5,10 @@ import (
 	"lpms/app/response"
 	"lpms/app/vo"
 	"lpms/commom/drivers/database"
+	"lpms/constant"
 	"lpms/exception"
+	"strconv"
+	"strings"
 	"sync"
 
 	"gorm.io/gorm"
@@ -35,8 +38,9 @@ type ReserveService interface {
 	Create(openID string, param *vo.ReserveReq) exception.Exception
 	Get(id int64) (*vo.ReserveResp, exception.Exception)
 	List(params *vo.ReserveFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
-	// Update(openID string, id int64, param *vo.BlackIPUpdateReq) exception.Exception
+	Update(openID string, id int64, param *vo.ReserveUpdateReq) exception.Exception
 	Delete(id int64) exception.Exception
+	MultiDelete(ids string) exception.Exception
 }
 
 func (rsi *reserveServiceImpl) Create(openID string, param *vo.ReserveReq) exception.Exception {
@@ -81,6 +85,33 @@ func (rsi *reserveServiceImpl) List(params *vo.ReserveFilterParam, pageInfo *vo.
 	return vo.NewDataPagination(count, resp, pageInfo), nil
 }
 
+func (rsi *reserveServiceImpl) Update(openID string, id int64, param *vo.ReserveUpdateReq) exception.Exception {
+	return rsi.repo.Update(rsi.db, id, param.ToMap(openID))
+}
+
 func (rsi *reserveServiceImpl) Delete(id int64) exception.Exception {
 	return rsi.repo.Delete(rsi.db, id)
+}
+
+func (rsi *reserveServiceImpl) MultiDelete(ids string) exception.Exception {
+	idslice := strings.Split(ids, ",")
+	if len(idslice) == 0 {
+		return exception.New(response.ExceptionInvalidRequestParameters, "无效参数")
+	}
+	did := make([]int64, 0, len(idslice))
+	for i := range idslice {
+		id, err := strconv.ParseUint(idslice[i], 10, 0)
+		if err != nil {
+			return exception.Wrap(response.ExceptionParseStringToInt64Error, err)
+		}
+		did = append(did, int64(id))
+	}
+	return rsi.repo.MultiDelete(rsi.db, did)
+}
+
+func (rsi *reserveServiceImpl) Refer(openID string, id int64) exception.Exception {
+	return rsi.repo.Refer(rsi.db, id, map[string]interface{}{
+		"update_by": openID,
+		"status":    constant.EnteredDB,
+	})
 }

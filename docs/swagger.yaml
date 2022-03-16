@@ -21,6 +21,9 @@ definitions:
     type: object
   vo.InvestDetail:
     properties:
+      comment:
+        description: 备注
+        type: string
       total:
         description: 资金类别 总投资
         type: number
@@ -126,9 +129,6 @@ definitions:
       add:
         description: 新增建设用地
         type: number
-      and_use_id:
-        description: 用地情况记录的ID
-        type: integer
       company_business:
         description: 企/事业单位(家)
         type: integer
@@ -156,7 +156,7 @@ definitions:
       investment_detail:
         description: |-
           资金详情 eg:
-          "[{\"type\":0, \"total\":100, \"detail\":[{\"total\": 100,\"year\": \"2022\",\"value\":20}, {\"total\": 100,\"year\": \"2023\",\"value\":30}, ...]}, {}...]"
+          "[{\\"type\\":0, \\"total\\":100, \\"detail\\":[{\\"total\\": 100,\\"year\\": \\"2022\\",\\"value\\":20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"year\\": \\"2023\\",\\"value\\":30,\\"comment\\":\\"xxx\\"}, ...]}, {}...]"
           type说明： 0:区财政;1:自筹;2:其他
         type: string
       is_land_use:
@@ -219,9 +219,6 @@ definitions:
       add:
         description: 新增建设用地
         type: number
-      and_use_id:
-        description: 用地情况记录的ID
-        type: integer
       company_business:
         description: 企/事业单位(家)
         type: integer
@@ -334,7 +331,7 @@ paths:
         schema:
           $ref: '#/definitions/vo.ReserveReq'
       responses:
-        "200":
+        "201":
           description: 创建储备库项目成功
         "400":
           description: 请求参数错误
@@ -422,6 +419,38 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取储备库项目
+      tags:
+      - 储备库 - 项目
+    put:
+      description: 修改储备库项目
+      parameters:
+      - description: 储备库项目id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 修改储备库项目成功
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "401":
+          description: 当前用户登录令牌失效
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "403":
+          description: 当前操作无权限
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改储备库项目
       tags:
       - 储备库 - 项目
   /api/v1/reserve/projects:

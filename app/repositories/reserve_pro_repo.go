@@ -32,6 +32,10 @@ type ReserveRepo interface {
 	GetInvestDetail(db *gorm.DB, id int64) ([]models.InvestDetail, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	Delete(db *gorm.DB, id int64) exception.Exception
+	MultiDelete(db *gorm.DB, ids []int64) exception.Exception
+	Refer(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
+	Submission(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
+	MultiSubmission(db *gorm.DB, ids []int64, param map[string]interface{}) exception.Exception
 }
 
 func (rri *ReserveRepoImpl) Create(db *gorm.DB, reserve *models.ReservePro) exception.Exception {
@@ -96,4 +100,26 @@ func (rri *ReserveRepoImpl) Update(db *gorm.DB, id int64, param map[string]inter
 
 func (rri *ReserveRepoImpl) Delete(db *gorm.DB, id int64) exception.Exception {
 	return exception.Wrap(response.ExceptionDatabase, db.Delete(&models.ReservePro{}, id).Error)
+}
+
+func (rri *ReserveRepoImpl) MultiDelete(db *gorm.DB, ids []int64) exception.Exception {
+	return exception.Wrap(response.ExceptionDatabase, db.Delete(&models.ReservePro{}, ids).Error)
+}
+
+// 提交 : 0(草稿) -> 1(已入库)
+func (rri *ReserveRepoImpl) Refer(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception {
+	return exception.Wrap(response.ExceptionDatabase,
+		db.Model(&models.ReservePro{}).Where(&models.ReservePro{ID: id}).Updates(param).Error)
+}
+
+// 提报 : 1(已入库) -> 2(前期计划）
+func (rri *ReserveRepoImpl) Submission(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception {
+	return exception.Wrap(response.ExceptionDatabase,
+		db.Model(&models.ReservePro{}).Where(&models.ReservePro{ID: id}).Updates(param).Error)
+}
+
+// 批量提报:  1(已入库) -> 2(前期计划）
+func (rri *ReserveRepoImpl) MultiSubmission(db *gorm.DB, ids []int64, param map[string]interface{}) exception.Exception {
+	return exception.Wrap(response.ExceptionDatabase,
+		db.Model(&models.ReservePro{}).Where("id in (?)", ids).Updates(param).Error)
 }
