@@ -15,6 +15,7 @@ var V0001InitTables = &gormigrate.Migration{
 		if err := tx.AutoMigrate(
 			models.User{},
 			models.ReservePro{},
+			models.Object{},
 		); err != nil {
 			return err
 		}

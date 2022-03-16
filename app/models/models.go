@@ -12,4 +12,6 @@ type (
 	ReservePro     = reserve.ReservePro
 	InvestDetail   = reserve.InvestDetail
 	ListReservePro = reserve.ListReservePro
+
+	Object = common.Object
 )

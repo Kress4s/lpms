@@ -24,6 +24,8 @@ const (
 	BeginAt          = "begin_at"
 	EndAt            = "end_at"
 	Status           = "status"
+	File             = "uploadfile"
+	BucketName       = "lpms"
 )
 
 // project status

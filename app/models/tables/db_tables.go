@@ -6,4 +6,7 @@ const (
 	Reserve = "lpms_reserve_pro"
 	// 用地情况
 	LandUse = "lpms_land_use"
+
+	// 文件
+	Object = "lpms_object"
 )

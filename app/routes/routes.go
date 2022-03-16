@@ -29,4 +29,8 @@ func RegisterRoutes(app *iris.Application) {
 	reserveParty := party.Party("/reserve")
 	reserveApp := mvc.New(reserveParty)
 	reserveApp.Handle(v1.NewReserveHandler())
+
+	objectParty := party.Party("/object")
+	objectApp := mvc.New(objectParty)
+	objectApp.Handle(v1.NewObjectHandler())
 }
