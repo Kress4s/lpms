@@ -275,8 +275,8 @@ type ReserveFilterParam struct {
 	ConstructSubject string `json:"construct_subject"`
 	// 计划开始时间
 	PlanBegin string `json:"plan_begin"`
-	// 计划周期(根据起止时间计算相差的月数)
-	Period *int `json:"period"`
+	// 计划结束时间
+	PlanEnd string `json:"plan_end"`
 	// 状态
 	Status *int `json:"status"`
 }

@@ -737,12 +737,12 @@
                     "description": "以下所有参数，有就传，无则不传\n项目名称",
                     "type": "string"
                 },
-                "period": {
-                    "description": "计划周期(根据起止时间计算相差的月数)",
-                    "type": "integer"
-                },
                 "plan_begin": {
                     "description": "计划开始时间",
+                    "type": "string"
+                },
+                "plan_end": {
+                    "description": "计划结束时间",
                     "type": "string"
                 },
                 "project_type": {

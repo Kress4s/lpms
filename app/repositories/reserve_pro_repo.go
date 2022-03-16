@@ -69,11 +69,8 @@ func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.
 	if params.ConstructSubject != "" {
 		tx = tx.Where("construct_subject = ?", params.ConstructSubject)
 	}
-	if params.PlanBegin != "" {
-		tx = tx.Where("plan_begin < ?", params.PlanBegin)
-	}
-	if params.Period != nil {
-		tx = tx.Where("period > ?", params.Period)
+	if params.PlanBegin != "" && params.PlanEnd != "" {
+		tx = tx.Where("plan_begin <= ? and plan_begin >= ", params.PlanEnd, params.PlanBegin)
 	}
 	if params.Status != nil {
 		tx = tx.Where("status = ?", params.Status)
