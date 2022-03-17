@@ -42,6 +42,8 @@ type ReservePro struct {
 	Contract                string          `gorm:"column:contract;type:varchar(20);comment:前期工作联系人"`
 	Phone                   string          `gorm:"column:phone;type:varchar(20);comment:联系人手机号"`
 	Status                  int             `gorm:"column:status;type:integer;comment:项目状态 0:草稿,1:已入库,2:前期计划;3:已发文"`
+	IsCaseFinish            *bool           `gorm:"column:is_case_finish;type:boolean;comment:方案是否完成"`
+	IsResearch              *int            `gorm:"column:is_research;type:boolean;comment:是否可研编制; 0:编制中 1:已完成"`
 }
 
 type InvestDetail struct {

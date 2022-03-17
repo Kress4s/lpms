@@ -202,6 +202,7 @@ func (rh *ReserveHandler) Refer(ctx iris.Context) mvc.Result {
 // @Description 提报储备库项目
 // @Tags 储备库 - 项目
 // @Param id path string true "储备库项目id"
+// @Param parameters body vo.SubmissionOutStorage true "SubmissionOutStorage"
 // @Success 200 "提报储备库项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
@@ -214,7 +215,11 @@ func (rh *ReserveHandler) Submission(ctx iris.Context) mvc.Result {
 	if err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
 	}
-	if ex := rh.Svc.Submission(rh.UserName, id); ex != nil {
+	param := &vo.SubmissionOutStorage{}
+	if err := ctx.ReadJSON(param); err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
+	}
+	if ex := rh.Svc.Submission(rh.UserName, id, param); ex != nil {
 		return response.Error(ex)
 	}
 	return response.OK()
@@ -245,6 +250,7 @@ func (rh *ReserveHandler) MultiSubmission(ctx iris.Context) mvc.Result {
 // @Description 出库储备库项目至审核
 // @Tags 储备库 - 项目
 // @Param id path string true "储备库项目id"
+// @Param parameters body vo.SubmissionOutStorage true "SubmissionOutStorage"
 // @Success 200 "出库储备库项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
@@ -257,7 +263,11 @@ func (rh *ReserveHandler) OutStorage(ctx iris.Context) mvc.Result {
 	if err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
 	}
-	if ex := rh.Svc.OutStorage(rh.UserName, id); ex != nil {
+	param := &vo.SubmissionOutStorage{}
+	if err := ctx.ReadJSON(param); err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
+	}
+	if ex := rh.Svc.OutStorage(rh.UserName, id, param); ex != nil {
 		return response.Error(ex)
 	}
 	return response.OK()

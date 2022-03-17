@@ -749,6 +749,15 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "SubmissionOutStorage",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.SubmissionOutStorage"
+                        }
                     }
                 ],
                 "responses": {
@@ -853,6 +862,15 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "SubmissionOutStorage",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.SubmissionOutStorage"
+                        }
                     }
                 ],
                 "responses": {
@@ -1590,7 +1608,7 @@
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态: 暂存-\u003e1; 提交-\u003e2",
+                    "description": "状态: 暂存-\u003e0; 提交-\u003e1",
                     "type": "integer"
                 },
                 "total": {
@@ -1850,6 +1868,19 @@
                 "upload_cad_id": {
                     "description": "CAD文件ID(上传文件接口返回的ID)",
                     "type": "string"
+                }
+            }
+        },
+        "vo.SubmissionOutStorage": {
+            "type": "object",
+            "properties": {
+                "is_case_finish": {
+                    "description": "方案是否完成",
+                    "type": "boolean"
+                },
+                "is_research": {
+                    "description": "是否可研编制; 0:编制中 1:已完成",
+                    "type": "integer"
                 }
             }
         }

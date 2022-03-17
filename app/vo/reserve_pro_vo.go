@@ -96,7 +96,7 @@ type ReserveReq struct {
 	Contract string `json:"contract"`
 	// 联系人手机号
 	Phone string `json:"phone"`
-	// 状态: 暂存->1; 提交->2
+	// 状态: 暂存->0; 提交->1
 	Status int `json:"status"`
 }
 
@@ -392,4 +392,11 @@ func (r *ReserveUpdateReq) ToMap(openID string) map[string]interface{} {
 		"phone":                     r.Phone,
 		"create_by":                 openID,
 	}
+}
+
+type SubmissionOutStorage struct {
+	// 方案是否完成
+	IsCaseFinish bool `json:"is_case_finish"`
+	// 是否可研编制; 0:编制中 1:已完成
+	IsResearch int `json:"is_research"`
 }

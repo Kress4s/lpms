@@ -44,9 +44,9 @@ type ReserveService interface {
 	Delete(id int64) exception.Exception
 	MultiDelete(ids string) exception.Exception
 	Refer(openID string, id int64) exception.Exception
-	Submission(openID string, id int64) exception.Exception
+	Submission(openID string, id int64, req *vo.SubmissionOutStorage) exception.Exception
 	MultiSubmission(openID string, ids string) exception.Exception
-	OutStorage(openID string, id int64) exception.Exception
+	OutStorage(openID string, id int64, req *vo.SubmissionOutStorage) exception.Exception
 }
 
 func (rsi *reserveServiceImpl) Create(openID string, param *vo.ReserveReq) exception.Exception {
@@ -169,10 +169,12 @@ func (rsi *reserveServiceImpl) Refer(openID string, id int64) exception.Exceptio
 	})
 }
 
-func (rsi *reserveServiceImpl) Submission(openID string, id int64) exception.Exception {
+func (rsi *reserveServiceImpl) Submission(openID string, id int64, req *vo.SubmissionOutStorage) exception.Exception {
 	return rsi.repo.Submission(rsi.db, id, map[string]interface{}{
-		"update_by": openID,
-		"status":    constant.EarlyPlan,
+		"update_by":      openID,
+		"status":         constant.EarlyPlan,
+		"is_case_finish": req.IsCaseFinish,
+		"is_research":    req.IsResearch,
 	})
 }
 
@@ -195,9 +197,11 @@ func (rsi *reserveServiceImpl) MultiSubmission(openID string, ids string) except
 	})
 }
 
-func (rsi *reserveServiceImpl) OutStorage(openID string, id int64) exception.Exception {
+func (rsi *reserveServiceImpl) OutStorage(openID string, id int64, req *vo.SubmissionOutStorage) exception.Exception {
 	return rsi.repo.OutStorage(rsi.db, id, map[string]interface{}{
-		"update_by": openID,
-		"status":    constant.OutStorageInspect,
+		"update_by":      openID,
+		"status":         constant.OutStorageInspect,
+		"is_case_finish": req.IsCaseFinish,
+		"is_research":    req.IsResearch,
 	})
 }

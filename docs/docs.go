@@ -4,7 +4,7 @@ package docs
 
 import "github.com/swaggo/swag"
 
-const docTemplate_swagger = `{
+const docTemplate = `{
     "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
@@ -753,6 +753,15 @@ const docTemplate_swagger = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "SubmissionOutStorage",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.SubmissionOutStorage"
+                        }
                     }
                 ],
                 "responses": {
@@ -857,6 +866,15 @@ const docTemplate_swagger = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "SubmissionOutStorage",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.SubmissionOutStorage"
+                        }
                     }
                 ],
                 "responses": {
@@ -1594,7 +1612,7 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态: 暂存-\u003e1; 提交-\u003e2",
+                    "description": "状态: 暂存-\u003e0; 提交-\u003e1",
                     "type": "integer"
                 },
                 "total": {
@@ -1856,6 +1874,19 @@ const docTemplate_swagger = `{
                     "type": "string"
                 }
             }
+        },
+        "vo.SubmissionOutStorage": {
+            "type": "object",
+            "properties": {
+                "is_case_finish": {
+                    "description": "方案是否完成",
+                    "type": "boolean"
+                },
+                "is_research": {
+                    "description": "是否可研编制; 0:编制中 1:已完成",
+                    "type": "integer"
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -1876,7 +1907,7 @@ var SwaggerInfo = &swag.Spec{
 	Title:            "临安区政府投资项目管理后台API",
 	Description:      "临安区政府投资项目管理后台API",
 	InfoInstanceName: "swagger",
-	SwaggerTemplate:  docTemplate_swagger,
+	SwaggerTemplate:  docTemplate,
 }
 
 func init() {

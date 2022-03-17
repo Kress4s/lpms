@@ -421,7 +421,7 @@ definitions:
         description: 选址红线 0:有拆迁,1:无拆迁
         type: integer
       status:
-        description: '状态: 暂存->1; 提交->2'
+        description: '状态: 暂存->0; 提交->1'
         type: integer
       total:
         description: 总用亩
@@ -618,6 +618,15 @@ definitions:
       upload_cad_id:
         description: CAD文件ID(上传文件接口返回的ID)
         type: string
+    type: object
+  vo.SubmissionOutStorage:
+    properties:
+      is_case_finish:
+        description: 方案是否完成
+        type: boolean
+      is_research:
+        description: 是否可研编制; 0:编制中 1:已完成
+        type: integer
     type: object
 info:
   contact:
@@ -1022,6 +1031,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: SubmissionOutStorage
+        in: body
+        name: parameters
+        required: true
+        schema:
+          $ref: '#/definitions/vo.SubmissionOutStorage'
       responses:
         "200":
           description: 出库储备库项目成功
@@ -1088,6 +1103,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: SubmissionOutStorage
+        in: body
+        name: parameters
+        required: true
+        schema:
+          $ref: '#/definitions/vo.SubmissionOutStorage'
       responses:
         "200":
           description: 提报储备库项目成功
