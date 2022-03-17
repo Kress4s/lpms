@@ -19,21 +19,268 @@ definitions:
       msg:
         type: string
     type: object
+  vo.ImplementGovFilterParam:
+    properties:
+      construct_subject:
+        description: 建设主体  ***注意:（所有参数，有就传，无则不传）***
+        type: string
+      cur_year_begin:
+        description: '当年起始时间(闭区间) eg: 2022-01-01 00:00:00'
+        type: string
+      cur_year_end:
+        description: '当年终止时间(开区间) eg : 2023-01-01 00:00:00'
+        type: string
+      level:
+        description: 项目级别
+        type: integer
+      name:
+        description: 项目名称
+        type: string
+      plan_begin:
+        description: 计划开始时间
+        type: string
+      plan_end:
+        description: 计划结束时间
+        type: string
+      project_type:
+        description: 项目类型
+        type: integer
+      status:
+        description: 状态
+        type: integer
+    type: object
+  vo.ImplementGovReq:
+    properties:
+      add:
+        description: 新增建设用地
+        type: number
+      company_business:
+        description: 企/事业单位(家)
+        type: integer
+      construct_basis_necessity:
+        description: 建设依据及必要性
+        type: string
+      construct_content_scope:
+        description: 建设内容及规模
+        type: string
+      construct_site:
+        description: 建设地点
+        type: string
+      construct_subject:
+        description: 建设主体
+        type: string
+      contract:
+        description: 前期工作联系人
+        type: string
+      enter_db_type:
+        description: 入库类别 0:A类,1:B类;2:C类
+        type: integer
+      implement_type:
+        description: 实施类型 0:新开工,1:续建
+        type: integer
+      investment_detail:
+        description: |-
+          资金详情 eg:
+          "[{\\"type\\":0, \\"total\\":100, \\"detail\\":{\\"total\\": 100,\\"2022\\": 20,\\"comment\\":\\"xxx\\"}, {\\"total\\": 100,\\"2023\\": 30,\\"comment\\":\\"xxx\\"}, ...}, {}...]"
+          type说明： 0:区财政;1:自筹;2:其他
+        type: string
+      is_land_use:
+        description: 是否有用地情况
+        type: boolean
+      level:
+        description: 项目级别 0:区级,1:街镇级
+        type: integer
+      move_land_comsumption:
+        description: 征迁/土地费用
+        type: number
+      name:
+        description: 项目名称
+        type: string
+      need_collect:
+        description: 需征地面积
+        type: number
+      need_people_move:
+        description: 需拆迁农户/居民数(人)
+        type: integer
+      no_conform_use_plan:
+        description: 不符合土地利用规划面积
+        type: number
+      period:
+        description: 建设周期
+        type: integer
+      phone:
+        description: 联系人手机号
+        type: string
+      plan_begin:
+        description: 计划开工时间
+        type: string
+      point_type:
+        description: 重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型
+        type: integer
+      project_consumption:
+        description: 工程费用
+        type: number
+      project_type:
+        description: 项目类型; 0:安置房,1:道路交通,2:市政设施;3:提升整治;4:卫生;5:五水共治;6:学校;7:其他
+        type: integer
+      site_photo:
+        description: 无拆迁照片
+        type: string
+      site_red:
+        description: 选址红线 0:有拆迁,1:无拆迁
+        type: integer
+      total:
+        description: 总用亩
+        type: number
+      total_investment:
+        description: 总投资
+        type: number
+      upload_cad_id:
+        description: CAD文件ID(上传文件接口返回的ID)
+        type: string
+    type: object
+  vo.ImplementGovResp:
+    properties:
+      add:
+        description: 新增建设用地
+        type: number
+      company_business:
+        description: 企/事业单位(家)
+        type: integer
+      construct_basis_necessity:
+        description: 建设依据及必要性
+        type: string
+      construct_content_scope:
+        description: 建设内容及规模
+        type: string
+      construct_site:
+        description: 建设地点
+        type: string
+      construct_subject:
+        description: 建设主体
+        type: string
+      contract:
+        description: 前期工作联系人
+        type: string
+      enter_db_type:
+        description: 入库类别 0:A类,1:B类;2:C类
+        type: integer
+      id:
+        description: id
+        type: integer
+      implement_type:
+        description: 实施类型 0:新开工,1:续建
+        type: integer
+      investment_detail:
+        description: 资金详情
+        type: string
+      is_land_use:
+        description: 是否有用地情况
+        type: boolean
+      level:
+        description: 项目级别 0:区级,1:街镇级
+        type: integer
+      move_land_comsumption:
+        description: 征迁/土地费用
+        type: number
+      name:
+        description: 项目名称
+        type: string
+      need_collect:
+        description: 需征地面积
+        type: number
+      need_people_move:
+        description: 需拆迁农户/居民数(人)
+        type: integer
+      no_conform_use_plan:
+        description: 不符合土地利用规划面积
+        type: number
+      period:
+        description: 建设周期
+        type: integer
+      phone:
+        description: 联系人手机号
+        type: string
+      plan_begin:
+        description: 计划开工时间
+        type: string
+      point_type:
+        description: 重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型
+        type: integer
+      project_consumption:
+        description: 工程费用
+        type: number
+      project_type:
+        description: 项目类型; 0:安置房,1:道路交通,2:市政设施;3:提升整治;4:卫生;5:五水共治;6:学校;7:其他
+        type: integer
+      site_photo:
+        description: 无拆迁照片
+        type: string
+      site_red:
+        description: 选址红线 0:有拆迁,1:无拆迁
+        type: integer
+      status:
+        description: 项目状态 0:未开工,1:开工待审核,2:已开工;3:竣工待审核;4:已竣工"
+        type: integer
+      total:
+        description: 总用亩
+        type: number
+      total_investment:
+        description: 总投资
+        type: number
+      upload_cad_id:
+        description: CAD文件ID(上传文件接口返回的ID)
+        type: string
+    type: object
+  vo.ListImplementGovResp:
+    properties:
+      construct_subject:
+        description: 建设主体
+        type: string
+      finish_time:
+        description: 竣工时间
+        type: string
+      id:
+        description: id
+        type: integer
+      level:
+        description: 项目级别
+        type: integer
+      name:
+        description: 名称
+        type: string
+      plan_begin:
+        description: 计划开工时间
+        type: string
+      project_type:
+        description: 项目类型
+        type: integer
+      status:
+        description: 状态
+        type: integer
+    type: object
   vo.ListReserveProResp:
     properties:
       construct_subject:
+        description: 建设主体
         type: string
       create_at:
+        description: 创建时间
         type: string
       id:
+        description: id
         type: integer
       level:
+        description: 项目级别
         type: integer
       name:
+        description: 名称
         type: string
       project_type:
+        description: 项目类型
         type: integer
       status:
+        description: 状态
         type: integer
     type: object
   vo.LoginReq:
@@ -72,15 +319,13 @@ definitions:
   vo.ReserveFilterParam:
     properties:
       construct_subject:
-        description: 建设主体
+        description: 建设主体 ***注意:（所有参数，有就传，无则不传）***
         type: string
       level:
         description: 项目级别
         type: integer
       name:
-        description: |-
-          以下所有参数，有就传，无则不传
-          项目名称
+        description: 项目名称
         type: string
       plan_begin:
         description: 计划开始时间
@@ -174,6 +419,9 @@ definitions:
         type: string
       site_red:
         description: 选址红线 0:有拆迁,1:无拆迁
+        type: integer
+      status:
+        description: '状态: 暂存->1; 提交->2'
         type: integer
       total:
         description: 总用亩
@@ -379,6 +627,191 @@ info:
   title: 临安区政府投资项目管理后台API
   version: "1.0"
 paths:
+  /api/v1/implement/gov/project:
+    post:
+      description: 创建实施库政府投资项目
+      parameters:
+      - description: ImplementGovReq
+        in: body
+        name: parameters
+        required: true
+        schema:
+          $ref: '#/definitions/vo.ImplementGovReq'
+      responses:
+        "201":
+          description: 创建实施库政府投资项目成功
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "401":
+          description: 当前用户登录令牌失效
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "403":
+          description: 当前操作无权限
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建实施库政府投资项目
+      tags:
+      - 实施库 - 政府投资项目
+  /api/v1/implement/gov/project/{id}:
+    delete:
+      description: 删除实施库政府投资项目
+      parameters:
+      - description: 实施库政府投资项目id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 删除实施库政府投资项目成功
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "401":
+          description: 当前用户登录令牌失效
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "403":
+          description: 当前操作无权限
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除实施库政府投资项目
+      tags:
+      - 实施库 - 政府投资项目
+    get:
+      description: 查看实施库政府投资项目
+      parameters:
+      - description: 项目id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 查询实施库政府投资项目成功
+          schema:
+            $ref: '#/definitions/vo.ImplementGovResp'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "401":
+          description: 当前用户登录令牌失效
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "403":
+          description: 当前操作无权限
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: 查看实施库政府投资项目
+      tags:
+      - 实施库 - 政府投资项目
+  /api/v1/implement/gov/project/multi:
+    delete:
+      description: 批量删除实施库政府投资项目
+      parameters:
+      - description: 实施库政府投资项目id, `,` 连接
+        in: query
+        name: ids
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 批量删除实施库政府投资项目成功
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "401":
+          description: 当前用户登录令牌失效
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "403":
+          description: 当前操作无权限
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除实施库政府投资项目
+      tags:
+      - 实施库 - 政府投资项目
+  /api/v1/implement/gov/projects:
+    post:
+      description: 获取实施库政府投资项目列表
+      parameters:
+      - description: 请求页
+        in: query
+        name: page
+        type: integer
+      - description: 页大小
+        in: query
+        name: page_size
+        type: integer
+      - description: ImplementGovFilterParam
+        in: body
+        name: parameters
+        required: true
+        schema:
+          $ref: '#/definitions/vo.ImplementGovFilterParam'
+      responses:
+        "200":
+          description: 查询实施库政府投资项目列表成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/vo.DataPagination'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/vo.ListImplementGovResp'
+                  type: array
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "401":
+          description: 当前用户登录令牌失效
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "403":
+          description: 当前操作无权限
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取实施库政府投资项目列表
+      tags:
+      - 实施库 - 政府投资项目
   /api/v1/object/file/{id}:
     get:
       description: 获取对象
@@ -401,7 +834,7 @@ paths:
       - ApiKeyAuth: []
       summary: 获取对象
       tags:
-      - 应用管理 - 伪装内容 - 文件对象
+      - 项目 - 文件
   /api/v1/object/file/upload:
     post:
       consumes:
@@ -440,7 +873,7 @@ paths:
       - ApiKeyAuth: []
       summary: 存储对象
       tags:
-      - 应用管理 - 伪装内容 - 文件对象
+      - 项目 - 文件
   /api/v1/reserve/project:
     post:
       description: 创建储备库项目
@@ -578,6 +1011,39 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 修改储备库项目
+      tags:
+      - 储备库 - 项目
+  /api/v1/reserve/project/{id}/out-storage:
+    patch:
+      description: 出库储备库项目至审核
+      parameters:
+      - description: 储备库项目id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 出库储备库项目成功
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "401":
+          description: 当前用户登录令牌失效
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "403":
+          description: 当前操作无权限
+          schema:
+            $ref: '#/definitions/vo.Error'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/vo.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: 出库储备库项目至审核
       tags:
       - 储备库 - 项目
   /api/v1/reserve/project/{id}/refer:

@@ -16,6 +16,7 @@ var V0001InitTables = &gormigrate.Migration{
 			models.User{},
 			models.ReservePro{},
 			models.Object{},
+			models.ImplementGov{},
 		); err != nil {
 			return err
 		}

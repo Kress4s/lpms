@@ -2,6 +2,7 @@ package models
 
 import (
 	"lpms/app/models/internal/common"
+	"lpms/app/models/internal/implement"
 	"lpms/app/models/internal/reserve"
 	"lpms/app/models/internal/user"
 )
@@ -14,4 +15,6 @@ type (
 	ListReservePro = reserve.ListReservePro
 
 	Object = common.Object
+	
+	ImplementGov = implement.ImplementGov
 )

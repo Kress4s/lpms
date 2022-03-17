@@ -46,6 +46,7 @@ type ReserveService interface {
 	Refer(openID string, id int64) exception.Exception
 	Submission(openID string, id int64) exception.Exception
 	MultiSubmission(openID string, ids string) exception.Exception
+	OutStorage(openID string, id int64) exception.Exception
 }
 
 func (rsi *reserveServiceImpl) Create(openID string, param *vo.ReserveReq) exception.Exception {
@@ -83,7 +84,7 @@ func (rsi *reserveServiceImpl) List(params *vo.ReserveFilterParam, pageInfo *vo.
 			Level:            projects[i].Level,
 			ProjectType:      projects[i].ProjectType,
 			ConstructSubject: projects[i].ConstructSubject,
-			CreateAt:         &projects[i].CreateAt,
+			CreateAt:         projects[i].CreateAt,
 			Status:           projects[i].Status,
 		})
 	}
@@ -191,5 +192,12 @@ func (rsi *reserveServiceImpl) MultiSubmission(openID string, ids string) except
 	return rsi.repo.MultiSubmission(rsi.db, did, map[string]interface{}{
 		"update_by": openID,
 		"status":    constant.EarlyPlan,
+	})
+}
+
+func (rsi *reserveServiceImpl) OutStorage(openID string, id int64) exception.Exception {
+	return rsi.repo.OutStorage(rsi.db, id, map[string]interface{}{
+		"update_by": openID,
+		"status":    constant.OutStorageInspect,
 	})
 }

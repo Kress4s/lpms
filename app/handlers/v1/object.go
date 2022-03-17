@@ -27,7 +27,7 @@ func NewObjectHandler() *ObjectHandler {
 // Upload godoc
 // @Summary 存储对象
 // @Description 存储对象并返回对象的id
-// @Tags 应用管理 - 伪装内容 - 文件对象
+// @Tags 项目 - 文件
 // @Accept mpfd
 // @Produce json
 // @Param uploadfile formData file true "文件"
@@ -56,7 +56,7 @@ func (oh *ObjectHandler) Upload(ctx iris.Context) mvc.Result {
 // Get godoc
 // @Summary 获取对象
 // @Description 获取对象
-// @Tags 应用管理 - 伪装内容 - 文件对象
+// @Tags 项目 - 文件
 // @Param id path string true "对象id"
 // @Success 200 {string} byte "获取文件成功"
 // @Failure 500 {string} byte "服务器内部错误"

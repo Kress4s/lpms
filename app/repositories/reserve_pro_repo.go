@@ -36,6 +36,7 @@ type ReserveRepo interface {
 	Refer(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	Submission(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	MultiSubmission(db *gorm.DB, ids []int64, param map[string]interface{}) exception.Exception
+	OutStorage(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 }
 
 func (rri *ReserveRepoImpl) Create(db *gorm.DB, reserve *models.ReservePro) exception.Exception {
@@ -70,7 +71,7 @@ func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.
 		tx = tx.Where("construct_subject = ?", params.ConstructSubject)
 	}
 	if params.PlanBegin != "" && params.PlanEnd != "" {
-		tx = tx.Where("plan_begin <= ? and plan_begin >= ", params.PlanEnd, params.PlanBegin)
+		tx = tx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)
 	}
 	if params.Status != nil {
 		tx = tx.Where("status = ?", params.Status)
@@ -119,4 +120,10 @@ func (rri *ReserveRepoImpl) Submission(db *gorm.DB, id int64, param map[string]i
 func (rri *ReserveRepoImpl) MultiSubmission(db *gorm.DB, ids []int64, param map[string]interface{}) exception.Exception {
 	return exception.Wrap(response.ExceptionDatabase,
 		db.Model(&models.ReservePro{}).Where("id in (?)", ids).Updates(param).Error)
+}
+
+// 出库: 3(已发文) -> 4(出库进入实施库审核)
+func (rri *ReserveRepoImpl) OutStorage(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception {
+	return exception.Wrap(response.ExceptionDatabase,
+		db.Model(&models.ReservePro{}).Where(&models.ReservePro{ID: id}).Updates(param).Error)
 }

@@ -28,7 +28,7 @@ const (
 	BucketName       = "lpms"
 )
 
-// project status
+// reserver project status
 const (
 	// 草稿
 	Draft = 0
@@ -38,8 +38,22 @@ const (
 	EarlyPlan = 2
 	// 已发文
 	Posted = 3
-	// 已入政府项目实施库
-	Implementation = 4
+	// 出库进入实施库审核
+	OutStorageInspect = 4
+)
+
+// implement project status
+const (
+	// 未开工
+	UnStart = 0
+	// 开工待审核
+	Inspecting = 1
+	// 开工建设
+	Started = 2
+	// 竣工待审核
+	UnFinishInspect = 3
+	// 已竣工
+	Finished = 4
 )
 
 // time format

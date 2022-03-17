@@ -9,4 +9,8 @@ const (
 
 	// 文件
 	Object = "lpms_object"
+	// 实施库-政府项目
+	ImplementGov = "lpms_implement_gov"
+	// 实施库-产业项目
+	ImplementIndustry = "lpms_implement_industry"
 )
