@@ -20,15 +20,17 @@ var (
 )
 
 type reserveServiceImpl struct {
-	db   *gorm.DB
-	repo repositories.ReserveRepo
+	db      *gorm.DB
+	repo    repositories.ReserveRepo
+	objRepo repositories.ObjectRepo
 }
 
 func GetReserveService() ReserveService {
 	reserveOnce.Do(func() {
 		reserveServiceInstance = &reserveServiceImpl{
-			db:   database.GetDriver(),
-			repo: repositories.GetReserveRepo(),
+			db:      database.GetDriver(),
+			repo:    repositories.GetReserveRepo(),
+			objRepo: repositories.GetObjectRepo(),
 		}
 	})
 	return reserveServiceInstance
@@ -89,10 +91,41 @@ func (rsi *reserveServiceImpl) List(params *vo.ReserveFilterParam, pageInfo *vo.
 }
 
 func (rsi *reserveServiceImpl) Update(openID string, id int64, param *vo.ReserveUpdateReq) exception.Exception {
+	pro, ex := rsi.repo.Get(rsi.db, id)
+	if ex != nil {
+		return ex
+	}
+	// obj change
+	if pro.UploadCadID != "" && pro.UploadCadID != param.UploadCadID {
+		ex := rsi.objRepo.Delete(rsi.db, pro.UploadCadID)
+		if ex != nil {
+			return ex
+		}
+	}
+	if pro.SitePhoto != "" && pro.SitePhoto != param.SitePhoto {
+		ex := rsi.objRepo.Delete(rsi.db, pro.SitePhoto)
+		if ex != nil {
+			return ex
+		}
+	}
 	return rsi.repo.Update(rsi.db, id, param.ToMap(openID))
 }
 
 func (rsi *reserveServiceImpl) Delete(id int64) exception.Exception {
+	pro, ex := rsi.repo.Get(rsi.db, id)
+	if ex != nil {
+		return ex
+	}
+	if pro.SitePhoto != "" {
+		if exx := rsi.objRepo.Delete(rsi.db, pro.SitePhoto); exx != nil {
+			return exx
+		}
+	}
+	if pro.UploadCadID != "" {
+		if exx := rsi.objRepo.Delete(rsi.db, pro.UploadCadID); exx != nil {
+			return exx
+		}
+	}
 	return rsi.repo.Delete(rsi.db, id)
 }
 
@@ -108,6 +141,22 @@ func (rsi *reserveServiceImpl) MultiDelete(ids string) exception.Exception {
 			return exception.Wrap(response.ExceptionParseStringToInt64Error, err)
 		}
 		did = append(did, int64(id))
+	}
+	for i := range did {
+		pro, ex := rsi.repo.Get(rsi.db, did[i])
+		if ex != nil {
+			return ex
+		}
+		if pro.SitePhoto != "" {
+			if exx := rsi.objRepo.Delete(rsi.db, pro.SitePhoto); exx != nil {
+				return exx
+			}
+		}
+		if pro.UploadCadID != "" {
+			if exx := rsi.objRepo.Delete(rsi.db, pro.UploadCadID); exx != nil {
+				return exx
+			}
+		}
 	}
 	return rsi.repo.MultiDelete(rsi.db, did)
 }
