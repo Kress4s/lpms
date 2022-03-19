@@ -26,6 +26,8 @@ const (
 	Status           = "status"
 	File             = "uploadfile"
 	BucketName       = "lpms"
+	Month            = "month"
+	ProjectID        = "project_id"
 )
 
 // reserver project status
@@ -56,6 +58,8 @@ const (
 	FinishInspect = 3
 	// 已竣工
 	Finished = 4
+	// 项目变更
+	Change = 5
 )
 
 // time format

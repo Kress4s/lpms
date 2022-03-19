@@ -19,6 +19,239 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/implement/gov/progress": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "查看实施库政府投资项目进度",
+                "tags": [
+                    "实施库 - 政府投资项目 - 进度"
+                ],
+                "summary": "查看实施库政府投资 项目进度",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "所属项目id",
+                        "name": "project_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "项目进度所属月份 eg: 1月 --\u003e 1",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询实施库政府投资项目进度成功",
+                        "schema": {
+                            "$ref": "#/definitions/vo.GovProgressResp"
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "实施库政府投资项目**进度计划**保存",
+                "tags": [
+                    "实施库 - 政府投资项目 - 进度"
+                ],
+                "summary": "实施库政府投资项目 进度计划 保存(修改)",
+                "parameters": [
+                    {
+                        "description": "GovProgressReq",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.GovProgressReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "实施库政府投资项目进度保存成功"
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/implement/gov/progress/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "修改项目进度",
+                "tags": [
+                    "实施库 - 政府投资项目 - 进度"
+                ],
+                "summary": "修改项目进度",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "项目进度记录id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "GovProgressUpdateReq",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.GovProgressUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "修改项目进度成功"
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/implement/gov/progress/{project_id}/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "查看实施库政府投资项目 **进度计划**",
+                "tags": [
+                    "实施库 - 政府投资项目 - 进度"
+                ],
+                "summary": "查看实施库政府投资项目 进度计划",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "所属项目id",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询实施库政府投资项目进度计划",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vo.ListGovProgressPlan"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/implement/gov/project": {
             "post": {
                 "security": [
@@ -1370,6 +1603,184 @@ const docTemplate = `{
                 }
             }
         },
+        "vo.GovProgressInfo": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "id,**新添加的不需要传**",
+                    "type": "integer"
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer"
+                },
+                "plan_invest": {
+                    "description": "本月计划投资额(万)",
+                    "type": "number"
+                },
+                "plan_progress": {
+                    "description": "本月计划形象进度",
+                    "type": "string"
+                },
+                "project_id": {
+                    "description": "项目ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.GovProgressReq": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.GovProgressInfo"
+                    }
+                }
+            }
+        },
+        "vo.GovProgressResp": {
+            "type": "object",
+            "properties": {
+                ":comment": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                ":id": {
+                    "description": "id",
+                    "type": "integer"
+                },
+                "actual_progress": {
+                    "description": "本月完成形象进度",
+                    "type": "string"
+                },
+                "change_content": {
+                    "description": "变更内容",
+                    "type": "string"
+                },
+                "change_money": {
+                    "description": "//变更金额",
+                    "type": "number"
+                },
+                "change_type": {
+                    "description": "变更类型;0:较小变更,1:一般变更,2:较大变更,3:重大变更",
+                    "type": "integer"
+                },
+                "is_change": {
+                    "description": "是否本月产生联系单变更",
+                    "type": "boolean"
+                },
+                "is_help": {
+                    "description": "是否需协调解决问题",
+                    "type": "boolean"
+                },
+                "last_month_fixed_invested": {
+                    "description": "上月完成固投(万)",
+                    "type": "number"
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer"
+                },
+                "pay_project": {
+                    "description": "本月支付工程款(万)",
+                    "type": "number"
+                },
+                "plan_invest": {
+                    "description": "本月计划投资额(万)",
+                    "type": "number"
+                },
+                "plan_invested": {
+                    "description": "本月完成投资额(万)",
+                    "type": "number"
+                },
+                "plan_progress": {
+                    "description": "本月计划形象进度",
+                    "type": "string"
+                },
+                "problem_detail": {
+                    "description": "问题详情",
+                    "type": "string"
+                },
+                "problem_type": {
+                    "description": "问题类型",
+                    "type": "integer"
+                },
+                "project_id": {
+                    "description": "项目ID",
+                    "type": "integer"
+                },
+                "year_sum__fixed_invested": {
+                    "description": "当年累计固投(万)",
+                    "type": "number"
+                },
+                "year_sum_invested": {
+                    "description": "当年累计投资额(万)",
+                    "type": "number"
+                }
+            }
+        },
+        "vo.GovProgressUpdateReq": {
+            "type": "object",
+            "properties": {
+                ":comment": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "actual_progress": {
+                    "description": "本月完成形象进度",
+                    "type": "string"
+                },
+                "change_content": {
+                    "description": "变更内容",
+                    "type": "string"
+                },
+                "change_money": {
+                    "description": "变更金额",
+                    "type": "number"
+                },
+                "change_type": {
+                    "description": "变更类型;0:较小变更,1:一般变更,2:较大变更,3:重大变更",
+                    "type": "integer"
+                },
+                "is_change": {
+                    "description": "是否本月产生联系单变更",
+                    "type": "boolean"
+                },
+                "is_help": {
+                    "description": "是否需协调解决问题",
+                    "type": "boolean"
+                },
+                "last_month_fixed_invested": {
+                    "description": "上月完成固投(万)",
+                    "type": "number"
+                },
+                "pay_project": {
+                    "description": "本月支付工程款(万)",
+                    "type": "number"
+                },
+                "plan_invested": {
+                    "description": "本月完成投资额(万)",
+                    "type": "number"
+                },
+                "problem_detail": {
+                    "description": "问题详情",
+                    "type": "string"
+                },
+                "problem_type": {
+                    "description": "问题类型",
+                    "type": "integer"
+                },
+                "year_sum__fixed_invested": {
+                    "description": "当年累计固投(万)",
+                    "type": "number"
+                },
+                "year_sum_invested": {
+                    "description": "当年累计投资额(万)",
+                    "type": "number"
+                }
+            }
+        },
         "vo.ImpleIndustryFilterParam": {
             "type": "object",
             "properties": {
@@ -1932,6 +2343,27 @@ const docTemplate = `{
                 },
                 "upload_cad_id": {
                     "description": "CAD文件ID(上传文件接口返回的ID)",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.ListGovProgressPlan": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "integer"
+                },
+                "month": {
+                    "description": "月份数",
+                    "type": "integer"
+                },
+                "plan_invest": {
+                    "description": "本月计划投资额(万)",
+                    "type": "number"
+                },
+                "plan_progress": {
+                    "description": "本月计划形象进度",
                     "type": "string"
                 }
             }

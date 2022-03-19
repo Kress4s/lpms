@@ -193,6 +193,7 @@ type ImplementGovResp struct {
 
 func NewImplementGovResponse(r *models.ImplementGov) (*ImplementGovResp, error) {
 	return &ImplementGovResp{
+		ID:                      r.ID,
 		Level:                   r.Level,
 		Name:                    r.Name,
 		ConstructSubject:        r.ConstructSubject,

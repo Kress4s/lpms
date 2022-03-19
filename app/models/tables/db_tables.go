@@ -13,4 +13,6 @@ const (
 	ImplementGov = "lpms_implement_gov"
 	// 实施库-产业项目
 	ImplementIndustry = "lpms_implement_industry"
+	// 实施库-政府项目-进度
+	GovProgress = "lpms_gov_progress"
 )

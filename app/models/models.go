@@ -16,6 +16,8 @@ type (
 
 	Object = common.Object
 
-	ImplementGov  = implement.ImplementGov
-	ImpleIndustry = implement.ImpleIndustry
+	ImplementGov        = implement.ImplementGov
+	ImpleIndustry       = implement.ImpleIndustry
+	GovProgress         = implement.GovProgress
+	ListGovProgressPlan = implement.ListGovProgressPlan
 )

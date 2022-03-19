@@ -390,7 +390,7 @@ func (r *ReserveUpdateReq) ToMap(openID string) map[string]interface{} {
 		"investment_detail":         r.InvestmentDetail,
 		"contract":                  r.Contract,
 		"phone":                     r.Phone,
-		"create_by":                 openID,
+		"update_by":                 openID,
 	}
 }
 
