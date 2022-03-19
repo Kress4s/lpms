@@ -40,6 +40,8 @@ const (
 	Posted = 3
 	// 出库进入实施库审核
 	OutStorageInspect = 4
+	// 已出库
+	OutStorage = 5
 )
 
 // implement project status
@@ -47,11 +49,11 @@ const (
 	// 未开工
 	UnStart = 0
 	// 开工待审核
-	Inspecting = 1
+	StartInspecting = 1
 	// 开工建设
 	Started = 2
 	// 竣工待审核
-	UnFinishInspect = 3
+	FinishInspect = 3
 	// 已竣工
 	Finished = 4
 )

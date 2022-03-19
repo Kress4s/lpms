@@ -12,31 +12,31 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 )
 
-type ImplementGovHandler struct {
+type ImpleIndustryHandler struct {
 	handlers.BaseHandler
-	Svc service.ImplementGovService
+	Svc service.ImpleIndustryService
 }
 
-func NewImplementGovHandler() *ImplementGovHandler {
-	return &ImplementGovHandler{
-		Svc: service.GetImplementGovService(),
+func NewImpleIndustryHandler() *ImpleIndustryHandler {
+	return &ImpleIndustryHandler{
+		Svc: service.GetImpleIndustryService(),
 	}
 }
 
 // Create godoc
-// @Summary 创建实施库政府投资项目
-// @Description 创建实施库政府投资项目
-// @Tags 实施库 - 政府投资项目
-// @Param parameters body vo.ImplementGovReq true "ImplementGovReq"
-// @Success 201  "创建实施库政府投资项目成功"
+// @Summary 创建实施库产业项目
+// @Description 创建实施库产业项目
+// @Tags 实施库 - 产业项目
+// @Param parameters body vo.ImpleIndustryReq true "ImpleIndustryReq"
+// @Success 201  "创建实施库产业项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"
 // @Failure 500 {object} vo.Error "服务器内部错误"
 // @Security ApiKeyAuth
-// @Router /api/v1/implement/gov/project [post]
-func (ih *ImplementGovHandler) Create(ctx iris.Context) mvc.Result {
-	req := &vo.ImplementGovReq{}
+// @Router /api/v1/implement/indust/project [post]
+func (ih *ImpleIndustryHandler) Create(ctx iris.Context) mvc.Result {
+	req := &vo.ImpleIndustryReq{}
 	if err := ctx.ReadJSON(req); err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
 	}
@@ -48,18 +48,18 @@ func (ih *ImplementGovHandler) Create(ctx iris.Context) mvc.Result {
 }
 
 // Create godoc
-// @Summary 查看实施库政府投资项目
-// @Description 查看实施库政府投资项目
-// @Tags 实施库 - 政府投资项目
+// @Summary 查看实施库产业项目
+// @Description 查看实施库产业项目
+// @Tags 实施库 - 产业项目
 // @Param id path string true "项目id"
-// @Success 200 {object} vo.ImplementGovResp "查询实施库政府投资项目成功"
+// @Success 200 {object} vo.ImpleIndustryResp "查询实施库产业项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"
 // @Failure 500 {object} vo.Error "服务器内部错误"
 // @Security ApiKeyAuth
-// @Router /api/v1/implement/gov/project/{id} [get]
-func (ih *ImplementGovHandler) Get(ctx iris.Context) mvc.Result {
+// @Router /api/v1/implement/indust/project/{id} [get]
+func (ih *ImpleIndustryHandler) Get(ctx iris.Context) mvc.Result {
 	id, err := ctx.Params().GetInt64(constant.ID)
 	if err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
@@ -72,25 +72,25 @@ func (ih *ImplementGovHandler) Get(ctx iris.Context) mvc.Result {
 }
 
 // Create godoc
-// @Summary 获取实施库政府投资项目列表
-// @Description 获取实施库政府投资项目列表
-// @Tags 实施库 - 政府投资项目
+// @Summary 获取实施库产业项目列表
+// @Description 获取实施库产业项目列表
+// @Tags 实施库 - 产业项目
 // @Param page query int false "请求页"
 // @Param page_size query int false "页大小"
-// @Param parameters body vo.ImplementGovFilterParam true "ImplementGovFilterParam"
-// @Success 200 {object} vo.DataPagination{data=[]vo.ListImplementGovResp} "查询实施库政府投资项目列表成功"
+// @Param parameters body vo.ImpleIndustryFilterParam true "ImpleIndustryFilterParam"
+// @Success 200 {object} vo.DataPagination{data=[]vo.ListImpleIndustryResp} "查询实施库产业项目列表成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"
 // @Failure 500 {object} vo.Error "服务器内部错误"
 // @Security ApiKeyAuth
-// @Router /api/v1/implement/gov/projects [post]
-func (ih *ImplementGovHandler) List(ctx iris.Context) mvc.Result {
+// @Router /api/v1/implement/indust/projects [post]
+func (ih *ImpleIndustryHandler) List(ctx iris.Context) mvc.Result {
 	page, ex := handlers.GetPageInfo(ctx)
 	if ex != nil {
 		return response.Error(ex)
 	}
-	params := &vo.ImplementGovFilterParam{}
+	params := &vo.ImpleIndustryFilterParam{}
 	if err := ctx.ReadJSON(params); err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
 	}
@@ -102,18 +102,18 @@ func (ih *ImplementGovHandler) List(ctx iris.Context) mvc.Result {
 }
 
 // Create godoc
-// @Summary 删除实施库政府投资项目
-// @Description 删除实施库政府投资项目
-// @Tags 实施库 - 政府投资项目
-// @Param id path string true "实施库政府投资项目id"
-// @Success 200 "删除实施库政府投资项目成功"
+// @Summary 删除实施库产业项目
+// @Description 删除实施库产业项目
+// @Tags 实施库 - 产业项目
+// @Param id path string true "实施库产业项目id"
+// @Success 200 "删除实施库产业项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"
 // @Failure 500 {object} vo.Error "服务器内部错误"
 // @Security ApiKeyAuth
-// @Router /api/v1/implement/gov/project/{id} [delete]
-func (ih *ImplementGovHandler) Delete(ctx iris.Context) mvc.Result {
+// @Router /api/v1/implement/indust/project/{id} [delete]
+func (ih *ImpleIndustryHandler) Delete(ctx iris.Context) mvc.Result {
 	id, err := ctx.Params().GetInt64(constant.ID)
 	if err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
@@ -126,18 +126,18 @@ func (ih *ImplementGovHandler) Delete(ctx iris.Context) mvc.Result {
 }
 
 // Create godoc
-// @Summary 批量删除实施库政府投资项目
-// @Description 批量删除实施库政府投资项目
-// @Tags 实施库 - 政府投资项目
-// @Param ids query string true "实施库政府投资项目id, `,` 连接"
-// @Success 200 "批量删除实施库政府投资项目成功"
+// @Summary 批量删除实施库产业项目
+// @Description 批量删除实施库产业项目
+// @Tags 实施库 - 产业项目
+// @Param ids query string true "实施库产业项目id, `,` 连接"
+// @Success 200 "批量删除实施库产业项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"
 // @Failure 500 {object} vo.Error "服务器内部错误"
 // @Security ApiKeyAuth
-// @Router /api/v1/implement/gov/project/multi [delete]
-func (ih *ImplementGovHandler) MultiDelete(ctx iris.Context) mvc.Result {
+// @Router /api/v1/implement/indust/project/multi [delete]
+func (ih *ImpleIndustryHandler) MultiDelete(ctx iris.Context) mvc.Result {
 	ids := ctx.URLParam(constant.IDS)
 	ex := ih.Svc.MultiDelete(ids)
 	if ex != nil {
@@ -147,10 +147,10 @@ func (ih *ImplementGovHandler) MultiDelete(ctx iris.Context) mvc.Result {
 }
 
 // BeforeActivation 初始化路由
-func (ih *ImplementGovHandler) BeforeActivation(b mvc.BeforeActivation) {
-	b.Handle(iris.MethodPost, "/gov/project", "Create")
-	b.Handle(iris.MethodGet, "/gov/project/{id:string}", "Get")
-	b.Handle(iris.MethodPost, "/gov/projects", "List")
-	b.Handle(iris.MethodDelete, "/gov/project/{id:string}", "Delete")
-	b.Handle(iris.MethodDelete, "/gov/project/multi", "MultiDelete")
+func (ih *ImpleIndustryHandler) BeforeActivation(b mvc.BeforeActivation) {
+	b.Handle(iris.MethodPost, "/indust/project", "Create")
+	b.Handle(iris.MethodGet, "/indust/project/{id:string}", "Get")
+	b.Handle(iris.MethodPost, "/indust/projects", "List")
+	b.Handle(iris.MethodDelete, "/indust/project/{id:string}", "Delete")
+	b.Handle(iris.MethodDelete, "/indust/project/multi", "MultiDelete")
 }

@@ -5,6 +5,7 @@ import (
 	"lpms/app/models/tables"
 	"lpms/app/response"
 	"lpms/app/vo"
+	"lpms/constant"
 	"lpms/exception"
 	"sync"
 
@@ -57,7 +58,7 @@ func (rri *ReserveRepoImpl) Get(db *gorm.DB, id int64) (*models.ReservePro, exce
 
 func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam) (int64, []models.ReservePro, exception.Exception) {
 	data := make([]models.ReservePro, 0)
-	tx := db.Table(tables.Reserve).Select("id, name, level, project_type, construct_subject, create_at, status")
+	tx := db.Table(tables.Reserve).Select("id, name, level, project_type, construct_subject, create_at, status").Where("status <> ? and status <> ?", constant.OutStorageInspect, constant.OutStorage)
 	if params.Name != "" {
 		tx = tx.Where("name = ?", params.Name)
 	}

@@ -11,12 +11,17 @@ import (
 var V0001InitTables = &gormigrate.Migration{
 	ID: "0001_init_tables",
 	Migrate: func(tx *gorm.DB) error {
-		// 创建 操作人员表，角色表, 操作人员角色关联表，用户登录记录表
 		if err := tx.AutoMigrate(
+			// 用户
 			models.User{},
+			// 储备库
 			models.ReservePro{},
+			// 文件库
 			models.Object{},
+			// 实施库-政府项目
 			models.ImplementGov{},
+			// 实施库-产业项目
+			models.ImpleIndustry{},
 		); err != nil {
 			return err
 		}

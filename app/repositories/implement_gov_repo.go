@@ -5,6 +5,7 @@ import (
 	"lpms/app/models/tables"
 	"lpms/app/response"
 	"lpms/app/vo"
+	"lpms/constant"
 	"lpms/exception"
 	"sync"
 
@@ -53,7 +54,7 @@ func (igi *ImplementGovRepoImpl) Get(db *gorm.DB, id int64) (*models.ImplementGo
 func (igi *ImplementGovRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImplementGovFilterParam) (int64,
 	[]models.ImplementGov, exception.Exception) {
 	data := make([]models.ImplementGov, 0)
-	tx := db.Table(tables.ImplementGov).Select("id, name, level, project_type, construct_subject, create_at, status")
+	tx := db.Table(tables.ImplementGov).Select("id, name, level, project_type, construct_subject, create_at, status").Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect)
 	if params.Name != "" {
 		tx = tx.Where("name = ?", params.Name)
 	}

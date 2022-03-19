@@ -15,6 +15,7 @@ type (
 	ListReservePro = reserve.ListReservePro
 
 	Object = common.Object
-	
-	ImplementGov = implement.ImplementGov
+
+	ImplementGov  = implement.ImplementGov
+	ImpleIndustry = implement.ImpleIndustry
 )
