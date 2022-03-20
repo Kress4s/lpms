@@ -32,6 +32,7 @@ type GovProgressRepo interface {
 	Get(db *gorm.DB, id int64, month int) (*models.GovProgress, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	ListGovProgressCompare(db *gorm.DB, projectID int64) ([]models.GovProgressCompare, exception.Exception)
+	DeleteByProjectID(db *gorm.DB, projectID ...int64) exception.Exception
 }
 
 func (grr *GovProgressRepoImpl) Create(db *gorm.DB, govProgress []models.GovProgress) exception.Exception {
@@ -74,4 +75,8 @@ func (grr *GovProgressRepoImpl) ListGovProgressCompare(db *gorm.DB, projectID in
 	lpg := make([]models.GovProgressCompare, 0)
 	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Select("month, plan_invest, plan_progress, plan_invested, actual_progress").Find(&lpg)
 	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
+}
+
+func (grr *GovProgressRepoImpl) DeleteByProjectID(db *gorm.DB, projectID ...int64) exception.Exception {
+	return exception.Wrap(response.ExceptionDatabase, db.Where("project_id in (?)", projectID).Delete(&models.GovProgress{}).Error)
 }

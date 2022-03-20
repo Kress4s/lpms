@@ -19,17 +19,19 @@ var (
 )
 
 type implementGovServiceImpl struct {
-	db      *gorm.DB
-	repo    repositories.ImplementGovRepo
-	objRepo repositories.ObjectRepo
+	db             *gorm.DB
+	repo           repositories.ImplementGovRepo
+	objRepo        repositories.ObjectRepo
+	GovProcessRepo repositories.GovProgressRepo
 }
 
 func GetImplementGovService() ImplementGovService {
 	implementGovOnce.Do(func() {
 		implementGovServiceInstance = &implementGovServiceImpl{
-			db:      database.GetDriver(),
-			repo:    repositories.GetImplementGovRepo(),
-			objRepo: repositories.GetObjectRepo(),
+			db:             database.GetDriver(),
+			repo:           repositories.GetImplementGovRepo(),
+			objRepo:        repositories.GetObjectRepo(),
+			GovProcessRepo: repositories.GetGovProgressRepo(),
 		}
 	})
 	return implementGovServiceInstance
@@ -88,17 +90,33 @@ func (isi *implementGovServiceImpl) Delete(id int64) exception.Exception {
 	if ex != nil {
 		return ex
 	}
+	tx := isi.db.Begin()
+	if tx.Error != nil {
+		return exception.Wrap(response.ExceptionDatabase, tx.Error)
+	}
+
+	defer tx.Rollback()
 	if pro.SitePhoto != "" {
-		if exx := isi.objRepo.Delete(isi.db, pro.SitePhoto); exx != nil {
+		if exx := isi.objRepo.Delete(tx, pro.SitePhoto); exx != nil {
 			return exx
 		}
 	}
 	if pro.UploadCadID != "" {
-		if exx := isi.objRepo.Delete(isi.db, pro.UploadCadID); exx != nil {
+		if exx := isi.objRepo.Delete(tx, pro.UploadCadID); exx != nil {
 			return exx
 		}
 	}
-	return isi.repo.Delete(isi.db, id)
+
+	if ex := isi.GovProcessRepo.DeleteByProjectID(tx, id); ex != nil {
+		return ex
+	}
+	if ex != isi.repo.Delete(tx, id) {
+		return ex
+	}
+	if err := tx.Commit(); err.Error != nil {
+		return exception.Wrap(response.ExceptionDatabase, err.Error)
+	}
+	return nil
 }
 
 func (isi *implementGovServiceImpl) MultiDelete(ids string) exception.Exception {
@@ -114,21 +132,35 @@ func (isi *implementGovServiceImpl) MultiDelete(ids string) exception.Exception 
 		}
 		did = append(did, int64(id))
 	}
+	tx := isi.db.Begin()
+	if tx.Error != nil {
+		return exception.Wrap(response.ExceptionDatabase, tx.Error)
+	}
+
 	for i := range did {
-		pro, ex := isi.repo.Get(isi.db, did[i])
+		pro, ex := isi.repo.Get(tx, did[i])
 		if ex != nil {
 			return ex
 		}
 		if pro.SitePhoto != "" {
-			if exx := isi.objRepo.Delete(isi.db, pro.SitePhoto); exx != nil {
+			if exx := isi.objRepo.Delete(tx, pro.SitePhoto); exx != nil {
 				return exx
 			}
 		}
 		if pro.UploadCadID != "" {
-			if exx := isi.objRepo.Delete(isi.db, pro.UploadCadID); exx != nil {
+			if exx := isi.objRepo.Delete(tx, pro.UploadCadID); exx != nil {
 				return exx
 			}
 		}
 	}
-	return isi.repo.MultiDelete(isi.db, did)
+	if ex := isi.GovProcessRepo.DeleteByProjectID(tx, did...); ex != nil {
+		return ex
+	}
+	if ex := isi.repo.MultiDelete(isi.db, did); ex != nil {
+		return ex
+	}
+	if err := tx.Commit(); err.Error != nil {
+		return exception.Wrap(response.ExceptionDatabase, err.Error)
+	}
+	return nil
 }

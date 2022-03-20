@@ -160,7 +160,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/vo.ListGovProgressPlan"
+                                "$ref": "#/definitions/vo.GovProgressCompare"
                             }
                         }
                     },
@@ -1657,6 +1657,35 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "vo.GovProgressCompare": {
+            "type": "object",
+            "properties": {
+                "actual_progress": {
+                    "description": "本月完成形象进度",
+                    "type": "string"
+                },
+                "completeness": {
+                    "description": "完成度",
+                    "type": "number"
+                },
+                "month": {
+                    "description": "月份",
+                    "type": "integer"
+                },
+                "plan_invest": {
+                    "description": "本月计划投资额",
+                    "type": "number"
+                },
+                "plan_invested": {
+                    "description": "本月完成投资额",
+                    "type": "number"
+                },
+                "plan_progress": {
+                    "description": "本月计划形象进度",
                     "type": "string"
                 }
             }
