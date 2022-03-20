@@ -1071,7 +1071,7 @@ paths:
         schema:
           $ref: '#/definitions/vo.GovProgressReq'
       responses:
-        "201":
+        "200":
           description: 实施库政府投资项目进度保存成功
         "400":
           description: 请求参数错误
@@ -1577,7 +1577,7 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
+        "200":
           description: 响应成功
           schema:
             type: string
@@ -1613,7 +1613,7 @@ paths:
         schema:
           $ref: '#/definitions/vo.ReserveReq'
       responses:
-        "201":
+        "200":
           description: 创建储备库项目成功
         "400":
           description: 请求参数错误

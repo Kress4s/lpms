@@ -28,7 +28,7 @@ func NewGovProgressHandler() *GovProgressHandler {
 // @Description 实施库政府投资项目**进度计划**保存
 // @Tags 实施库 - 政府投资项目 - 进度
 // @Param parameters body vo.GovProgressReq true "GovProgressReq"
-// @Success 201  "实施库政府投资项目进度保存成功"
+// @Success 200  "实施库政府投资项目进度保存成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"

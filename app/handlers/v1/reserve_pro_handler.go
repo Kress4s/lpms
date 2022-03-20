@@ -28,7 +28,7 @@ func NewReserveHandler() *ReserveHandler {
 // @Description 创建储备库项目
 // @Tags 储备库 - 项目
 // @Param parameters body vo.ReserveReq true "ReserveReq"
-// @Success 201  "创建储备库项目成功"
+// @Success 200  "创建储备库项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"

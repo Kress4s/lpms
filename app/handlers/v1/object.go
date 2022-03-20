@@ -31,7 +31,7 @@ func NewObjectHandler() *ObjectHandler {
 // @Accept mpfd
 // @Produce json
 // @Param uploadfile formData file true "文件"
-// @Success 201 {object} types.UUID "响应成功"
+// @Success 200 {object} types.UUID "响应成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"

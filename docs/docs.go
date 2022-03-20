@@ -103,7 +103,7 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "实施库政府投资项目进度保存成功"
                     },
                     "400": {
@@ -870,7 +870,7 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "响应成功",
                         "schema": {
                             "type": "string"
@@ -964,7 +964,7 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "创建储备库项目成功"
                     },
                     "400": {
