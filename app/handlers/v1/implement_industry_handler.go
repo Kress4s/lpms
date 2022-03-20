@@ -28,7 +28,7 @@ func NewImpleIndustryHandler() *ImpleIndustryHandler {
 // @Description 创建实施库产业项目
 // @Tags 实施库 - 产业项目
 // @Param parameters body vo.ImpleIndustryReq true "ImpleIndustryReq"
-// @Success 201  "创建实施库产业项目成功"
+// @Success 200  "创建实施库产业项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"

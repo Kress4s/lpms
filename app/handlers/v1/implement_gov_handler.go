@@ -28,7 +28,7 @@ func NewImplementGovHandler() *ImplementGovHandler {
 // @Description 创建实施库政府投资项目
 // @Tags 实施库 - 政府投资项目
 // @Param parameters body vo.ImplementGovReq true "ImplementGovReq"
-// @Success 201  "创建实施库政府投资项目成功"
+// @Success 200  "创建实施库政府投资项目成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
 // @Failure 403 {object} vo.Error "当前操作无权限"
