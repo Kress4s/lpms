@@ -56,3 +56,16 @@ type ListGovProgressPlan struct {
 	PlanInvest   *float64 `gorm:"column:plan_invest"`
 	PlanProgress string   `gorm:"column:plan_progress"`
 }
+
+type GovProgressCompare struct {
+	// 月份
+	Month int `gorm:"column:month"`
+	// 本月计划投资额
+	PlanInvest *float64 `gorm:"column:plan_invest"`
+	// 本月计划形象进度
+	PlanProgress string `gorm:"column:plan_progress"`
+	// 本月完成投资额
+	PlanInvested *float64 `gorm:"column:plan_invested"`
+	// 本月完成形象进度
+	ActualProgress string `gorm:"column:actual_progress"`
+}

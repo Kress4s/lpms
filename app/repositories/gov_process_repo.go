@@ -31,6 +31,7 @@ type GovProgressRepo interface {
 	ListProgressPlan(db *gorm.DB, projectID int64) ([]models.ListGovProgressPlan, exception.Exception)
 	Get(db *gorm.DB, id int64, month int) (*models.GovProgress, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
+	ListGovProgressCompare(db *gorm.DB, projectID int64) ([]models.GovProgressCompare, exception.Exception)
 }
 
 func (grr *GovProgressRepoImpl) Create(db *gorm.DB, govProgress []models.GovProgress) exception.Exception {
@@ -67,4 +68,10 @@ func (rri *GovProgressRepoImpl) ListPlan(db *gorm.DB, projectID int64) ([]models
 	res := make([]models.ListGovProgressPlan, 0)
 	// tx := db.Table(tables.GovProgress).Select("id, plan_invest, plan_progress, month").Where("project_id = ?", projectID).Find(&res)
 	return res, exception.Wrap(response.ExceptionDatabase, db.Table(tables.GovProgress).Select("id, plan_invest, plan_progress, month").Where("project_id = ?", projectID).Find(&res).Error)
+}
+
+func (grr *GovProgressRepoImpl) ListGovProgressCompare(db *gorm.DB, projectID int64) ([]models.GovProgressCompare, exception.Exception) {
+	lpg := make([]models.GovProgressCompare, 0)
+	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Select("month, plan_invest, plan_progress, plan_invested, actual_progress").Find(&lpg)
+	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }

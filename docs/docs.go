@@ -133,6 +133,64 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/implement/gov/progress/compare/{project_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "查看实施库政府投资项目 **进度对比**",
+                "tags": [
+                    "实施库 - 政府投资项目 - 进度"
+                ],
+                "summary": "查看实施库政府投资项目 进度对比",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "所属项目id",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询实施库政府投资项目进度对比",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vo.ListGovProgressPlan"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/implement/gov/progress/{id}": {
             "put": {
                 "security": [

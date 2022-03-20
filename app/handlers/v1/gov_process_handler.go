@@ -128,10 +128,35 @@ func (ih *GovProgressHandler) Update(ctx iris.Context) mvc.Result {
 	return response.OK()
 }
 
+// Create godoc
+// @Summary 查看实施库政府投资项目 进度对比
+// @Description 查看实施库政府投资项目 **进度对比**
+// @Tags 实施库 - 政府投资项目 - 进度
+// @Param project_id path string true "所属项目id"
+// @Success 200 {array} vo.GovProgressCompare "查询实施库政府投资项目进度对比"
+// @Failure 400 {object} vo.Error "请求参数错误"
+// @Failure 401 {object} vo.Error "当前用户登录令牌失效"
+// @Failure 403 {object} vo.Error "当前操作无权限"
+// @Failure 500 {object} vo.Error "服务器内部错误"
+// @Security ApiKeyAuth
+// @Router /api/v1/implement/gov/progress/compare/{project_id} [get]
+func (ih *GovProgressHandler) ListGovProgressCompare(ctx iris.Context) mvc.Result {
+	project_id, err := ctx.Params().GetInt64(constant.ProjectID)
+	if err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
+	}
+	resp, ex := ih.Svc.ListGovProgressCompare(project_id)
+	if ex != nil {
+		return response.Error(ex)
+	}
+	return response.JSON(resp)
+}
+
 // BeforeActivation 初始化路由
 func (ih *GovProgressHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPost, "/gov/progress", "Create")
 	b.Handle(iris.MethodGet, "/gov/progress", "Get")
 	b.Handle(iris.MethodPut, "/gov/progress/{id:string}", "Update")
 	b.Handle(iris.MethodGet, "/gov/progress/{project_id:string}/list", "ListPlan")
+	b.Handle(iris.MethodGet, "/gov/progress/compare/{project_id:string}", "ListGovProgressCompare")
 }

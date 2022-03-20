@@ -226,3 +226,18 @@ type ListGovProgressPlan struct {
 	//本月计划形象进度
 	PlanProgress string `json:"plan_progress"`
 }
+
+type GovProgressCompare struct {
+	// 月份
+	Month int `json:"month"`
+	// 本月计划投资额
+	PlanInvest *float64 `json:"plan_invest"`
+	// 本月计划形象进度
+	PlanProgress string `json:"plan_progress"`
+	// 本月完成投资额
+	PlanInvested *float64 `json:"plan_invested"`
+	// 本月完成形象进度
+	ActualProgress string `json:"actual_progress"`
+	// 完成度
+	Completeness float64 `json:"completeness"`
+}

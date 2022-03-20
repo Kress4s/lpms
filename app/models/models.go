@@ -20,4 +20,5 @@ type (
 	ImpleIndustry       = implement.ImpleIndustry
 	GovProgress         = implement.GovProgress
 	ListGovProgressPlan = implement.ListGovProgressPlan
+	GovProgressCompare  = implement.GovProgressCompare
 )
