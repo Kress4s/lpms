@@ -276,7 +276,7 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "创建实施库政府投资项目成功"
                     },
                     "400": {
@@ -571,7 +571,7 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "创建实施库产业项目成功"
                     },
                     "400": {
