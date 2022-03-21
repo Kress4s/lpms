@@ -39,4 +39,8 @@ func RegisterRoutes(app *iris.Application) {
 	implementApp.Handle(v1.NewImplementGovHandler())
 	implementApp.Handle(v1.NewImpleIndustryHandler())
 	implementApp.Handle(v1.NewGovProgressHandler())
+
+	inspectParty := party.Party("/inspect")
+	inspectApp := mvc.New(inspectParty)
+	inspectApp.Handle(v1.NewReserveInspectHandler())
 }

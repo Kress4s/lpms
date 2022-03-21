@@ -2,7 +2,9 @@ package reserve
 
 import (
 	"lpms/app/models/internal/common"
+	"lpms/app/models/internal/implement"
 	"lpms/app/models/tables"
+	"lpms/constant"
 	"time"
 
 	"github.com/goccy/go-json"
@@ -74,4 +76,42 @@ func (b *ReservePro) BeforeUpdate(tx *gorm.DB) error {
 
 func (ReservePro) TableName() string {
 	return tables.Reserve
+}
+
+func (r *ReservePro) ToGovReserveModel(openID string) *implement.ImplementGov {
+	return &implement.ImplementGov{
+		Level:                   r.Level,
+		Name:                    r.Name,
+		ConstructSubject:        r.ConstructSubject,
+		ConstructSite:           r.ConstructSite,
+		ProjectType:             r.ProjectType,
+		PlanBegin:               r.PlanBegin,
+		Period:                  r.Period,
+		PointType:               r.PointType,
+		ImplementType:           r.ImplementType,
+		ConstructContentScope:   r.ConstructContentScope,
+		ConstructBasisNecessity: r.ConstructBasisNecessity,
+		EnterDBType:             r.EnterDBType,
+		IsLandUse:               r.IsLandUse,
+		Total:                   r.Total,
+		Add:                     r.Add,
+		NoConformUsePlan:        r.NoConformUsePlan,
+		SiteRed:                 r.SiteRed,
+		SitePhoto:               r.SitePhoto,
+		NeedCollect:             r.NeedCollect,
+		NeedPeopleMove:          r.NeedPeopleMove,
+		CompanyBusiness:         r.CompanyBusiness,
+		UploadCadID:             r.UploadCadID,
+		TotalInvestment:         r.TotalInvestment,
+		ProjectComsumption:      r.ProjectComsumption,
+		MoveLandComsumption:     r.MoveLandComsumption,
+		InvestmentDetail:        json.RawMessage([]byte(r.InvestmentDetail)),
+		Contract:                r.Contract,
+		Phone:                   r.Phone,
+		Status:                  constant.UnStart,
+		Base: common.Base{
+			UpdateBy: openID,
+			CreateBy: openID,
+		},
+	}
 }
