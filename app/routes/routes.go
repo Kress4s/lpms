@@ -43,4 +43,5 @@ func RegisterRoutes(app *iris.Application) {
 	inspectParty := party.Party("/inspect")
 	inspectApp := mvc.New(inspectParty)
 	inspectApp.Handle(v1.NewReserveInspectHandler())
+	inspectApp.Handle(v1.NewWindowHandler())
 }

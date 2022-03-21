@@ -400,3 +400,22 @@ type SubmissionOutStorage struct {
 	// 是否可研编制; 0:编制中 1:已完成
 	IsResearch int `json:"is_research"`
 }
+
+type ReserveAnalysisFilter struct {
+	// 项目级别
+	Level *int `json:"level"`
+	// 项目类型
+	ProjectType *int `json:"project_type"`
+	// 建设主体 ***注意:（所有参数，有就传，无则不传）***
+	ConstructSubject string `json:"construct_subject"`
+	// 重点类型
+	PointType *int `json:"point_type"`
+	// 入库类别
+	EnterDBType *int `json:"enter_db_type"`
+	// 计划开始时间 eg month:2022-03-01 00:00:00 year:2022-01-01 00:00:00
+	PlanBegin string `json:"plan_begin"`
+	// 计划结束时间 eg month:2022-04-01 00:00:00 year:2023-01-01 00:00:00
+	PlanEnd string `json:"plan_end"`
+	// 过滤时间类型 0：按月 1：按年
+	QueryType int `json:"query_type"`
+}

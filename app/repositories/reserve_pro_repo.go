@@ -38,6 +38,7 @@ type ReserveRepo interface {
 	Submission(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	MultiSubmission(db *gorm.DB, ids []int64, param map[string]interface{}) exception.Exception
 	OutStorage(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
+	DataAnalysis(db *gorm.DB, params *vo.ReserveAnalysisFilter, queryType *int) ([]models.ReserveAnalysis, exception.Exception)
 }
 
 func (rri *ReserveRepoImpl) Create(db *gorm.DB, reserve *models.ReservePro) exception.Exception {
@@ -127,4 +128,35 @@ func (rri *ReserveRepoImpl) MultiSubmission(db *gorm.DB, ids []int64, param map[
 func (rri *ReserveRepoImpl) OutStorage(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception {
 	return exception.Wrap(response.ExceptionDatabase,
 		db.Model(&models.ReservePro{}).Where(&models.ReservePro{ID: id}).Updates(param).Error)
+}
+
+func (rri *ReserveRepoImpl) DataAnalysis(db *gorm.DB, params *vo.ReserveAnalysisFilter, queryType *int) ([]models.ReserveAnalysis, exception.Exception) {
+	var subTx *gorm.DB
+	if params.QueryType == 0 {
+		subTx = db.Select("status, to_char(create_at, 'YYYY-MM') AS bucket")
+	} else {
+		subTx = db.Select("status, to_char(create_at, 'YYYY') AS bucket")
+	}
+
+	if params.Level != nil {
+		subTx = subTx.Where("level = ?", params.Level)
+	}
+	if params.ProjectType != nil {
+		subTx = subTx.Where("project_type = ?", params.ProjectType)
+	}
+	if params.ConstructSubject != "" {
+		subTx = subTx.Where("construct_subject = ?", params.ConstructSubject)
+	}
+	if params.PointType != nil {
+		subTx = subTx.Where("point_type = ?", params.PointType)
+	}
+	if params.EnterDBType != nil {
+		subTx = subTx.Where("enter_db_type = ?", params.EnterDBType)
+	}
+	if params.PlanBegin != "" && params.PlanEnd != "" {
+		subTx = subTx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)
+	}
+	res := make([]models.ReserveAnalysis, 0)
+	tx := db.Table("(?) AS sub", subTx).Select("sub.bucket AS bucket, count(*) as count, sub.status AS status").Group("sub.bucket, sub.status").Find(&res)
+	return res, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }

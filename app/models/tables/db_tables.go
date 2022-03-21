@@ -15,4 +15,6 @@ const (
 	ImplementIndustry = "lpms_implement_industry"
 	// 实施库-政府项目-进度
 	GovProgress = "lpms_gov_progress"
+	// 窗口期设置
+	Window = "lpms_window_setting"
 )

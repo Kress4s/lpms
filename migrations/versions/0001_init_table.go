@@ -24,6 +24,8 @@ var V0001InitTables = &gormigrate.Migration{
 			models.ImpleIndustry{},
 			// 实施库-政府项目-进度
 			models.GovProgress{},
+			// 窗口设置
+			models.WindowSetting{},
 		); err != nil {
 			return err
 		}

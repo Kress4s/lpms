@@ -3,6 +3,7 @@ package models
 import (
 	"lpms/app/models/internal/common"
 	"lpms/app/models/internal/implement"
+	"lpms/app/models/internal/inspect"
 	"lpms/app/models/internal/reserve"
 	"lpms/app/models/internal/user"
 )
@@ -21,4 +22,6 @@ type (
 	GovProgress         = implement.GovProgress
 	ListGovProgressPlan = implement.ListGovProgressPlan
 	GovProgressCompare  = implement.GovProgressCompare
+	WindowSetting       = inspect.WindowSetting
+	ReserveAnalysis     = reserve.ReserveAnalysis
 )
