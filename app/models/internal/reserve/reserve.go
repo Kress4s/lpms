@@ -131,5 +131,5 @@ type ReserveAnalysis struct {
 	// OutStorage int64  `gorm:"column:out_storage"`
 	// EnteredDB  int64  `gorm:"column:enter_ddb"`
 	Status int `gorm:"column:status"`
-	Count  int `gorm:"column:count"`
+	Count  int64 `gorm:"column:count"`
 }

@@ -1537,6 +1537,66 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/reserve/project/data-analysis": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "储备库数据分析",
+                "tags": [
+                    "储备库 - 项目"
+                ],
+                "summary": "储备库数据分析",
+                "parameters": [
+                    {
+                        "description": "ReserveAnalysisFilter",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.ReserveAnalysisFilter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "储备库数据分析",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vo.ReserveAnalysisResp"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/reserve/project/multi": {
             "delete": {
                 "security": [
@@ -2117,6 +2177,19 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "vo.AnalysisData": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "description": "数量",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "0:净新增, 1:入库, 5:出库",
+                    "type": "integer"
+                }
+            }
+        },
         "vo.DataPagination": {
             "type": "object",
             "properties": {
@@ -3090,6 +3163,63 @@ const docTemplate = `{
                 },
                 "total_count": {
                     "description": "数据总条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.ReserveAnalysisFilter": {
+            "type": "object",
+            "properties": {
+                "construct_subject": {
+                    "description": "建设主体 ***注意:（所有参数，有就传，无则不传）***",
+                    "type": "string"
+                },
+                "enter_db_type": {
+                    "description": "入库类别",
+                    "type": "integer"
+                },
+                "level": {
+                    "description": "项目级别",
+                    "type": "integer"
+                },
+                "plan_begin": {
+                    "description": "计划开始时间 eg month:2022-03-01 00:00:00 year:2022-01-01 00:00:00",
+                    "type": "string"
+                },
+                "plan_end": {
+                    "description": "计划结束时间 eg month:2022-04-01 00:00:00 year:2023-01-01 00:00:00",
+                    "type": "string"
+                },
+                "point_type": {
+                    "description": "重点类型",
+                    "type": "integer"
+                },
+                "project_type": {
+                    "description": "项目类型",
+                    "type": "integer"
+                },
+                "query_type": {
+                    "description": "过滤时间类型 0：按月 1：按年",
+                    "type": "integer"
+                }
+            }
+        },
+        "vo.ReserveAnalysisResp": {
+            "type": "object",
+            "properties": {
+                "bucket": {
+                    "description": "时间",
+                    "type": "string"
+                },
+                "data": {
+                    "description": "数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vo.AnalysisData"
+                    }
+                },
+                "total": {
+                    "description": "总数",
                     "type": "integer"
                 }
             }

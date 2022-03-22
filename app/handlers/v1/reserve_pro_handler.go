@@ -273,6 +273,30 @@ func (rh *ReserveHandler) OutStorage(ctx iris.Context) mvc.Result {
 	return response.OK()
 }
 
+// Create godoc
+// @Summary 储备库数据分析
+// @Description 储备库数据分析
+// @Tags 储备库 - 项目
+// @Param parameters body vo.ReserveAnalysisFilter true "ReserveAnalysisFilter"
+// @Success 200 {array}  vo.ReserveAnalysisResp "储备库数据分析"
+// @Failure 400 {object} vo.Error "请求参数错误"
+// @Failure 401 {object} vo.Error "当前用户登录令牌失效"
+// @Failure 403 {object} vo.Error "当前操作无权限"
+// @Failure 500 {object} vo.Error "服务器内部错误"
+// @Security ApiKeyAuth
+// @Router /api/v1/reserve/project/data-analysis [post]
+func (rh *ReserveHandler) DataAnalysis(ctx iris.Context) mvc.Result {
+	param := &vo.ReserveAnalysisFilter{}
+	if err := ctx.ReadJSON(param); err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
+	}
+	resp, ex := rh.Svc.DataAnalysis(param)
+	if ex != nil {
+		return response.Error(ex)
+	}
+	return response.JSON(resp)
+}
+
 // BeforeActivation 初始化路由
 func (rh *ReserveHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPost, "/project", "Create")
@@ -285,4 +309,5 @@ func (rh *ReserveHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPatch, "/project/{id:string}/submit", "Submission")
 	b.Handle(iris.MethodPatch, "/project/submit/multi", "MultiSubmission")
 	b.Handle(iris.MethodPatch, "/project/{id:string}/out-storage", "OutStorage")
+	b.Handle(iris.MethodPost, "/project/data-analysis", "DataAnalysis")
 }

@@ -419,3 +419,19 @@ type ReserveAnalysisFilter struct {
 	// 过滤时间类型 0：按月 1：按年
 	QueryType int `json:"query_type"`
 }
+
+type ReserveAnalysisResp struct {
+	// 时间
+	Bucket string `json:"bucket"`
+	// 总数
+	Total int64 `json:"total"`
+	// 数据
+	Data []AnalysisData `json:"data"`
+}
+
+type AnalysisData struct {
+	// 0:净新增, 1:入库, 5:出库
+	Status int `json:"status"`
+	// 数量
+	Count int64 `json:"count"`
+}

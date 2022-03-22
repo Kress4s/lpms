@@ -47,6 +47,7 @@ type ReserveService interface {
 	Submission(openID string, id int64, req *vo.SubmissionOutStorage) exception.Exception
 	MultiSubmission(openID string, ids string) exception.Exception
 	OutStorage(openID string, id int64, req *vo.SubmissionOutStorage) exception.Exception
+	DataAnalysis(params *vo.ReserveAnalysisFilter) ([]vo.ReserveAnalysisResp, exception.Exception)
 }
 
 func (rsi *reserveServiceImpl) Create(openID string, param *vo.ReserveReq) exception.Exception {
@@ -204,4 +205,28 @@ func (rsi *reserveServiceImpl) OutStorage(openID string, id int64, req *vo.Submi
 		"is_case_finish": req.IsCaseFinish,
 		"is_research":    req.IsResearch,
 	})
+}
+
+func (rsi *reserveServiceImpl) DataAnalysis(params *vo.ReserveAnalysisFilter) ([]vo.ReserveAnalysisResp, exception.Exception) {
+	res, ex := rsi.repo.DataAnalysis(rsi.db, params)
+	if ex != nil {
+		return nil, ex
+	}
+	dataMap := make(map[string][]vo.AnalysisData)
+	for i := range res {
+		dataMap[res[i].Bucket] = append(dataMap[res[i].Bucket], vo.AnalysisData{Status: res[i].Status, Count: res[i].Count})
+	}
+	resp := make([]vo.ReserveAnalysisResp, 0, len(res))
+	for key, value := range dataMap {
+		total := int64(0)
+		for i := range value {
+			total += value[i].Count
+		}
+		resp = append(resp, vo.ReserveAnalysisResp{
+			Bucket: key,
+			Total:  total,
+			Data:   value,
+		})
+	}
+	return resp, ex
 }

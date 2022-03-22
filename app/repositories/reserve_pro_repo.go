@@ -38,7 +38,7 @@ type ReserveRepo interface {
 	Submission(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	MultiSubmission(db *gorm.DB, ids []int64, param map[string]interface{}) exception.Exception
 	OutStorage(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
-	DataAnalysis(db *gorm.DB, params *vo.ReserveAnalysisFilter, queryType *int) ([]models.ReserveAnalysis, exception.Exception)
+	DataAnalysis(db *gorm.DB, params *vo.ReserveAnalysisFilter) ([]models.ReserveAnalysis, exception.Exception)
 }
 
 func (rri *ReserveRepoImpl) Create(db *gorm.DB, reserve *models.ReservePro) exception.Exception {
@@ -130,14 +130,15 @@ func (rri *ReserveRepoImpl) OutStorage(db *gorm.DB, id int64, param map[string]i
 		db.Model(&models.ReservePro{}).Where(&models.ReservePro{ID: id}).Updates(param).Error)
 }
 
-func (rri *ReserveRepoImpl) DataAnalysis(db *gorm.DB, params *vo.ReserveAnalysisFilter, queryType *int) ([]models.ReserveAnalysis, exception.Exception) {
+func (rri *ReserveRepoImpl) DataAnalysis(db *gorm.DB, params *vo.ReserveAnalysisFilter) ([]models.ReserveAnalysis, exception.Exception) {
 	var subTx *gorm.DB
+	subTx = db.Table(tables.Reserve)
 	if params.QueryType == 0 {
-		subTx = db.Select("status, to_char(create_at, 'YYYY-MM') AS bucket")
+		subTx = subTx.Select("status, to_char(create_at, 'YYYY-MM') AS bucket")
 	} else {
-		subTx = db.Select("status, to_char(create_at, 'YYYY') AS bucket")
+		subTx = subTx.Select("status, to_char(create_at, 'YYYY') AS bucket")
 	}
-
+	subTx = subTx.Where("status in (?, ?, ?)", constant.Draft, constant.EnteredDB, constant.OutStorage)
 	if params.Level != nil {
 		subTx = subTx.Where("level = ?", params.Level)
 	}
@@ -154,7 +155,7 @@ func (rri *ReserveRepoImpl) DataAnalysis(db *gorm.DB, params *vo.ReserveAnalysis
 		subTx = subTx.Where("enter_db_type = ?", params.EnterDBType)
 	}
 	if params.PlanBegin != "" && params.PlanEnd != "" {
-		subTx = subTx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)
+		subTx = subTx.Where("create_at < ? and create_at >= ?", params.PlanEnd, params.PlanBegin)
 	}
 	res := make([]models.ReserveAnalysis, 0)
 	tx := db.Table("(?) AS sub", subTx).Select("sub.bucket AS bucket, count(*) as count, sub.status AS status").Group("sub.bucket, sub.status").Find(&res)
