@@ -71,7 +71,7 @@ func (igi *ImpleIndustryRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, param
 		tx = tx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)
 	}
 	if params.CurYearBegin != "" && params.CurYearEnd != "" {
-		tx = tx.Where("finish_time < ? and finish_time >= ", params.PlanEnd, params.PlanBegin)
+		tx = tx.Where("finish_time < ? and finish_time >= ?", params.PlanEnd, params.PlanBegin)
 	}
 	if params.Status != nil {
 		tx = tx.Where("status = ?", params.Status)

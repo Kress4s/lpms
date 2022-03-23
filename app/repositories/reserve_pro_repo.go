@@ -73,13 +73,13 @@ func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.
 		tx = tx.Where("construct_subject = ?", params.ConstructSubject)
 	}
 	if params.PlanBegin != "" && params.PlanEnd != "" {
-		tx = tx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)
+		tx = tx.Where("create_at <= ? and create_at >= ?", params.PlanEnd, params.PlanBegin)
 	}
 	if params.Status != nil {
 		tx = tx.Where("status = ?", params.Status)
 	}
 	count := int64(0)
-	tx = tx.Limit(pageInfo.PageSize).Offset(pageInfo.Offset()).
+	tx = tx.Limit(pageInfo.PageSize).Offset(pageInfo.Offset()).Order("id").
 		Scan(&data).Limit(-1).Offset(-1).Count(&count)
 	return count, data, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
