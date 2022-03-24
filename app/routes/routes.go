@@ -23,6 +23,9 @@ func RegisterRoutes(app *iris.Application) {
 	authApp := app.Party("/auth")
 	mvc.New(authApp).Handle(auth.NewLoginHandler())
 
+	objectApp := app.Party("/object")
+	mvc.New(objectApp).Handle(v1.NewObjectHandler())
+
 	party := app.Party("/api/v1")
 	party.Use(middlewares.Auth().Serve)
 
@@ -30,9 +33,9 @@ func RegisterRoutes(app *iris.Application) {
 	reserveApp := mvc.New(reserveParty)
 	reserveApp.Handle(v1.NewReserveHandler())
 
-	objectParty := party.Party("/object")
-	objectApp := mvc.New(objectParty)
-	objectApp.Handle(v1.NewObjectHandler())
+	// objectParty := party.Party("/object")
+	// objectApp := mvc.New(objectParty)
+	// objectApp.Handle(v1.NewObjectHandler())
 
 	implementParty := party.Party("/implement")
 	implementApp := mvc.New(implementParty)

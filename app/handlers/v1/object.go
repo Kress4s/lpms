@@ -37,7 +37,7 @@ func NewObjectHandler() *ObjectHandler {
 // @Failure 403 {object} vo.Error "当前操作无权限"
 // @Failure 500 {object} vo.Error "服务器内部错误"
 // @Security ApiKeyAuth
-// @Router /api/v1/object/file/upload [post]
+// @Router /object/file/upload [post]
 func (oh *ObjectHandler) Upload(ctx iris.Context) mvc.Result {
 	file, info, err := ctx.FormFile(constant.File)
 	if err != nil {
@@ -61,7 +61,7 @@ func (oh *ObjectHandler) Upload(ctx iris.Context) mvc.Result {
 // @Success 200 {string} byte "获取文件成功"
 // @Failure 500 {string} byte "服务器内部错误"
 // @Security ApiKeyAuth
-// @Router /api/v1/object/file/{id} [get]
+// @Router /object/file/{id} [get]
 func (oh *ObjectHandler) Get(ctx iris.Context) {
 	id := ctx.Params().Get(constant.ID)
 
