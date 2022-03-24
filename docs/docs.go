@@ -4,7 +4,7 @@ package docs
 
 import "github.com/swaggo/swag"
 
-const docTemplate = `{
+const docTemplate_swagger = `{
     "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
@@ -2241,16 +2241,16 @@ const docTemplate = `{
         "vo.GovProgressResp": {
             "type": "object",
             "properties": {
-                ":comment": {
-                    "description": "备注",
-                    "type": "string"
-                },
                 "actual_progress": {
                     "description": "本月完成形象进度",
                     "type": "string"
                 },
                 "change_content": {
                     "description": "本月产生联系单变更",
+                    "type": "string"
+                },
+                "comment": {
+                    "description": "备注",
                     "type": "string"
                 },
                 "contracts": {
@@ -3658,7 +3658,7 @@ var SwaggerInfo = &swag.Spec{
 	Title:            "临安区政府投资项目管理后台API",
 	Description:      "临安区政府投资项目管理后台API",
 	InfoInstanceName: "swagger",
-	SwaggerTemplate:  docTemplate,
+	SwaggerTemplate:  docTemplate_swagger,
 }
 
 func init() {
