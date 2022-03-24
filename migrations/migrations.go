@@ -12,6 +12,7 @@ var migrations = []*gormigrate.Migration{
 	versions.V0001InitTables,
 	// init data
 	versions.V0002InitData,
+	versions.V0003InitProgressTables,
 }
 
 func Migrate() error {

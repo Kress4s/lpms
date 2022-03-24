@@ -42,6 +42,7 @@ type ImpleIndustry struct {
 	Contract                string          `gorm:"column:contract;type:varchar(20);comment:前期工作联系人"`
 	Phone                   string          `gorm:"column:phone;type:varchar(20);comment:联系人手机号"`
 	Status                  int             `gorm:"column:status;type:integer;;not null;comment:项目状态 0:未开工,1:开工待审核,2:已开工;3:竣工待审核;4:已竣工"`
+	StartTime               *time.Time      `gorm:"column:start_time;type:timestamp;comment:开工时间"`
 	FinishTime              *time.Time      `gorm:"column:finish_time;type:timestamp;comment:竣工时间"`
 }
 

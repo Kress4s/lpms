@@ -33,7 +33,7 @@ func GetGovProgressService() GovProgressService {
 
 type GovProgressService interface {
 	Create(openID string, param *vo.GovProgressReq) exception.Exception
-	Get(id int64, month int) (*vo.GovProgressResp, exception.Exception)
+	Get(id int64, year, month int) (*vo.GovProgressResp, exception.Exception)
 	Update(openID string, id int64, param *vo.GovProgressUpdateReq) exception.Exception
 	ListPlan(projectID int64) ([]vo.ListGovProgressPlan, exception.Exception)
 	ListGovProgressCompare(projectID int64) ([]vo.GovProgressCompare, exception.Exception)
@@ -44,16 +44,20 @@ func (gsi *govProgressServiceImpl) Create(openID string, param *vo.GovProgressRe
 	return gsi.repo.Create(gsi.db, govProgress)
 }
 
-func (gsi *govProgressServiceImpl) Get(id int64, month int) (*vo.GovProgressResp, exception.Exception) {
-	govProgress, ex := gsi.repo.Get(gsi.db, id, month)
+func (gsi *govProgressServiceImpl) Get(id int64, year, month int) (*vo.GovProgressResp, exception.Exception) {
+	govProgress, ex := gsi.repo.Get(gsi.db, id, year, month)
 	if ex != nil {
 		return nil, ex
 	}
-	resp, err := vo.NewGovProgressResponse(govProgress)
+	resp := &vo.GovProgressResp{}
+	var err error
+	if govProgress == nil {
+		return resp, nil
+	}
+	resp, err = vo.NewGovProgressResponse(govProgress)
 	if err != nil {
 		return nil, exception.Wrap(response.ExceptionUnmarshalJSON, err)
 	}
-
 	return resp, nil
 }
 
@@ -70,6 +74,7 @@ func (gsi *govProgressServiceImpl) ListPlan(projectID int64) ([]vo.ListGovProgre
 	for i := range res {
 		resp = append(resp, vo.ListGovProgressPlan{
 			ID:           res[i].ID,
+			Year:         res[i].Year,
 			Month:        res[i].Month,
 			PlanInvest:   res[i].PlanInvest,
 			PlanProgress: res[i].PlanProgress,
@@ -83,39 +88,20 @@ func (gsi *govProgressServiceImpl) ListGovProgressCompare(projectID int64) ([]vo
 	if ex != nil {
 		return nil, ex
 	}
-	monthList := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 	resp := make([]vo.GovProgressCompare, 0, len(res))
 	for i := range res {
-		isIn := false
-		for j := range monthList {
-			if res[i].Month == monthList[j] {
-				isIn = true
-				break
-			}
+		compare := float64(0)
+		if res[i].PlanInvested != nil && res[i].PlanInvest != nil {
+			compare = *res[i].PlanInvested / *res[i].PlanInvest
 		}
-		if isIn {
-			compare := float64(0)
-			if res[i].PlanInvested != nil && res[i].PlanInvest != nil {
-				compare = *res[i].PlanInvested / *res[i].PlanInvest
-			}
-			resp = append(resp, vo.GovProgressCompare{
-				Month:          res[i].Month,
-				PlanInvest:     res[i].PlanInvest,
-				PlanProgress:   res[i].PlanProgress,
-				PlanInvested:   res[i].PlanInvested,
-				ActualProgress: res[i].ActualProgress,
-				Completeness:   compare,
-			})
-		} else {
-			resp = append(resp, vo.GovProgressCompare{
-				Month:          res[i].Month,
-				PlanInvest:     nil,
-				PlanProgress:   "",
-				PlanInvested:   nil,
-				ActualProgress: "",
-				Completeness:   0,
-			})
-		}
+		resp = append(resp, vo.GovProgressCompare{
+			Month:          res[i].Month,
+			PlanInvest:     res[i].PlanInvest,
+			PlanProgress:   res[i].PlanProgress,
+			PlanInvested:   res[i].PlanInvested,
+			ActualProgress: res[i].ActualProgress,
+			Completeness:   compare,
+		})
 	}
 	return resp, nil
 }

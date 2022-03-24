@@ -80,6 +80,7 @@ func (isi *implementGovServiceImpl) List(params *vo.ImplementGovFilterParam, pag
 			PlanBegin:        projects[i].PlanBegin,
 			FinishTime:       projects[i].FinishTime,
 			Status:           projects[i].Status,
+			StartTime:        projects[i].StartTime,
 		})
 	}
 	return vo.NewDataPagination(count, resp, pageInfo), nil

@@ -45,6 +45,13 @@ const docTemplate = `{
                         "name": "month",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "项目进度所属年份 eg: 2022年 --\u003e 2022",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2245,6 +2252,10 @@ const docTemplate = `{
                 "plan_progress": {
                     "description": "本月计划形象进度",
                     "type": "string"
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer"
                 }
             }
         },
@@ -2270,6 +2281,10 @@ const docTemplate = `{
                 "project_id": {
                     "description": "项目ID",
                     "type": "integer"
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer"
                 }
             }
         },
@@ -2291,33 +2306,21 @@ const docTemplate = `{
                     "description": "备注",
                     "type": "string"
                 },
-                ":id": {
-                    "description": "id",
-                    "type": "integer"
-                },
                 "actual_progress": {
                     "description": "本月完成形象进度",
                     "type": "string"
                 },
                 "change_content": {
-                    "description": "变更内容",
+                    "description": "本月产生联系单变更",
                     "type": "string"
                 },
-                "change_money": {
-                    "description": "//变更金额",
-                    "type": "number"
+                "contracts": {
+                    "description": "本月新增合同信息",
+                    "type": "string"
                 },
-                "change_type": {
-                    "description": "变更类型;0:较小变更,1:一般变更,2:较大变更,3:重大变更",
+                "id": {
+                    "description": "id",
                     "type": "integer"
-                },
-                "is_change": {
-                    "description": "是否本月产生联系单变更",
-                    "type": "boolean"
-                },
-                "is_help": {
-                    "description": "是否需协调解决问题",
-                    "type": "boolean"
                 },
                 "last_month_fixed_invested": {
                     "description": "上月完成固投(万)",
@@ -2326,10 +2329,6 @@ const docTemplate = `{
                 "month": {
                     "description": "月份",
                     "type": "integer"
-                },
-                "pay_project": {
-                    "description": "本月支付工程款(万)",
-                    "type": "number"
                 },
                 "plan_invest": {
                     "description": "本月计划投资额(万)",
@@ -2344,15 +2343,15 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "problem_detail": {
-                    "description": "问题详情",
+                    "description": "需协调问题详情",
                     "type": "string"
-                },
-                "problem_type": {
-                    "description": "问题类型",
-                    "type": "integer"
                 },
                 "project_id": {
                     "description": "项目ID",
+                    "type": "integer"
+                },
+                "year": {
+                    "description": "年份",
                     "type": "integer"
                 },
                 "year_sum__fixed_invested": {
@@ -2368,40 +2367,24 @@ const docTemplate = `{
         "vo.GovProgressUpdateReq": {
             "type": "object",
             "properties": {
-                ":comment": {
-                    "description": "备注",
-                    "type": "string"
-                },
                 "actual_progress": {
                     "description": "本月完成形象进度",
                     "type": "string"
                 },
                 "change_content": {
-                    "description": "变更内容",
+                    "description": "本月产生联系单变更",
                     "type": "string"
                 },
-                "change_money": {
-                    "description": "变更金额",
-                    "type": "number"
+                "comment": {
+                    "description": "备注",
+                    "type": "string"
                 },
-                "change_type": {
-                    "description": "变更类型;0:较小变更,1:一般变更,2:较大变更,3:重大变更",
-                    "type": "integer"
-                },
-                "is_change": {
-                    "description": "是否本月产生联系单变更",
-                    "type": "boolean"
-                },
-                "is_help": {
-                    "description": "是否需协调解决问题",
-                    "type": "boolean"
+                "contracts": {
+                    "description": "本月新增合同信息",
+                    "type": "string"
                 },
                 "last_month_fixed_invested": {
                     "description": "上月完成固投(万)",
-                    "type": "number"
-                },
-                "pay_project": {
-                    "description": "本月支付工程款(万)",
                     "type": "number"
                 },
                 "plan_invested": {
@@ -2409,12 +2392,8 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "problem_detail": {
-                    "description": "问题详情",
+                    "description": "需协调问题详情",
                     "type": "string"
-                },
-                "problem_type": {
-                    "description": "问题类型",
-                    "type": "integer"
                 },
                 "year_sum__fixed_invested": {
                     "description": "当年累计固投(万)",
@@ -3010,6 +2989,10 @@ const docTemplate = `{
                 "plan_progress": {
                     "description": "本月计划形象进度",
                     "type": "string"
+                },
+                "year": {
+                    "description": "年份",
+                    "type": "integer"
                 }
             }
         },
@@ -3043,6 +3026,10 @@ const docTemplate = `{
                 "project_type": {
                     "description": "项目类型",
                     "type": "integer"
+                },
+                "start_time": {
+                    "description": "实际开工时间",
+                    "type": "string"
                 },
                 "status": {
                     "description": "状态",
@@ -3080,6 +3067,10 @@ const docTemplate = `{
                 "project_type": {
                     "description": "项目类型",
                     "type": "integer"
+                },
+                "start_time": {
+                    "description": "实际开工时间",
+                    "type": "string"
                 },
                 "status": {
                     "description": "状态",

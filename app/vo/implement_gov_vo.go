@@ -189,6 +189,7 @@ type ImplementGovResp struct {
 	Phone string `json:"phone"`
 	// 项目状态 0:未开工,1:开工待审核,2:已开工;3:竣工待审核;4:已竣工"
 	Status int `json:"status"`
+	//
 }
 
 func NewImplementGovResponse(r *models.ImplementGov) (*ImplementGovResp, error) {
@@ -243,4 +244,6 @@ type ListImplementGovResp struct {
 	FinishTime *time.Time `json:"finish_time"`
 	// 状态
 	Status int `json:"status"`
+	// 实际开工时间
+	StartTime *time.Time `json:"start_time"`
 }

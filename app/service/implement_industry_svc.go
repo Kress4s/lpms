@@ -78,6 +78,7 @@ func (isi *ImpleIndustryServiceImpl) List(params *vo.ImpleIndustryFilterParam, p
 			PlanBegin:        projects[i].PlanBegin,
 			FinishTime:       projects[i].FinishTime,
 			Status:           projects[i].Status,
+			StartTime:        projects[i].StartTime,
 		})
 	}
 	return vo.NewDataPagination(count, resp, pageInfo), nil

@@ -27,6 +27,7 @@ const (
 	File             = "uploadfile"
 	BucketName       = "lpms"
 	Month            = "month"
+	Year             = "year"
 	ProjectID        = "project_id"
 )
 

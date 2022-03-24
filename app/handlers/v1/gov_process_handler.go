@@ -53,6 +53,7 @@ func (ih *GovProgressHandler) Create(ctx iris.Context) mvc.Result {
 // @Tags 实施库 - 政府投资项目 - 进度
 // @Param project_id query string true "所属项目id"
 // @Param month query string true "项目进度所属月份 eg: 1月 --> 1"
+// @Param year query string true "项目进度所属年份 eg: 2022年 --> 2022"
 // @Success 200 {object} vo.GovProgressResp "查询实施库政府投资项目进度成功"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
@@ -69,7 +70,11 @@ func (ih *GovProgressHandler) Get(ctx iris.Context) mvc.Result {
 	if err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
 	}
-	resp, ex := ih.Svc.Get(id, month)
+	year, err := ctx.URLParamInt(constant.Year)
+	if err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
+	}
+	resp, ex := ih.Svc.Get(id, year, month)
 	if ex != nil {
 		return response.Error(ex)
 	}

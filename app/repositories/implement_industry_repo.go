@@ -54,7 +54,7 @@ func (igi *ImpleIndustryRepoImpl) Get(db *gorm.DB, id int64) (*models.ImpleIndus
 func (igi *ImpleIndustryRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImpleIndustryFilterParam) (int64,
 	[]models.ImpleIndustry, exception.Exception) {
 	data := make([]models.ImpleIndustry, 0)
-	tx := db.Table(tables.ImplementIndustry).Select("id, name, level, project_type, construct_subject, create_at, status").Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect)
+	tx := db.Table(tables.ImplementIndustry).Select("id, name, level, project_type, construct_subject, create_at, status, start_time, finish_time").Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect)
 	if params.Name != "" {
 		tx = tx.Where("name = ?", params.Name)
 	}

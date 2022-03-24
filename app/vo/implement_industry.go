@@ -242,4 +242,6 @@ type ListImpleIndustryResp struct {
 	FinishTime *time.Time `json:"finish_time"`
 	// 状态
 	Status int `json:"status"`
+	// 实际开工时间
+	StartTime *time.Time `json:"start_time"`
 }

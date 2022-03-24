@@ -48,6 +48,9 @@ definitions:
       plan_progress:
         description: 本月计划形象进度
         type: string
+      year:
+        description: 年份
+        type: integer
     type: object
   vo.GovProgressInfo:
     properties:
@@ -66,6 +69,9 @@ definitions:
       project_id:
         description: 项目ID
         type: integer
+      year:
+        description: 年份
+        type: integer
     type: object
   vo.GovProgressReq:
     properties:
@@ -79,36 +85,24 @@ definitions:
       :comment:
         description: 备注
         type: string
-      :id:
-        description: id
-        type: integer
       actual_progress:
         description: 本月完成形象进度
         type: string
       change_content:
-        description: 变更内容
+        description: 本月产生联系单变更
         type: string
-      change_money:
-        description: //变更金额
-        type: number
-      change_type:
-        description: 变更类型;0:较小变更,1:一般变更,2:较大变更,3:重大变更
+      contracts:
+        description: 本月新增合同信息
+        type: string
+      id:
+        description: id
         type: integer
-      is_change:
-        description: 是否本月产生联系单变更
-        type: boolean
-      is_help:
-        description: 是否需协调解决问题
-        type: boolean
       last_month_fixed_invested:
         description: 上月完成固投(万)
         type: number
       month:
         description: 月份
         type: integer
-      pay_project:
-        description: 本月支付工程款(万)
-        type: number
       plan_invest:
         description: 本月计划投资额(万)
         type: number
@@ -119,13 +113,13 @@ definitions:
         description: 本月计划形象进度
         type: string
       problem_detail:
-        description: 问题详情
+        description: 需协调问题详情
         type: string
-      problem_type:
-        description: 问题类型
-        type: integer
       project_id:
         description: 项目ID
+        type: integer
+      year:
+        description: 年份
         type: integer
       year_sum__fixed_invested:
         description: 当年累计固投(万)
@@ -136,42 +130,27 @@ definitions:
     type: object
   vo.GovProgressUpdateReq:
     properties:
-      :comment:
-        description: 备注
-        type: string
       actual_progress:
         description: 本月完成形象进度
         type: string
       change_content:
-        description: 变更内容
+        description: 本月产生联系单变更
         type: string
-      change_money:
-        description: 变更金额
-        type: number
-      change_type:
-        description: 变更类型;0:较小变更,1:一般变更,2:较大变更,3:重大变更
-        type: integer
-      is_change:
-        description: 是否本月产生联系单变更
-        type: boolean
-      is_help:
-        description: 是否需协调解决问题
-        type: boolean
+      comment:
+        description: 备注
+        type: string
+      contracts:
+        description: 本月新增合同信息
+        type: string
       last_month_fixed_invested:
         description: 上月完成固投(万)
-        type: number
-      pay_project:
-        description: 本月支付工程款(万)
         type: number
       plan_invested:
         description: 本月完成投资额(万)
         type: number
       problem_detail:
-        description: 问题详情
+        description: 需协调问题详情
         type: string
-      problem_type:
-        description: 问题类型
-        type: integer
       year_sum__fixed_invested:
         description: 当年累计固投(万)
         type: number
@@ -619,6 +598,9 @@ definitions:
       plan_progress:
         description: 本月计划形象进度
         type: string
+      year:
+        description: 年份
+        type: integer
     type: object
   vo.ListImpleIndustryResp:
     properties:
@@ -643,6 +625,9 @@ definitions:
       project_type:
         description: 项目类型
         type: integer
+      start_time:
+        description: 实际开工时间
+        type: string
       status:
         description: 状态
         type: integer
@@ -670,6 +655,9 @@ definitions:
       project_type:
         description: 项目类型
         type: integer
+      start_time:
+        description: 实际开工时间
+        type: string
       status:
         description: 状态
         type: integer
@@ -1158,6 +1146,11 @@ paths:
       - description: '项目进度所属月份 eg: 1月 --> 1'
         in: query
         name: month
+        required: true
+        type: string
+      - description: '项目进度所属年份 eg: 2022年 --> 2022'
+        in: query
+        name: year
         required: true
         type: string
       responses:

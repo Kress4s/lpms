@@ -29,7 +29,7 @@ func GetGovProgressRepo() GovProgressRepo {
 type GovProgressRepo interface {
 	Create(db *gorm.DB, impl []models.GovProgress) exception.Exception
 	ListProgressPlan(db *gorm.DB, projectID int64) ([]models.ListGovProgressPlan, exception.Exception)
-	Get(db *gorm.DB, id int64, month int) (*models.GovProgress, exception.Exception)
+	Get(db *gorm.DB, id int64, year, month int) (*models.GovProgress, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	ListGovProgressCompare(db *gorm.DB, projectID int64) ([]models.GovProgressCompare, exception.Exception)
 	DeleteByProjectID(db *gorm.DB, projectID ...int64) exception.Exception
@@ -48,11 +48,11 @@ func (grr *GovProgressRepoImpl) ListProgressPlan(db *gorm.DB, projectID int64) (
 	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
 
-func (grr *GovProgressRepoImpl) Get(db *gorm.DB, id int64, month int) (*models.GovProgress, exception.Exception) {
+func (grr *GovProgressRepoImpl) Get(db *gorm.DB, id int64, year, month int) (*models.GovProgress, exception.Exception) {
 	govProgress := models.GovProgress{}
-	res := db.Where(&models.GovProgress{ProjectID: id, Month: month}).Find(&govProgress)
+	res := db.Where(&models.GovProgress{ProjectID: id, Month: month, Year: year}).Find(&govProgress)
 	if res.RowsAffected == 0 {
-		return nil, exception.New(response.ExceptionRecordNotFound, "recode not found")
+		return nil, nil
 	}
 	if res.Error != nil {
 		return nil, exception.Wrap(response.ExceptionDatabase, res.Error)
@@ -73,7 +73,7 @@ func (rri *GovProgressRepoImpl) ListPlan(db *gorm.DB, projectID int64) ([]models
 
 func (grr *GovProgressRepoImpl) ListGovProgressCompare(db *gorm.DB, projectID int64) ([]models.GovProgressCompare, exception.Exception) {
 	lpg := make([]models.GovProgressCompare, 0)
-	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Select("month, plan_invest, plan_progress, plan_invested, actual_progress").Find(&lpg)
+	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Select("year, month, plan_invest, plan_progress, plan_invested, actual_progress").Find(&lpg)
 	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
 
