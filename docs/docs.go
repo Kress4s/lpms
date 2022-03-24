@@ -1345,6 +1345,67 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/object/file/upload": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "存储对象并返回对象的id",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "项目 - 文件"
+                ],
+                "summary": "存储对象",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "文件",
+                        "name": "uploadfile",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "响应成功",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/reserve/project": {
             "post": {
                 "security": [
@@ -2037,74 +2098,8 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/object/file/upload": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "存储对象并返回对象的id",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "项目 - 文件"
-                ],
-                "summary": "存储对象",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "文件",
-                        "name": "uploadfile",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "响应成功",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "请求参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/vo.Error"
-                        }
-                    },
-                    "401": {
-                        "description": "当前用户登录令牌失效",
-                        "schema": {
-                            "$ref": "#/definitions/vo.Error"
-                        }
-                    },
-                    "403": {
-                        "description": "当前操作无权限",
-                        "schema": {
-                            "$ref": "#/definitions/vo.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器内部错误",
-                        "schema": {
-                            "$ref": "#/definitions/vo.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/object/file/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取对象",
                 "tags": [
                     "项目 - 文件"

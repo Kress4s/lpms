@@ -23,8 +23,9 @@ func RegisterRoutes(app *iris.Application) {
 	authApp := app.Party("/auth")
 	mvc.New(authApp).Handle(auth.NewLoginHandler())
 
-	objectApp := app.Party("/object")
-	mvc.New(objectApp).Handle(v1.NewObjectHandler())
+	// objectApp := app.Party("/object")
+	// mvc.New(objectApp).Handle(v1.NewObjectHandler())
+	app.Get("/object/file/{id:string}", v1.NewObjectHandler().Get)
 
 	party := app.Party("/api/v1")
 	party.Use(middlewares.Auth().Serve)
