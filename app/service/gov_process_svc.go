@@ -35,8 +35,8 @@ type GovProgressService interface {
 	Create(openID string, param *vo.GovProgressReq) exception.Exception
 	Get(id int64, year, month int) (*vo.GovProgressResp, exception.Exception)
 	Update(openID string, id int64, param *vo.GovProgressUpdateReq) exception.Exception
-	ListPlan(projectID int64) ([]vo.ListGovProgressPlan, exception.Exception)
-	ListGovProgressCompare(projectID int64) ([]vo.GovProgressCompare, exception.Exception)
+	ListPlan(projectID int64, year int) ([]vo.ListGovProgressPlan, exception.Exception)
+	ListGovProgressCompare(projectID int64, year int) ([]vo.GovProgressCompare, exception.Exception)
 }
 
 func (gsi *govProgressServiceImpl) Create(openID string, param *vo.GovProgressReq) exception.Exception {
@@ -65,8 +65,8 @@ func (gsi *govProgressServiceImpl) Update(openID string, id int64, param *vo.Gov
 	return gsi.repo.Update(gsi.db, id, param.ToMap(openID))
 }
 
-func (gsi *govProgressServiceImpl) ListPlan(projectID int64) ([]vo.ListGovProgressPlan, exception.Exception) {
-	res, ex := gsi.repo.ListProgressPlan(gsi.db, projectID)
+func (gsi *govProgressServiceImpl) ListPlan(projectID int64, year int) ([]vo.ListGovProgressPlan, exception.Exception) {
+	res, ex := gsi.repo.ListProgressPlan(gsi.db, projectID, year)
 	if ex != nil {
 		return nil, ex
 	}
@@ -83,8 +83,8 @@ func (gsi *govProgressServiceImpl) ListPlan(projectID int64) ([]vo.ListGovProgre
 	return resp, nil
 }
 
-func (gsi *govProgressServiceImpl) ListGovProgressCompare(projectID int64) ([]vo.GovProgressCompare, exception.Exception) {
-	res, ex := gsi.repo.ListGovProgressCompare(gsi.db, projectID)
+func (gsi *govProgressServiceImpl) ListGovProgressCompare(projectID int64, year int) ([]vo.GovProgressCompare, exception.Exception) {
+	res, ex := gsi.repo.ListGovProgressCompare(gsi.db, projectID, year)
 	if ex != nil {
 		return nil, ex
 	}

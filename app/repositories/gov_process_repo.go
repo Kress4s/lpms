@@ -28,10 +28,10 @@ func GetGovProgressRepo() GovProgressRepo {
 
 type GovProgressRepo interface {
 	Create(db *gorm.DB, impl []models.GovProgress) exception.Exception
-	ListProgressPlan(db *gorm.DB, projectID int64) ([]models.ListGovProgressPlan, exception.Exception)
+	ListProgressPlan(db *gorm.DB, projectID int64, year int) ([]models.ListGovProgressPlan, exception.Exception)
 	Get(db *gorm.DB, id int64, year, month int) (*models.GovProgress, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
-	ListGovProgressCompare(db *gorm.DB, projectID int64) ([]models.GovProgressCompare, exception.Exception)
+	ListGovProgressCompare(db *gorm.DB, projectID int64, year int) ([]models.GovProgressCompare, exception.Exception)
 	DeleteByProjectID(db *gorm.DB, projectID ...int64) exception.Exception
 }
 
@@ -42,9 +42,9 @@ func (grr *GovProgressRepoImpl) Create(db *gorm.DB, govProgress []models.GovProg
 	}).Create(&govProgress).Error)
 }
 
-func (grr *GovProgressRepoImpl) ListProgressPlan(db *gorm.DB, projectID int64) ([]models.ListGovProgressPlan, exception.Exception) {
+func (grr *GovProgressRepoImpl) ListProgressPlan(db *gorm.DB, projectID int64, year int) ([]models.ListGovProgressPlan, exception.Exception) {
 	lpg := make([]models.ListGovProgressPlan, 0)
-	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Find(&lpg)
+	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Where("year = ?", year).Find(&lpg)
 	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
 
@@ -71,9 +71,9 @@ func (rri *GovProgressRepoImpl) ListPlan(db *gorm.DB, projectID int64) ([]models
 	return res, exception.Wrap(response.ExceptionDatabase, db.Table(tables.GovProgress).Select("id, plan_invest, plan_progress, month").Where("project_id = ?", projectID).Find(&res).Error)
 }
 
-func (grr *GovProgressRepoImpl) ListGovProgressCompare(db *gorm.DB, projectID int64) ([]models.GovProgressCompare, exception.Exception) {
+func (grr *GovProgressRepoImpl) ListGovProgressCompare(db *gorm.DB, projectID int64, year int) ([]models.GovProgressCompare, exception.Exception) {
 	lpg := make([]models.GovProgressCompare, 0)
-	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Select("year, month, plan_invest, plan_progress, plan_invested, actual_progress").Find(&lpg)
+	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Where("year = ?", year).Select("year, month, plan_invest, plan_progress, plan_invested, actual_progress").Find(&lpg)
 	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
 

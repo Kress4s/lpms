@@ -159,6 +159,13 @@ const docTemplate = `{
                         "name": "project_id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "年份",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -277,6 +284,13 @@ const docTemplate = `{
                         "description": "所属项目id",
                         "name": "project_id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "年份",
+                        "name": "year",
+                        "in": "query",
                         "required": true
                     }
                 ],

@@ -86,6 +86,7 @@ func (ih *GovProgressHandler) Get(ctx iris.Context) mvc.Result {
 // @Description 查看实施库政府投资项目 **进度计划**
 // @Tags 实施库 - 政府投资项目 - 进度
 // @Param project_id path string true "所属项目id"
+// @Param year query string true "年份"
 // @Success 200 {array} vo.ListGovProgressPlan "查询实施库政府投资项目进度计划"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
@@ -98,7 +99,11 @@ func (ih *GovProgressHandler) ListPlan(ctx iris.Context) mvc.Result {
 	if err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
 	}
-	resp, ex := ih.Svc.ListPlan(project_id)
+	year, err := ctx.URLParamInt(constant.Year)
+	if err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
+	}
+	resp, ex := ih.Svc.ListPlan(project_id, year)
 	if ex != nil {
 		return response.Error(ex)
 	}
@@ -138,6 +143,7 @@ func (ih *GovProgressHandler) Update(ctx iris.Context) mvc.Result {
 // @Description 查看实施库政府投资项目 **进度对比**
 // @Tags 实施库 - 政府投资项目 - 进度
 // @Param project_id path string true "所属项目id"
+// @Param year query string true "年份"
 // @Success 200 {array} vo.GovProgressCompare "查询实施库政府投资项目进度对比"
 // @Failure 400 {object} vo.Error "请求参数错误"
 // @Failure 401 {object} vo.Error "当前用户登录令牌失效"
@@ -150,7 +156,11 @@ func (ih *GovProgressHandler) ListGovProgressCompare(ctx iris.Context) mvc.Resul
 	if err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
 	}
-	resp, ex := ih.Svc.ListGovProgressCompare(project_id)
+	year, err := ctx.URLParamInt(constant.Year)
+	if err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestParameters, err))
+	}
+	resp, ex := ih.Svc.ListGovProgressCompare(project_id, year)
 	if ex != nil {
 		return response.Error(ex)
 	}

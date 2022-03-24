@@ -1262,6 +1262,11 @@ paths:
         name: project_id
         required: true
         type: string
+      - description: 年份
+        in: query
+        name: year
+        required: true
+        type: string
       responses:
         "200":
           description: 查询实施库政府投资项目进度计划
@@ -1297,6 +1302,11 @@ paths:
       - description: 所属项目id
         in: path
         name: project_id
+        required: true
+        type: string
+      - description: 年份
+        in: query
+        name: year
         required: true
         type: string
       responses:
