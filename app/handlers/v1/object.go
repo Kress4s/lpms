@@ -37,14 +37,14 @@ func NewObjectHandler() *ObjectHandler {
 // @Failure 403 {object} vo.Error "当前操作无权限"
 // @Failure 500 {object} vo.Error "服务器内部错误"
 // @Security ApiKeyAuth
-// @Router /object/file/upload [post]
+// @Router /api/v1/object/file/upload [post]
 func (oh *ObjectHandler) Upload(ctx iris.Context) mvc.Result {
 	file, info, err := ctx.FormFile(constant.File)
 	if err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
 	}
 
-	id, ex := oh.Service.UploadFromReader(oh.UserName, info.Filename, info.Size, file)
+	id, ex := oh.Service.UploadFromReader("oh.UserName", info.Filename, info.Size, file)
 	if ex != nil {
 		return response.Error(ex)
 	}
@@ -60,7 +60,6 @@ func (oh *ObjectHandler) Upload(ctx iris.Context) mvc.Result {
 // @Param id path string true "对象id"
 // @Success 200 {string} byte "获取文件成功"
 // @Failure 500 {string} byte "服务器内部错误"
-// @Security ApiKeyAuth
 // @Router /object/file/{id} [get]
 func (oh *ObjectHandler) Get(ctx iris.Context) {
 	id := ctx.Params().Get(constant.ID)
@@ -75,5 +74,5 @@ func (oh *ObjectHandler) Get(ctx iris.Context) {
 // BeforeActivation 初始化路由
 func (oh *ObjectHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPost, "/file/upload", "Upload")
-	b.Handle(iris.MethodGet, "/file/{id:string}", "Get")
+	// b.Handle(iris.MethodGet, "/file/{id:string}", "Get")
 }
