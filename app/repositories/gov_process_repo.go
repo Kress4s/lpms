@@ -33,6 +33,7 @@ type GovProgressRepo interface {
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	ListGovProgressCompare(db *gorm.DB, projectID int64, year int) ([]models.GovProgressCompare, exception.Exception)
 	DeleteByProjectID(db *gorm.DB, projectID ...int64) exception.Exception
+	ListInvested(db *gorm.DB, projectID int64, year int) ([]models.GovProgress, exception.Exception)
 }
 
 func (grr *GovProgressRepoImpl) Create(db *gorm.DB, govProgress []models.GovProgress) exception.Exception {
@@ -45,6 +46,12 @@ func (grr *GovProgressRepoImpl) Create(db *gorm.DB, govProgress []models.GovProg
 func (grr *GovProgressRepoImpl) ListProgressPlan(db *gorm.DB, projectID int64, year int) ([]models.ListGovProgressPlan, exception.Exception) {
 	lpg := make([]models.ListGovProgressPlan, 0)
 	tx := db.Table(tables.GovProgress).Where("project_id = ?", projectID).Where("year = ?", year).Find(&lpg)
+	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
+}
+
+func (grr *GovProgressRepoImpl) ListInvested(db *gorm.DB, projectID int64, year int) ([]models.GovProgress, exception.Exception) {
+	lpg := make([]models.GovProgress, 0)
+	tx := db.Table(tables.GovProgress).Select("plan_invested, last_month_fixed_invested").Where("project_id = ?", projectID).Where("year = ?", year).Find(&lpg)
 	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
 

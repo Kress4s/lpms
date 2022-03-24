@@ -54,6 +54,22 @@ func (gsi *govProgressServiceImpl) Get(id int64, year, month int) (*vo.GovProgre
 	if govProgress == nil {
 		return resp, nil
 	}
+	info, ex := gsi.repo.ListInvested(gsi.db, id, year)
+	if ex != nil {
+		return nil, ex
+	}
+	investd := float64(0)
+	fixInvested := float64(0)
+	for i := range info {
+		if info[i].PlanInvested != nil {
+			investd += *info[i].PlanInvested
+		}
+		if info[i].LastMonthFixedInvested != nil {
+			fixInvested += *info[i].LastMonthFixedInvested
+		}
+	}
+	govProgress.YearSumFixedInvested = &fixInvested
+	govProgress.YearSumInvested = &investd
 	resp, err = vo.NewGovProgressResponse(govProgress)
 	if err != nil {
 		return nil, exception.Wrap(response.ExceptionUnmarshalJSON, err)
