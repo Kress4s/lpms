@@ -29,7 +29,7 @@ func GetReserveRepo() ReserveRepo {
 type ReserveRepo interface {
 	Create(db *gorm.DB, reserve *models.ReservePro) exception.Exception
 	Get(db *gorm.DB, id int64) (*models.ReservePro, exception.Exception)
-	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam) (int64, []models.ReservePro, exception.Exception)
+	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam, user string) (int64, []models.ReservePro, exception.Exception)
 	GetInvestDetail(db *gorm.DB, id int64) ([]models.InvestDetail, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	Delete(db *gorm.DB, id int64) exception.Exception
@@ -57,9 +57,10 @@ func (rri *ReserveRepoImpl) Get(db *gorm.DB, id int64) (*models.ReservePro, exce
 	return &reserve, nil
 }
 
-func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam) (int64, []models.ReservePro, exception.Exception) {
+func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam, user string) (int64, []models.ReservePro, exception.Exception) {
 	data := make([]models.ReservePro, 0)
-	tx := db.Table(tables.Reserve).Select("id, name, level, project_type, construct_subject, create_at, status").Where("status <> ? and status <> ?", constant.OutStorageInspect, constant.OutStorage)
+	tx := db.Table(tables.Reserve).Select("id, name, level, project_type, construct_subject, create_at, status").
+		Where("status <> ? and status <> ?", constant.OutStorageInspect, constant.OutStorage).Where("create_by = ?", user)
 	if params.Name != "" {
 		tx = tx.Where("name = ?", params.Name)
 	}
@@ -71,6 +72,9 @@ func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.
 	}
 	if params.ConstructSubject != "" {
 		tx = tx.Where("construct_subject = ?", params.ConstructSubject)
+	}
+	if params.PointType != nil {
+		tx = tx.Where("point_type = ?", params.PointType)
 	}
 	if params.PlanBegin != "" && params.PlanEnd != "" {
 		tx = tx.Where("create_at <= ? and create_at >= ?", params.PlanEnd, params.PlanBegin)

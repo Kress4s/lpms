@@ -94,7 +94,7 @@ func (ih *ImplementGovHandler) List(ctx iris.Context) mvc.Result {
 	if err := ctx.ReadJSON(params); err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
 	}
-	resp, ex := ih.Svc.List(params, page)
+	resp, ex := ih.Svc.List(ih.UserName, params, page)
 	if ex != nil {
 		return response.Error(ex)
 	}

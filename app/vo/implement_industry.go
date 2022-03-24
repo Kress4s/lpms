@@ -17,6 +17,8 @@ type ImpleIndustryFilterParam struct {
 	ProjectType *int `json:"project_type"`
 	// 建设主体  ***注意:（所有参数，有就传，无则不传）***
 	ConstructSubject string `json:"construct_subject"`
+	// 标签 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程
+	PointType *int `json:"point_type"`
 	// 计划开始时间
 	PlanBegin string `json:"plan_begin"`
 	// 计划结束时间
@@ -44,7 +46,7 @@ type ImpleIndustryReq struct {
 	PlanBegin *time.Time `json:"plan_begin"`
 	// 建设周期
 	Period *int `json:"period"`
-	// 重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型
+	// 重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程
 	PointType *int `json:"point_type"`
 	// 实施类型 0:新开工,1:续建
 	ImplementType *int `json:"implement_type"`

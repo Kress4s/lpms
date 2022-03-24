@@ -2436,6 +2436,10 @@ const docTemplate = `{
                     "description": "计划结束时间",
                     "type": "string"
                 },
+                "point_type": {
+                    "description": "标签 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程",
+                    "type": "integer"
+                },
                 "project_type": {
                     "description": "项目类型",
                     "type": "integer"
@@ -2530,7 +2534,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "point_type": {
-                    "description": "重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型",
+                    "description": "重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程",
                     "type": "integer"
                 },
                 "project_consumption": {
@@ -2718,6 +2722,10 @@ const docTemplate = `{
                 "plan_end": {
                     "description": "计划结束时间",
                     "type": "string"
+                },
+                "point_type": {
+                    "description": "标签 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程",
+                    "type": "integer"
                 },
                 "project_type": {
                     "description": "项目类型",
@@ -3238,6 +3246,10 @@ const docTemplate = `{
                     "description": "计划结束时间",
                     "type": "string"
                 },
+                "point_type": {
+                    "description": "标签 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程",
+                    "type": "integer"
+                },
                 "project_type": {
                     "description": "项目类型",
                     "type": "integer"
@@ -3361,7 +3373,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "point_type": {
-                    "description": "重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型",
+                    "description": "重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程",
                     "type": "integer"
                 },
                 "project_consumption": {

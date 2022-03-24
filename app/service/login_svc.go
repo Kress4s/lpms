@@ -38,7 +38,7 @@ type LoginService interface {
 }
 
 func (ls *loginServiceImpl) Login(username, password string) (*vo.LoginResponse, exception.Exception) {
-	password = string(tools.Base64Encode([]byte(password)))
+	// password = string(tools.Base64Encode([]byte(password)))
 	ok, status, userID, ex := ls.repo.CheckPassword(ls.db, username, password)
 	if ex != nil || !ok {
 		return nil, ex

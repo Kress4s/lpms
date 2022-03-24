@@ -29,7 +29,7 @@ func GetImpleIndustryRepo() ImpleIndustryRepo {
 type ImpleIndustryRepo interface {
 	Create(db *gorm.DB, impl *models.ImpleIndustry) exception.Exception
 	Get(db *gorm.DB, id int64) (*models.ImpleIndustry, exception.Exception)
-	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImpleIndustryFilterParam) (int64, []models.ImpleIndustry,
+	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImpleIndustryFilterParam, user string) (int64, []models.ImpleIndustry,
 		exception.Exception)
 	Delete(db *gorm.DB, id int64) exception.Exception
 	MultiDelete(db *gorm.DB, ids []int64) exception.Exception
@@ -51,10 +51,11 @@ func (igi *ImpleIndustryRepoImpl) Get(db *gorm.DB, id int64) (*models.ImpleIndus
 	return &reserve, nil
 }
 
-func (igi *ImpleIndustryRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImpleIndustryFilterParam) (int64,
+func (igi *ImpleIndustryRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImpleIndustryFilterParam, user string) (int64,
 	[]models.ImpleIndustry, exception.Exception) {
 	data := make([]models.ImpleIndustry, 0)
-	tx := db.Table(tables.ImplementIndustry).Select("id, name, level, project_type, construct_subject, create_at, status, start_time, finish_time").Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect)
+	tx := db.Table(tables.ImplementIndustry).Select("id, name, level, project_type, construct_subject, create_at, status, start_time, finish_time").
+		Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect).Where("create_by = ?", user)
 	if params.Name != "" {
 		tx = tx.Where("name = ?", params.Name)
 	}
@@ -66,6 +67,9 @@ func (igi *ImpleIndustryRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, param
 	}
 	if params.ConstructSubject != "" {
 		tx = tx.Where("construct_subject = ?", params.ConstructSubject)
+	}
+	if params.PointType != nil {
+		tx = tx.Where("point_type = ?", params.PointType)
 	}
 	if params.PlanBegin != "" && params.PlanEnd != "" {
 		tx = tx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)

@@ -38,7 +38,7 @@ func GetImpleIndustryService() ImpleIndustryService {
 type ImpleIndustryService interface {
 	Create(openID string, param *vo.ImpleIndustryReq) exception.Exception
 	Get(id int64) (*vo.ImpleIndustryResp, exception.Exception)
-	List(params *vo.ImpleIndustryFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
+	List(user string, params *vo.ImpleIndustryFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
 	Delete(id int64) exception.Exception
 	MultiDelete(ids string) exception.Exception
 }
@@ -61,9 +61,9 @@ func (isi *ImpleIndustryServiceImpl) Get(id int64) (*vo.ImpleIndustryResp, excep
 	return resp, nil
 }
 
-func (isi *ImpleIndustryServiceImpl) List(params *vo.ImpleIndustryFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination,
+func (isi *ImpleIndustryServiceImpl) List(user string, params *vo.ImpleIndustryFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination,
 	exception.Exception) {
-	count, projects, ex := isi.repo.List(isi.db, pageInfo, params)
+	count, projects, ex := isi.repo.List(isi.db, pageInfo, params, user)
 	if ex != nil {
 		return nil, ex
 	}

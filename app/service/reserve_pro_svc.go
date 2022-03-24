@@ -39,7 +39,7 @@ func GetReserveService() ReserveService {
 type ReserveService interface {
 	Create(openID string, param *vo.ReserveReq) exception.Exception
 	Get(id int64) (*vo.ReserveResp, exception.Exception)
-	List(params *vo.ReserveFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
+	List(user string, params *vo.ReserveFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
 	Update(openID string, id int64, param *vo.ReserveUpdateReq) exception.Exception
 	Delete(id int64) exception.Exception
 	MultiDelete(ids string) exception.Exception
@@ -72,8 +72,8 @@ func (rsi *reserveServiceImpl) Get(id int64) (*vo.ReserveResp, exception.Excepti
 	return resp, nil
 }
 
-func (rsi *reserveServiceImpl) List(params *vo.ReserveFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception) {
-	count, projects, ex := rsi.repo.List(rsi.db, pageInfo, params)
+func (rsi *reserveServiceImpl) List(user string, params *vo.ReserveFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception) {
+	count, projects, ex := rsi.repo.List(rsi.db, pageInfo, params, user)
 	if ex != nil {
 		return nil, ex
 	}

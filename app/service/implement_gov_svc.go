@@ -40,7 +40,7 @@ func GetImplementGovService() ImplementGovService {
 type ImplementGovService interface {
 	Create(openID string, param *vo.ImplementGovReq) exception.Exception
 	Get(id int64) (*vo.ImplementGovResp, exception.Exception)
-	List(params *vo.ImplementGovFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
+	List(user string, params *vo.ImplementGovFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
 	Delete(id int64) exception.Exception
 	MultiDelete(ids string) exception.Exception
 }
@@ -63,9 +63,9 @@ func (isi *implementGovServiceImpl) Get(id int64) (*vo.ImplementGovResp, excepti
 	return resp, nil
 }
 
-func (isi *implementGovServiceImpl) List(params *vo.ImplementGovFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination,
+func (isi *implementGovServiceImpl) List(user string, params *vo.ImplementGovFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination,
 	exception.Exception) {
-	count, projects, ex := isi.repo.List(isi.db, pageInfo, params)
+	count, projects, ex := isi.repo.List(isi.db, pageInfo, params, user)
 	if ex != nil {
 		return nil, ex
 	}

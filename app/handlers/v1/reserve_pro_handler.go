@@ -94,7 +94,7 @@ func (rh *ReserveHandler) List(ctx iris.Context) mvc.Result {
 	if err := ctx.ReadJSON(params); err != nil {
 		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
 	}
-	resp, ex := rh.Svc.List(params, page)
+	resp, ex := rh.Svc.List(rh.UserName, params, page)
 	if ex != nil {
 		return response.Error(ex)
 	}
