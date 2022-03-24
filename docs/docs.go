@@ -1232,17 +1232,17 @@ const docTemplate = `{
             }
         },
         "/api/v1/inspect/window/setting": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "创建窗口期设置",
+                "description": "窗口期设置修改",
                 "tags": [
                     "审批中心 - 项目审核 - 窗口期设置"
                 ],
-                "summary": "创建窗口期设置",
+                "summary": "窗口期设置修改",
                 "parameters": [
                     {
                         "description": "WindowsReq",
@@ -1256,7 +1256,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "创建储备库项目成功"
+                        "description": "窗口期设置修改成功"
                     },
                     "400": {
                         "description": "请求参数错误",
@@ -1303,67 +1303,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/vo.WindowsResponse"
                         }
-                    },
-                    "400": {
-                        "description": "请求参数错误",
-                        "schema": {
-                            "$ref": "#/definitions/vo.Error"
-                        }
-                    },
-                    "401": {
-                        "description": "当前用户登录令牌失效",
-                        "schema": {
-                            "$ref": "#/definitions/vo.Error"
-                        }
-                    },
-                    "403": {
-                        "description": "当前操作无权限",
-                        "schema": {
-                            "$ref": "#/definitions/vo.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "服务器内部错误",
-                        "schema": {
-                            "$ref": "#/definitions/vo.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/inspect/window/{id}/setting": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "窗口期设置修改",
-                "tags": [
-                    "审批中心 - 项目审核 - 窗口期设置"
-                ],
-                "summary": "窗口期设置修改",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "窗口期设置id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "WindowsUpdateReq",
-                        "name": "parameters",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/vo.WindowsUpdateReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "窗口期设置修改成功"
                     },
                     "400": {
                         "description": "请求参数错误",
@@ -3696,23 +3635,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "reserve_setting": {
-                    "type": "string"
-                }
-            }
-        },
-        "vo.WindowsUpdateReq": {
-            "type": "object",
-            "properties": {
-                "pro_plan_setting": {
-                    "description": "项目计划填报",
-                    "type": "string"
-                },
-                "progress_setting": {
-                    "description": "项目进度填报",
-                    "type": "string"
-                },
-                "reserve_setting": {
-                    "description": "储备库填报",
                     "type": "string"
                 }
             }

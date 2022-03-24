@@ -50,7 +50,7 @@ type WindowsUpdateReq struct {
 	ProPlanSetting string `json:"pro_plan_setting"`
 }
 
-func (w *WindowsUpdateReq) ToMap(openID string) map[string]interface{} {
+func (w *WindowsReq) ToMap(openID string) map[string]interface{} {
 	return map[string]interface{}{
 		"reserve_setting":  w.ReserveSetting,
 		"progress_setting": w.ProgressSetting,
