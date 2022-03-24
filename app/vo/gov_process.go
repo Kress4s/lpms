@@ -88,7 +88,7 @@ type GovProgressResp struct {
 	// 本月新增合同信息
 	Contracts string `json:"contracts"`
 	//备注
-	Comment string `json:":comment"`
+	Comment string `json:"comment"`
 }
 
 func NewGovProgressResponse(r *models.GovProgress) (*GovProgressResp, error) {

@@ -2237,16 +2237,16 @@
         "vo.GovProgressResp": {
             "type": "object",
             "properties": {
-                ":comment": {
-                    "description": "备注",
-                    "type": "string"
-                },
                 "actual_progress": {
                     "description": "本月完成形象进度",
                     "type": "string"
                 },
                 "change_content": {
                     "description": "本月产生联系单变更",
+                    "type": "string"
+                },
+                "comment": {
+                    "description": "备注",
                     "type": "string"
                 },
                 "contracts": {
