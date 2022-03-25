@@ -79,7 +79,7 @@ func (rir *ReserveInspectRepoImpl) OutStorageInspList(db *gorm.DB, pageInfo *vo.
 		tx = tx.Where("construct_subject = ?", params.ConstructSubject)
 	}
 	if params.PlanBegin != "" && params.PlanEnd != "" {
-		tx = tx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)
+		tx = tx.Where("create_at <= ? and create_at >= ?", params.PlanEnd, params.PlanBegin)
 	}
 	count := int64(0)
 	tx = tx.Limit(pageInfo.PageSize).Offset(pageInfo.Offset()).

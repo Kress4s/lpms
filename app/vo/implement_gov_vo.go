@@ -19,16 +19,41 @@ type ImplementGovFilterParam struct {
 	ConstructSubject string `json:"construct_subject"`
 	// 标签 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程
 	PointType *int `json:"point_type"`
-	// 计划开始时间
+	// 计划开工开始时间
 	PlanBegin string `json:"plan_begin"`
-	// 计划结束时间
+	// 计划开工结束时间
 	PlanEnd string `json:"plan_end"`
-	// 状态
+	// 开工开始时间
+	StartTime string `json:"start_time"`
+	// 开工结束时间
+	EndTime string `json:"end_time"`
+	// 状态(必传参数) -1: 当年全部(注意cur_year_all_begin和cur_year_all_end带上) 0:未开工, 2:开工建设; 4:竣工库(如果是 当年竣工，必须要带上cur_year_all_begin和cur_year_all_end参数)
 	Status *int `json:"status"`
-	// 当年起始时间(闭区间) eg: 2022-01-01 00:00:00
-	CurYearBegin string `json:"cur_year_begin"`
-	// 当年终止时间(开区间) eg : 2023-01-01 00:00:00
-	CurYearEnd string `json:"cur_year_end"`
+	// 当年 起始时间(闭区间) eg: 2022-01-01 00:00:00
+	CurYearBegin string `json:"cur_year_all_begin"`
+	// 当年 终止时间(开区间) eg : 2023-01-01 00:00:00
+	CurYearEnd string `json:"cur_year_all_end"`
+}
+
+type ImplementGovCountFilter struct {
+	//项目名称
+	Name string `json:"name"`
+	// 项目级别
+	Level *int `json:"level"`
+	// 项目类型
+	ProjectType *int `json:"project_type"`
+	// 建设主体  ***注意:（所有参数，有就传，无则不传）***
+	ConstructSubject string `json:"construct_subject"`
+	// 标签 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程
+	PointType *int `json:"point_type"`
+	// 计划开工开始时间
+	PlanBegin string `json:"plan_begin"`
+	// 计划开工结束时间
+	PlanEnd string `json:"plan_end"`
+	// 开工开始时间
+	StartTime string `json:"start_time"`
+	// 开工结束时间
+	EndTime string `json:"end_time"`
 }
 
 type ImplementGovReq struct {
@@ -248,4 +273,11 @@ type ListImplementGovResp struct {
 	Status int `json:"status"`
 	// 实际开工时间
 	StartTime *time.Time `json:"start_time"`
+}
+
+type StatusCountResp struct {
+	// 状态：-2：当年全部，-1：当年竣工，0：未开工，2：开工建设，4:竣工库
+	Status int `json:"status"`
+	// 数量
+	Count int64 `json:"count"`
 }

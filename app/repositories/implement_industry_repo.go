@@ -55,7 +55,10 @@ func (igi *ImpleIndustryRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, param
 	[]models.ImpleIndustry, exception.Exception) {
 	data := make([]models.ImpleIndustry, 0)
 	tx := db.Table(tables.ImplementIndustry).Select("id, name, level, project_type, construct_subject, create_at, status, start_time, finish_time").
-		Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect).Where("create_by = ?", user)
+		Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect)
+	if user != "admin" {
+		tx = tx.Where("create_by = ?", user)
+	}
 	if params.Name != "" {
 		tx = tx.Where("name = ?", params.Name)
 	}
@@ -72,7 +75,7 @@ func (igi *ImpleIndustryRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, param
 		tx = tx.Where("point_type = ?", params.PointType)
 	}
 	if params.PlanBegin != "" && params.PlanEnd != "" {
-		tx = tx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)
+		tx = tx.Where("create_at <= ? and create_at >= ?", params.PlanEnd, params.PlanBegin)
 	}
 	if params.CurYearBegin != "" && params.CurYearEnd != "" {
 		tx = tx.Where("finish_time < ? and finish_time >= ?", params.PlanEnd, params.PlanBegin)

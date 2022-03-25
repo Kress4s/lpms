@@ -15,6 +15,66 @@
     },
     "basePath": "/",
     "paths": {
+        "/api/v1/implement/gov/list/count": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取实施库政府投资项目不同筛选状态的数量",
+                "tags": [
+                    "实施库 - 政府投资项目"
+                ],
+                "summary": "获取实施库政府投资项目不同筛选状态的数量",
+                "parameters": [
+                    {
+                        "description": "ImplementGovCountFilter",
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/vo.ImplementGovCountFilter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vo.StatusCountResp"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "当前用户登录令牌失效",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "403": {
+                        "description": "当前操作无权限",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/vo.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/implement/gov/progress": {
             "get": {
                 "security": [
@@ -2636,19 +2696,15 @@
                 }
             }
         },
-        "vo.ImplementGovFilterParam": {
+        "vo.ImplementGovCountFilter": {
             "type": "object",
             "properties": {
                 "construct_subject": {
                     "description": "建设主体  ***注意:（所有参数，有就传，无则不传）***",
                     "type": "string"
                 },
-                "cur_year_begin": {
-                    "description": "当年起始时间(闭区间) eg: 2022-01-01 00:00:00",
-                    "type": "string"
-                },
-                "cur_year_end": {
-                    "description": "当年终止时间(开区间) eg : 2023-01-01 00:00:00",
+                "end_time": {
+                    "description": "开工结束时间",
                     "type": "string"
                 },
                 "level": {
@@ -2660,11 +2716,11 @@
                     "type": "string"
                 },
                 "plan_begin": {
-                    "description": "计划开始时间",
+                    "description": "计划开工开始时间",
                     "type": "string"
                 },
                 "plan_end": {
-                    "description": "计划结束时间",
+                    "description": "计划开工结束时间",
                     "type": "string"
                 },
                 "point_type": {
@@ -2675,8 +2731,61 @@
                     "description": "项目类型",
                     "type": "integer"
                 },
+                "start_time": {
+                    "description": "开工开始时间",
+                    "type": "string"
+                }
+            }
+        },
+        "vo.ImplementGovFilterParam": {
+            "type": "object",
+            "properties": {
+                "construct_subject": {
+                    "description": "建设主体  ***注意:（所有参数，有就传，无则不传）***",
+                    "type": "string"
+                },
+                "cur_year_all_begin": {
+                    "description": "当年 起始时间(闭区间) eg: 2022-01-01 00:00:00",
+                    "type": "string"
+                },
+                "cur_year_all_end": {
+                    "description": "当年 终止时间(开区间) eg : 2023-01-01 00:00:00",
+                    "type": "string"
+                },
+                "end_time": {
+                    "description": "开工结束时间",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "项目级别",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "项目名称",
+                    "type": "string"
+                },
+                "plan_begin": {
+                    "description": "计划开工开始时间",
+                    "type": "string"
+                },
+                "plan_end": {
+                    "description": "计划开工结束时间",
+                    "type": "string"
+                },
+                "point_type": {
+                    "description": "标签 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型;8: 152工程",
+                    "type": "integer"
+                },
+                "project_type": {
+                    "description": "项目类型",
+                    "type": "integer"
+                },
+                "start_time": {
+                    "description": "开工开始时间",
+                    "type": "string"
+                },
                 "status": {
-                    "description": "状态",
+                    "description": "状态(必传参数) -1: 当年全部(注意cur_year_all_begin和cur_year_all_end带上) 0:未开工, 2:开工建设; 4:竣工库(如果是 当年竣工，必须要带上cur_year_all_begin和cur_year_all_end参数)",
                     "type": "integer"
                 }
             }
@@ -3597,6 +3706,19 @@
                 "upload_cad_id": {
                     "description": "CAD文件ID(上传文件接口返回的ID)",
                     "type": "string"
+                }
+            }
+        },
+        "vo.StatusCountResp": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "description": "数量",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态：-2：当年全部，-1：当年竣工，0：未开工，2：开工建设，4:竣工库",
+                    "type": "integer"
                 }
             }
         },
