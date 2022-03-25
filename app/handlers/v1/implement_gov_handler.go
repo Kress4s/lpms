@@ -146,6 +146,30 @@ func (ih *ImplementGovHandler) MultiDelete(ctx iris.Context) mvc.Result {
 	return response.OK()
 }
 
+// Create godoc
+// @Summary 获取实施库政府投资项目不同筛选状态的数量
+// @Description 获取实施库政府投资项目不同筛选状态的数量
+// @Tags 实施库 - 政府投资项目
+// @Param parameters body vo.ImplementGovCountFilter true "ImplementGovCountFilter"
+// @Success 200 {array} vo.StatusCountResp "成功"
+// @Failure 400 {object} vo.Error "请求参数错误"
+// @Failure 401 {object} vo.Error "当前用户登录令牌失效"
+// @Failure 403 {object} vo.Error "当前操作无权限"
+// @Failure 500 {object} vo.Error "服务器内部错误"
+// @Security ApiKeyAuth
+// @Router /api/v1/implement/gov/list/count [post]
+func (ih *ImplementGovHandler) ListStatusCount(ctx iris.Context) mvc.Result {
+	params := &vo.ImplementGovCountFilter{}
+	if err := ctx.ReadJSON(params); err != nil {
+		return response.Error(exception.Wrap(response.ExceptionInvalidRequestBody, err))
+	}
+	resp, ex := ih.Svc.ListStatusCount(ih.UserName, params)
+	if ex != nil {
+		return response.Error(ex)
+	}
+	return response.JSON(resp)
+}
+
 // BeforeActivation 初始化路由
 func (ih *ImplementGovHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPost, "/gov/project", "Create")
@@ -153,4 +177,5 @@ func (ih *ImplementGovHandler) BeforeActivation(b mvc.BeforeActivation) {
 	b.Handle(iris.MethodPost, "/gov/projects", "List")
 	b.Handle(iris.MethodDelete, "/gov/project/{id:string}", "Delete")
 	b.Handle(iris.MethodDelete, "/gov/project/multi", "MultiDelete")
+	b.Handle(iris.MethodPost, "/gov/list/count", "ListStatusCount")
 }

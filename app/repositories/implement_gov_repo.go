@@ -8,6 +8,7 @@ import (
 	"lpms/constant"
 	"lpms/exception"
 	"sync"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -33,6 +34,7 @@ type ImplementGovRepo interface {
 		exception.Exception)
 	Delete(db *gorm.DB, id int64) exception.Exception
 	MultiDelete(db *gorm.DB, ids []int64) exception.Exception
+	ListStatusCount(db *gorm.DB, params *vo.ImplementGovCountFilter, user string) ([]ListCountModel, exception.Exception)
 }
 
 func (igi *ImplementGovRepoImpl) Create(db *gorm.DB, impl *models.ImplementGov) exception.Exception {
@@ -55,7 +57,10 @@ func (igi *ImplementGovRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params
 	[]models.ImplementGov, exception.Exception) {
 	data := make([]models.ImplementGov, 0)
 	tx := db.Table(tables.ImplementGov).Select("id, name, level, project_type, construct_subject, create_at, status, start_time, finish_time").
-		Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect).Where("create_by = ?", user)
+		Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect)
+	if user != "admin" {
+		tx = tx.Where("create_by = ?", user)
+	}
 	if params.Name != "" {
 		tx = tx.Where("name = ?", params.Name)
 	}
@@ -72,10 +77,19 @@ func (igi *ImplementGovRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params
 		tx = tx.Where("point_type = ?", params.PointType)
 	}
 	if params.PlanBegin != "" && params.PlanEnd != "" {
-		tx = tx.Where("create_at <= ? and create_at >= ", params.PlanEnd, params.PlanBegin)
+		tx = tx.Where("plan_begin <= ? and plan_begin >= ?", params.PlanEnd, params.PlanBegin)
+	}
+	if params.StartTime != "" && params.EndTime != "" {
+		tx = tx.Where("start_time <= ? and start_time >= ?", params.EndTime, params.StartTime)
 	}
 	if params.CurYearBegin != "" && params.CurYearEnd != "" {
-		tx = tx.Where("finish_time < ? and finish_time >= ?", params.PlanEnd, params.PlanBegin)
+		if params.Status != nil {
+			if *params.Status == -1 {
+				tx = tx.Where("create_at < ? and create_at >= ?", params.CurYearEnd, params.CurYearBegin)
+			} else if *params.Status == 4 {
+				tx = tx.Where("finish_time < ? and finish_time >= ?", params.CurYearEnd, params.CurYearBegin)
+			}
+		}
 	}
 	if params.Status != nil {
 		tx = tx.Where("status = ?", params.Status)
@@ -92,4 +106,70 @@ func (igi *ImplementGovRepoImpl) Delete(db *gorm.DB, id int64) exception.Excepti
 
 func (igi *ImplementGovRepoImpl) MultiDelete(db *gorm.DB, ids []int64) exception.Exception {
 	return exception.Wrap(response.ExceptionDatabase, db.Delete(&models.ImplementGov{}, ids).Error)
+}
+
+type ListCountModel struct {
+	Status int   `json:"status"`
+	Count  int64 `json:"count"`
+}
+
+// 统计数量 未开工、开工建设、 竣工
+func (igi *ImplementGovRepoImpl) ListStatusCount(db *gorm.DB, params *vo.ImplementGovCountFilter, user string) ([]ListCountModel, exception.Exception) {
+	res := make([]ListCountModel, 0)
+	subTx := db.Table(tables.ImplementGov).Select("status, create_at").
+		Where("status in (?, ?, ?)", constant.UnStart, constant.Started, constant.Finished)
+	if user != "admin" {
+		subTx = subTx.Where("create_by = ?", user)
+	}
+	if params.Name != "" {
+		subTx = subTx.Where("name = ?", params.Name)
+	}
+	if params.Level != nil {
+		subTx = subTx.Where("level = ?", params.Level)
+	}
+	if params.ProjectType != nil {
+		subTx = subTx.Where("project_type = ?", params.ProjectType)
+	}
+	if params.ConstructSubject != "" {
+		subTx = subTx.Where("construct_subject = ?", params.ConstructSubject)
+	}
+	if params.PointType != nil {
+		subTx = subTx.Where("point_type = ?", params.PointType)
+	}
+	if params.PlanBegin != "" && params.PlanEnd != "" {
+		subTx = subTx.Where("plan_begin <= ? and plan_begin >= ?", params.PlanEnd, params.PlanBegin)
+	}
+	if params.StartTime != "" && params.EndTime != "" {
+		subTx = subTx.Where("start_time <= ? and start_time >= ?", params.PlanEnd, params.PlanBegin)
+	}
+	tx := db.Table("(?) AS sub", subTx).Select("sub.status AS status, count(*) AS count").Group("sub.status").Find(&res)
+	if tx.Error != nil {
+		return nil, exception.Wrap(response.ExceptionDatabase, tx.Error)
+	}
+
+	now := time.Now()
+	CurYearBegin := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local)
+	CurYearEnd := CurYearBegin.AddDate(1, 0, 0)
+
+	count := int64(0)
+	tx1 := db.Table("(?) AS sub", subTx).Select("sub.status").Where("sub.create_at < ? and sub.create_at >= ?", CurYearEnd, CurYearBegin).Limit(-1).Offset(-1).Count(&count)
+	if tx1.Error != nil {
+		return nil, exception.Wrap(response.ExceptionDatabase, tx1.Error)
+	}
+	res = append(res, ListCountModel{
+		Status: -2,
+		Count:  count,
+	})
+
+	subTx = subTx.Where("status = ?", constant.Finished).Where("finish_time < ? and finish_time >= ?", CurYearEnd, CurYearBegin)
+	count1 := int64(0)
+	tx2 := db.Table("(?) AS sub", subTx).Limit(-1).Offset(-1).Count(&count1)
+	if tx2.Error != nil {
+		return nil, exception.Wrap(response.ExceptionDatabase, tx2.Error)
+	}
+	res = append(res, ListCountModel{
+		Status: -1,
+		Count:  count1,
+	})
+	return res, nil
 }

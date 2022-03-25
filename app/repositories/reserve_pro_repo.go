@@ -60,7 +60,10 @@ func (rri *ReserveRepoImpl) Get(db *gorm.DB, id int64) (*models.ReservePro, exce
 func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam, user string) (int64, []models.ReservePro, exception.Exception) {
 	data := make([]models.ReservePro, 0)
 	tx := db.Table(tables.Reserve).Select("id, name, level, project_type, construct_subject, create_at, status").
-		Where("status <> ? and status <> ?", constant.OutStorageInspect, constant.OutStorage).Where("create_by = ?", user)
+		Where("status <> ? and status <> ?", constant.OutStorageInspect, constant.OutStorage)
+	if user != "admin" {
+		tx = tx.Where("create_by = ?", user)
+	}
 	if params.Name != "" {
 		tx = tx.Where("name = ?", params.Name)
 	}

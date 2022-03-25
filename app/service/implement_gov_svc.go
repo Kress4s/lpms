@@ -43,6 +43,7 @@ type ImplementGovService interface {
 	List(user string, params *vo.ImplementGovFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception)
 	Delete(id int64) exception.Exception
 	MultiDelete(ids string) exception.Exception
+	ListStatusCount(user string, params *vo.ImplementGovCountFilter) ([]vo.StatusCountResp, exception.Exception)
 }
 
 func (isi *implementGovServiceImpl) Create(openID string, param *vo.ImplementGovReq) exception.Exception {
@@ -164,4 +165,19 @@ func (isi *implementGovServiceImpl) MultiDelete(ids string) exception.Exception 
 		return exception.Wrap(response.ExceptionDatabase, err.Error)
 	}
 	return nil
+}
+
+func (isi *implementGovServiceImpl) ListStatusCount(user string, params *vo.ImplementGovCountFilter) ([]vo.StatusCountResp, exception.Exception) {
+	res, ex := isi.repo.ListStatusCount(isi.db, params, user)
+	if ex != nil {
+		return nil, ex
+	}
+	resp := make([]vo.StatusCountResp, 0, len(res))
+	for i := range res {
+		resp = append(resp, vo.StatusCountResp{
+			Status: res[i].Status,
+			Count:  res[i].Count,
+		})
+	}
+	return resp, nil
 }
