@@ -92,7 +92,9 @@ func (igi *ImplementGovRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params
 		}
 	}
 	if params.Status != nil {
-		tx = tx.Where("status = ?", params.Status)
+		if *params.Status != -1 {
+			tx = tx.Where("status = ?", params.Status)
+		}
 	}
 	if params.BeginInvest != nil && params.EndInvest != nil {
 		tx = tx.Where("total_investment <= ? and total_investment >= ?", params.EndInvest, params.BeginInvest)
@@ -160,11 +162,11 @@ func (igi *ImplementGovRepoImpl) ListStatusCount(db *gorm.DB, params *vo.Impleme
 	}
 
 	now := time.Now()
-	CurYearBegin := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local)
+	CurYearBegin := time.Date(now.Year(), 1, 0, 0, 0, 0, 0, time.Local).AddDate(0, 0, 1)
 	CurYearEnd := CurYearBegin.AddDate(1, 0, 0)
 
 	count := int64(0)
-	tx1 := db.Table("(?) AS sub", subTx).Select("sub.status").Where("sub.create_at < ? and sub.create_at >= ?", CurYearEnd, CurYearBegin).Limit(-1).Offset(-1).Count(&count)
+	tx1 := db.Table("(?) AS sub", subTx).Select("*").Where("sub.create_at < ? and sub.create_at >= ?", CurYearEnd, CurYearBegin).Limit(-1).Offset(-1).Count(&count)
 	if tx1.Error != nil {
 		return nil, exception.Wrap(response.ExceptionDatabase, tx1.Error)
 	}

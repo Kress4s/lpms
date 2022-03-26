@@ -50,7 +50,7 @@ func (gsi *govProgressServiceImpl) Get(id int64, year, month int) (*vo.GovProgre
 	govProgress, ex := gsi.repo.Get(gsi.db, id, year, month)
 	if ex != nil {
 		if ex.Type() == response.ExceptionRecordNotFound {
-			return nil, nil
+			return &vo.GovProgressResp{}, nil
 		} else {
 			return nil, ex
 		}
