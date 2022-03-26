@@ -34,6 +34,8 @@ type GovProgressRepo interface {
 	ListGovProgressCompare(db *gorm.DB, projectID int64, year int) ([]models.GovProgressCompare, exception.Exception)
 	DeleteByProjectID(db *gorm.DB, projectID ...int64) exception.Exception
 	ListInvested(db *gorm.DB, projectID int64, year int) ([]models.GovProgress, exception.Exception)
+	FormNowInvested(db *gorm.DB, projectID int64, year, month int) (float64, exception.Exception)
+	StartFormNowInvestedAndFixed(db *gorm.DB, projectID int64, startYear, startMonth, year, month int) (float64, float64, exception.Exception)
 }
 
 func (grr *GovProgressRepoImpl) Create(db *gorm.DB, govProgress []models.GovProgress) exception.Exception {
@@ -53,6 +55,43 @@ func (grr *GovProgressRepoImpl) ListInvested(db *gorm.DB, projectID int64, year 
 	lpg := make([]models.GovProgress, 0)
 	tx := db.Table(tables.GovProgress).Select("plan_invested, last_month_fixed_invested").Where("project_id = ?", projectID).Where("year = ?", year).Find(&lpg)
 	return lpg, exception.Wrap(response.ExceptionDatabase, tx.Error)
+}
+
+// 开工至今累计投资额 和 开工至今累计固投
+func (grr *GovProgressRepoImpl) StartFormNowInvestedAndFixed(db *gorm.DB, projectID int64, startYear, startMonth, year, month int) (float64, float64, exception.Exception) {
+	lpg := make([]models.GovProgress, 0)
+	tx := db.Table(tables.GovProgress).Select("plan_invested, last_month_fixed_invested").Where("project_id = ?", projectID).
+		Where("year <= ? and month <= ?", year, month).Where("year >= ? and month >= ?", startYear, startMonth).Find(&lpg)
+	if tx.Error != nil {
+		return 0, 0, exception.Wrap(response.ExceptionDatabase, tx.Error)
+	}
+	invested := float64(0)
+	fixedSum := float64(0)
+	for i := range lpg {
+		if lpg[i].PlanInvested != nil {
+			invested += *lpg[i].PlanInvested
+		}
+		if lpg[i].LastMonthFixedInvested != nil {
+			fixedSum += *lpg[i].LastMonthFixedInvested
+		}
+	}
+	return invested, fixedSum, nil
+}
+
+// 一月至本月计划累计完成投资额
+func (grr *GovProgressRepoImpl) FormNowInvested(db *gorm.DB, projectID int64, year, month int) (float64, exception.Exception) {
+	lpg := make([]models.GovProgress, 0)
+	tx := db.Table(tables.GovProgress).Select("plan_invested").Where("project_id = ?", projectID).Where("year = ? and month <= ?", year, month).Find(&lpg)
+	if tx.Error != nil {
+		return 0, exception.Wrap(response.ExceptionDatabase, tx.Error)
+	}
+	total := float64(0)
+	for i := range lpg {
+		if lpg[i].PlanInvested != nil {
+			total += *lpg[i].PlanInvested
+		}
+	}
+	return total, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
 
 func (grr *GovProgressRepoImpl) Get(db *gorm.DB, id int64, year, month int) (*models.GovProgress, exception.Exception) {

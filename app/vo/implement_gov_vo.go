@@ -33,6 +33,12 @@ type ImplementGovFilterParam struct {
 	CurYearBegin string `json:"cur_year_all_begin"`
 	// 当年 终止时间(开区间) eg : 2023-01-01 00:00:00
 	CurYearEnd string `json:"cur_year_all_end"`
+	// 总投资额范围开始
+	BeginInvest *float64 `json:"begin_invest"`
+	// 总投资额范围结束
+	EndInvest *float64 `json:"end_invest"`
+	// 责任单位
+	DutyUnit string `json:"duty_unit"`
 }
 
 type ImplementGovCountFilter struct {
@@ -54,6 +60,12 @@ type ImplementGovCountFilter struct {
 	StartTime string `json:"start_time"`
 	// 开工结束时间
 	EndTime string `json:"end_time"`
+	// 总投资额范围开始
+	BeginInvest *float64 `json:"begin_invest"`
+	// 总投资额范围结束
+	EndInvest *float64 `json:"end_invest"`
+	// 责任单位
+	DutyUnit string `json:"duty_unit"`
 }
 
 type ImplementGovReq struct {
@@ -115,6 +127,12 @@ type ImplementGovReq struct {
 	Contract string `json:"contract"`
 	// 联系人手机号
 	Phone string `json:"phone"`
+	// 项目编码
+	ProjectCode string `json:"project_code"`
+	// 责任单位
+	DutyUnit string `json:"duty_unit"`
+	// 项目本质类型 1:政府项目 2：产业项目
+	Type int `json:"type"`
 }
 
 func (r *ImplementGovReq) ToModel(openID string) *models.ImplementGov {
@@ -148,6 +166,9 @@ func (r *ImplementGovReq) ToModel(openID string) *models.ImplementGov {
 		Contract:                r.Contract,
 		Phone:                   r.Phone,
 		Status:                  constant.UnStart,
+		ProjectCode:             r.ProjectCode,
+		DutyUint:                r.DutyUnit,
+		Type:                    r.Type,
 		Base: models.Base{
 			UpdateBy: openID,
 			CreateBy: openID,
@@ -216,7 +237,12 @@ type ImplementGovResp struct {
 	Phone string `json:"phone"`
 	// 项目状态 0:未开工,1:开工待审核,2:已开工;3:竣工待审核;4:已竣工"
 	Status int `json:"status"`
-	//
+	// 项目编码
+	ProjectCode string `json:"project_code"`
+	// 责任单位
+	DutyUnit string `json:"duty_unit"`
+	// 项目本质类型 1:政府项目 2：产业项目
+	Type int `json:"type"`
 }
 
 func NewImplementGovResponse(r *models.ImplementGov) (*ImplementGovResp, error) {
@@ -251,6 +277,9 @@ func NewImplementGovResponse(r *models.ImplementGov) (*ImplementGovResp, error) 
 		Contract:                r.Contract,
 		Phone:                   r.Phone,
 		Status:                  r.Status,
+		ProjectCode:             r.ProjectCode,
+		DutyUnit:                r.DutyUint,
+		Type:                    r.Type,
 	}, nil
 }
 
@@ -273,6 +302,12 @@ type ListImplementGovResp struct {
 	Status int `json:"status"`
 	// 实际开工时间
 	StartTime *time.Time `json:"start_time"`
+	// 项目编码
+	ProjectCode string `json:"project_code"`
+	// 责任单位
+	DutyUnit string `json:"duty_unit"`
+	// 项目本质类型 1:政府项目 2：产业项目
+	Type int `json:"type"`
 }
 
 type StatusCountResp struct {

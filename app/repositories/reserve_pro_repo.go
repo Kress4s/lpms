@@ -29,7 +29,7 @@ func GetReserveRepo() ReserveRepo {
 type ReserveRepo interface {
 	Create(db *gorm.DB, reserve *models.ReservePro) exception.Exception
 	Get(db *gorm.DB, id int64) (*models.ReservePro, exception.Exception)
-	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam, user string) (int64, []models.ReservePro, exception.Exception)
+	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam, isAdmin bool, user string) (int64, []models.ReservePro, exception.Exception)
 	GetInvestDetail(db *gorm.DB, id int64) ([]models.InvestDetail, exception.Exception)
 	Update(db *gorm.DB, id int64, param map[string]interface{}) exception.Exception
 	Delete(db *gorm.DB, id int64) exception.Exception
@@ -57,11 +57,11 @@ func (rri *ReserveRepoImpl) Get(db *gorm.DB, id int64) (*models.ReservePro, exce
 	return &reserve, nil
 }
 
-func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam, user string) (int64, []models.ReservePro, exception.Exception) {
+func (rri *ReserveRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ReserveFilterParam, isAdmin bool, user string) (int64, []models.ReservePro, exception.Exception) {
 	data := make([]models.ReservePro, 0)
 	tx := db.Table(tables.Reserve).Select("id, name, level, project_type, construct_subject, create_at, status").
 		Where("status <> ? and status <> ?", constant.OutStorageInspect, constant.OutStorage)
-	if user != "admin" {
+	if !isAdmin {
 		tx = tx.Where("create_by = ?", user)
 	}
 	if params.Name != "" {

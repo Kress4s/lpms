@@ -78,7 +78,7 @@ type GovProgressResp struct {
 	//上月完成固投(万)
 	LastMonthFixedInvested *float64 `json:"last_month_fixed_invested"`
 	//当年累计固投(万)
-	YearSumFixedInvested *float64 `json:"year_sum__fixed_invested"`
+	YearSumFixedInvested *float64 `json:"year_sum_fixed_invested"`
 	//本月完成形象进度
 	ActualProgress string `json:"actual_progress"`
 	//需协调问题详情
@@ -89,9 +89,15 @@ type GovProgressResp struct {
 	Contracts string `json:"contracts"`
 	//备注
 	Comment string `json:"comment"`
+	// 一月至本月计划累计完成投资额
+	TotalPlanInvested float64 `json:"total_plan_invested"`
+	// 开工至今累计投资额
+	StartSumInvested float64 `json:"start_sum_invest"`
+	// 开工至今累计固投
+	StartFixedInvested float64 `json:"start_fixed_invested"`
 }
 
-func NewGovProgressResponse(r *models.GovProgress) (*GovProgressResp, error) {
+func NewGovProgressResponse(r *models.GovProgress, total_plan_invested, start_sum, start_fixed float64) (*GovProgressResp, error) {
 	return &GovProgressResp{
 		ID:                     r.ID,
 		ProjectID:              r.ProjectID,
@@ -108,6 +114,9 @@ func NewGovProgressResponse(r *models.GovProgress) (*GovProgressResp, error) {
 		ChangeContent:          string(r.ChangeContent),
 		Contracts:              string(r.Contracts),
 		Comment:                r.Comment,
+		TotalPlanInvested:      total_plan_invested,
+		StartSumInvested:       start_sum,
+		StartFixedInvested:     start_fixed,
 	}, nil
 }
 

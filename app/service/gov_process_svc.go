@@ -17,15 +17,17 @@ var (
 )
 
 type govProgressServiceImpl struct {
-	db   *gorm.DB
-	repo repositories.GovProgressRepo
+	db          *gorm.DB
+	repo        repositories.GovProgressRepo
+	projectRepo repositories.ImplementGovRepo
 }
 
 func GetGovProgressService() GovProgressService {
 	govProgressOnce.Do(func() {
 		govProgressServiceInstance = &govProgressServiceImpl{
-			db:   database.GetDriver(),
-			repo: repositories.GetGovProgressRepo(),
+			db:          database.GetDriver(),
+			repo:        repositories.GetGovProgressRepo(),
+			projectRepo: repositories.GetImplementGovRepo(),
 		}
 	})
 	return govProgressServiceInstance
@@ -46,6 +48,10 @@ func (gsi *govProgressServiceImpl) Create(openID string, param *vo.GovProgressRe
 
 func (gsi *govProgressServiceImpl) Get(id int64, year, month int) (*vo.GovProgressResp, exception.Exception) {
 	govProgress, ex := gsi.repo.Get(gsi.db, id, year, month)
+	if ex != nil {
+		return nil, ex
+	}
+	govProject, ex := gsi.projectRepo.Get(gsi.db, govProgress.ProjectID)
 	if ex != nil {
 		return nil, ex
 	}
@@ -70,7 +76,24 @@ func (gsi *govProgressServiceImpl) Get(id int64, year, month int) (*vo.GovProgre
 	}
 	govProgress.YearSumFixedInvested = &fixInvested
 	govProgress.YearSumInvested = &investd
-	resp, err = vo.NewGovProgressResponse(govProgress)
+	total_plan_invested, ex := gsi.repo.FormNowInvested(gsi.db, govProgress.ProjectID, year, month)
+	if ex != nil {
+		return nil, ex
+	}
+	fromNowInvested := float64(0)
+	fromNowFixedSum := float64(0)
+	startYear := int(0)
+	startMonth := int(0)
+	if govProject.StartTime != nil {
+		startYear = govProject.StartTime.Year()
+		startMonth = int(govProject.StartTime.Month())
+		var exx exception.Exception
+		fromNowInvested, fromNowFixedSum, exx = gsi.repo.StartFormNowInvestedAndFixed(gsi.db, govProgress.ProjectID, startYear, startMonth, year, month)
+		if exx != nil {
+			return nil, ex
+		}
+	}
+	resp, err = vo.NewGovProgressResponse(govProgress, total_plan_invested, fromNowInvested, fromNowFixedSum)
 	if err != nil {
 		return nil, exception.Wrap(response.ExceptionUnmarshalJSON, err)
 	}
