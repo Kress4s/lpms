@@ -49,7 +49,11 @@ func (gsi *govProgressServiceImpl) Create(openID string, param *vo.GovProgressRe
 func (gsi *govProgressServiceImpl) Get(id int64, year, month int) (*vo.GovProgressResp, exception.Exception) {
 	govProgress, ex := gsi.repo.Get(gsi.db, id, year, month)
 	if ex != nil {
-		return nil, ex
+		if ex.Type() == response.ExceptionRecordNotFound {
+			return nil, nil
+		} else {
+			return nil, ex
+		}
 	}
 	govProject, ex := gsi.projectRepo.Get(gsi.db, govProgress.ProjectID)
 	if ex != nil {

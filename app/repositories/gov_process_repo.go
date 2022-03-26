@@ -98,7 +98,7 @@ func (grr *GovProgressRepoImpl) Get(db *gorm.DB, id int64, year, month int) (*mo
 	govProgress := models.GovProgress{}
 	res := db.Where(&models.GovProgress{ProjectID: id, Month: month, Year: year}).Find(&govProgress)
 	if res.RowsAffected == 0 {
-		return nil, nil
+		return nil, exception.New(response.ExceptionRecordNotFound, "recode not found")
 	}
 	if res.Error != nil {
 		return nil, exception.Wrap(response.ExceptionDatabase, res.Error)
