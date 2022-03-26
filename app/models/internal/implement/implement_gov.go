@@ -46,7 +46,7 @@ type ImplementGov struct {
 	FinishTime              *time.Time      `gorm:"column:finish_time;type:timestamp;comment:竣工时间"`
 	Type                    int             `gorm:"column:type;type:integer;not null;comment:项目本质类型 1:政府项目,2:产业项目"`
 	ProjectCode             string          `gorm:"column:project_code;type:varchar(50);not null;comment:项目编码"`
-	DutyUint                string          `gorm:"column:project_code;type:varchar(500);comment:责任单位"`
+	DutyUint                string          `gorm:"column:duty_unit;type:varchar(500);comment:责任单位"`
 }
 
 func (ImplementGov) TableName() string {
