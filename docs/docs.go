@@ -2358,11 +2358,23 @@ const docTemplate_swagger = `{
                     "description": "项目ID",
                     "type": "integer"
                 },
+                "start_fixed_invested": {
+                    "description": "开工至今累计固投",
+                    "type": "number"
+                },
+                "start_sum_invest": {
+                    "description": "开工至今累计投资额",
+                    "type": "number"
+                },
+                "total_plan_invested": {
+                    "description": "一月至本月计划累计完成投资额",
+                    "type": "number"
+                },
                 "year": {
                     "description": "年份",
                     "type": "integer"
                 },
-                "year_sum__fixed_invested": {
+                "year_sum_fixed_invested": {
                     "description": "当年累计固投(万)",
                     "type": "number"
                 },
@@ -2703,9 +2715,21 @@ const docTemplate_swagger = `{
         "vo.ImplementGovCountFilter": {
             "type": "object",
             "properties": {
+                "begin_invest": {
+                    "description": "总投资额范围开始",
+                    "type": "number"
+                },
                 "construct_subject": {
                     "description": "建设主体  ***注意:（所有参数，有就传，无则不传）***",
                     "type": "string"
+                },
+                "duty_unit": {
+                    "description": "责任单位",
+                    "type": "string"
+                },
+                "end_invest": {
+                    "description": "总投资额范围结束",
+                    "type": "number"
                 },
                 "end_time": {
                     "description": "开工结束时间",
@@ -2744,6 +2768,10 @@ const docTemplate_swagger = `{
         "vo.ImplementGovFilterParam": {
             "type": "object",
             "properties": {
+                "begin_invest": {
+                    "description": "总投资额范围开始",
+                    "type": "number"
+                },
                 "construct_subject": {
                     "description": "建设主体  ***注意:（所有参数，有就传，无则不传）***",
                     "type": "string"
@@ -2755,6 +2783,14 @@ const docTemplate_swagger = `{
                 "cur_year_all_end": {
                     "description": "当年 终止时间(开区间) eg : 2023-01-01 00:00:00",
                     "type": "string"
+                },
+                "duty_unit": {
+                    "description": "责任单位",
+                    "type": "string"
+                },
+                "end_invest": {
+                    "description": "总投资额范围结束",
+                    "type": "number"
                 },
                 "end_time": {
                     "description": "开工结束时间",
@@ -2825,6 +2861,10 @@ const docTemplate_swagger = `{
                     "description": "前期工作联系人",
                     "type": "string"
                 },
+                "duty_unit": {
+                    "description": "责任单位",
+                    "type": "string"
+                },
                 "enter_db_type": {
                     "description": "入库类别 0:A类,1:B类;2:C类",
                     "type": "integer"
@@ -2881,6 +2921,10 @@ const docTemplate_swagger = `{
                     "description": "重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型",
                     "type": "integer"
                 },
+                "project_code": {
+                    "description": "项目编码",
+                    "type": "string"
+                },
                 "project_consumption": {
                     "description": "工程费用",
                     "type": "number"
@@ -2904,6 +2948,10 @@ const docTemplate_swagger = `{
                 "total_investment": {
                     "description": "总投资",
                     "type": "number"
+                },
+                "type": {
+                    "description": "项目本质类型 1:政府项目 2：产业项目",
+                    "type": "integer"
                 },
                 "upload_cad_id": {
                     "description": "CAD文件ID(上传文件接口返回的ID)",
@@ -2940,6 +2988,10 @@ const docTemplate_swagger = `{
                 },
                 "contract": {
                     "description": "前期工作联系人",
+                    "type": "string"
+                },
+                "duty_unit": {
+                    "description": "责任单位",
                     "type": "string"
                 },
                 "enter_db_type": {
@@ -3002,6 +3054,10 @@ const docTemplate_swagger = `{
                     "description": "重点类型; 0:省重点实施项目,1:省重点预备项目,2:省重大产业项目;3:省4+1项目;4:省6千亿项目;5:市重点实施项目;6:市重点预备项目;7:无重点类型",
                     "type": "integer"
                 },
+                "project_code": {
+                    "description": "项目编码",
+                    "type": "string"
+                },
                 "project_consumption": {
                     "description": "工程费用",
                     "type": "number"
@@ -3029,6 +3085,10 @@ const docTemplate_swagger = `{
                 "total_investment": {
                     "description": "总投资",
                     "type": "number"
+                },
+                "type": {
+                    "description": "项目本质类型 1:政府项目 2：产业项目",
+                    "type": "integer"
                 },
                 "upload_cad_id": {
                     "description": "CAD文件ID(上传文件接口返回的ID)",
@@ -3109,6 +3169,10 @@ const docTemplate_swagger = `{
                     "description": "建设主体",
                     "type": "string"
                 },
+                "duty_unit": {
+                    "description": "责任单位",
+                    "type": "string"
+                },
                 "finish_time": {
                     "description": "竣工时间",
                     "type": "string"
@@ -3129,6 +3193,10 @@ const docTemplate_swagger = `{
                     "description": "计划开工时间",
                     "type": "string"
                 },
+                "project_code": {
+                    "description": "项目编码",
+                    "type": "string"
+                },
                 "project_type": {
                     "description": "项目类型",
                     "type": "integer"
@@ -3139,6 +3207,10 @@ const docTemplate_swagger = `{
                 },
                 "status": {
                     "description": "状态",
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "项目本质类型 1:政府项目 2：产业项目",
                     "type": "integer"
                 }
             }
@@ -3199,6 +3271,10 @@ const docTemplate_swagger = `{
                 "expiry": {
                     "description": "token 到期时间 默认两小时",
                     "type": "integer"
+                },
+                "is_admin": {
+                    "description": "是否是管理员",
+                    "type": "boolean"
                 },
                 "token_type": {
                     "description": "认证类型",

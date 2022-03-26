@@ -44,6 +44,9 @@ type ImplementGov struct {
 	Status                  int             `gorm:"column:status;type:integer;;not null;comment:项目状态 0:未开工,1:开工待审核,2:已开工;3:竣工待审核;4:已竣工"`
 	StartTime               *time.Time      `gorm:"column:start_time;type:timestamp;comment:开工时间"`
 	FinishTime              *time.Time      `gorm:"column:finish_time;type:timestamp;comment:竣工时间"`
+	Type                    int             `gorm:"column:type;type:integer;not null;comment:项目本质类型 1:政府项目,2:产业项目"`
+	ProjectCode             string          `gorm:"column:project_code;type:varchar(50);not null;comment:项目编码"`
+	DutyUint                string          `gorm:"column:project_code;type:varchar(500);comment:责任单位"`
 }
 
 func (ImplementGov) TableName() string {

@@ -23,6 +23,7 @@ type implementGovServiceImpl struct {
 	repo           repositories.ImplementGovRepo
 	objRepo        repositories.ObjectRepo
 	GovProcessRepo repositories.GovProgressRepo
+	userRepo       repositories.UserRepo
 }
 
 func GetImplementGovService() ImplementGovService {
@@ -32,6 +33,7 @@ func GetImplementGovService() ImplementGovService {
 			repo:           repositories.GetImplementGovRepo(),
 			objRepo:        repositories.GetObjectRepo(),
 			GovProcessRepo: repositories.GetGovProgressRepo(),
+			userRepo:       repositories.GetUserRepo(),
 		}
 	})
 	return implementGovServiceInstance
@@ -66,7 +68,11 @@ func (isi *implementGovServiceImpl) Get(id int64) (*vo.ImplementGovResp, excepti
 
 func (isi *implementGovServiceImpl) List(user string, params *vo.ImplementGovFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination,
 	exception.Exception) {
-	count, projects, ex := isi.repo.List(isi.db, pageInfo, params, user)
+	userInfo, ex := isi.userRepo.Get(isi.db, user)
+	if ex != nil {
+		return nil, ex
+	}
+	count, projects, ex := isi.repo.List(isi.db, pageInfo, params, userInfo.IsAdmin, user)
 	if ex != nil {
 		return nil, ex
 	}
@@ -82,6 +88,9 @@ func (isi *implementGovServiceImpl) List(user string, params *vo.ImplementGovFil
 			FinishTime:       projects[i].FinishTime,
 			Status:           projects[i].Status,
 			StartTime:        projects[i].StartTime,
+			ProjectCode:      projects[i].ProjectCode,
+			DutyUnit:         projects[i].DutyUint,
+			Type:             projects[i].Type,
 		})
 	}
 	return vo.NewDataPagination(count, resp, pageInfo), nil
@@ -168,7 +177,11 @@ func (isi *implementGovServiceImpl) MultiDelete(ids string) exception.Exception 
 }
 
 func (isi *implementGovServiceImpl) ListStatusCount(user string, params *vo.ImplementGovCountFilter) ([]vo.StatusCountResp, exception.Exception) {
-	res, ex := isi.repo.ListStatusCount(isi.db, params, user)
+	userInfo, ex := isi.userRepo.Get(isi.db, user)
+	if ex != nil {
+		return nil, ex
+	}
+	res, ex := isi.repo.ListStatusCount(isi.db, params, userInfo.IsAdmin, user)
 	if ex != nil {
 		return nil, ex
 	}

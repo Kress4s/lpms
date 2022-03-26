@@ -39,7 +39,7 @@ type LoginService interface {
 
 func (ls *loginServiceImpl) Login(username, password string) (*vo.LoginResponse, exception.Exception) {
 	// password = string(tools.Base64Encode([]byte(password)))
-	ok, status, userID, ex := ls.repo.CheckPassword(ls.db, username, password)
+	ok, status, isAdmin, userID, ex := ls.repo.CheckPassword(ls.db, username, password)
 	if ex != nil || !ok {
 		return nil, ex
 	}
@@ -52,5 +52,6 @@ func (ls *loginServiceImpl) Login(username, password string) (*vo.LoginResponse,
 		AccessToken: token,
 		TokenType:   constant.Authorization,
 		Expiry:      exp,
+		IsAdmin:     isAdmin,
 	}, nil
 }

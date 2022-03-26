@@ -30,11 +30,11 @@ func GetImplementGovRepo() ImplementGovRepo {
 type ImplementGovRepo interface {
 	Create(db *gorm.DB, impl *models.ImplementGov) exception.Exception
 	Get(db *gorm.DB, id int64) (*models.ImplementGov, exception.Exception)
-	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImplementGovFilterParam, user string) (int64, []models.ImplementGov,
+	List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImplementGovFilterParam, isAdmin bool, user string) (int64, []models.ImplementGov,
 		exception.Exception)
 	Delete(db *gorm.DB, id int64) exception.Exception
 	MultiDelete(db *gorm.DB, ids []int64) exception.Exception
-	ListStatusCount(db *gorm.DB, params *vo.ImplementGovCountFilter, user string) ([]ListCountModel, exception.Exception)
+	ListStatusCount(db *gorm.DB, params *vo.ImplementGovCountFilter, isAdmin bool, user string) ([]ListCountModel, exception.Exception)
 }
 
 func (igi *ImplementGovRepoImpl) Create(db *gorm.DB, impl *models.ImplementGov) exception.Exception {
@@ -53,12 +53,12 @@ func (igi *ImplementGovRepoImpl) Get(db *gorm.DB, id int64) (*models.ImplementGo
 	return &reserve, nil
 }
 
-func (igi *ImplementGovRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImplementGovFilterParam, user string) (int64,
+func (igi *ImplementGovRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params *vo.ImplementGovFilterParam, isAdmin bool, user string) (int64,
 	[]models.ImplementGov, exception.Exception) {
 	data := make([]models.ImplementGov, 0)
 	tx := db.Table(tables.ImplementGov).Select("id, name, level, project_type, construct_subject, create_at, status, start_time, finish_time").
 		Where("status <> ? and status <> ?", constant.StartInspecting, constant.FinishInspect)
-	if user != "admin" {
+	if !isAdmin {
 		tx = tx.Where("create_by = ?", user)
 	}
 	if params.Name != "" {
@@ -94,8 +94,14 @@ func (igi *ImplementGovRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params
 	if params.Status != nil {
 		tx = tx.Where("status = ?", params.Status)
 	}
+	if params.BeginInvest != nil && params.EndInvest != nil {
+		tx = tx.Where("total_investment <= ? and total_investment >= ?", params.EndInvest, params.BeginInvest)
+	}
+	if params.DutyUnit != "" {
+		tx = tx.Where("duty_unit = ?", params.DutyUnit)
+	}
 	count := int64(0)
-	tx = tx.Limit(pageInfo.PageSize).Offset(pageInfo.Offset()).
+	tx = tx.Limit(pageInfo.PageSize).Offset(pageInfo.Offset()).Order("type ASC").Order("project_code ASC").
 		Scan(&data).Limit(-1).Offset(-1).Count(&count)
 	return count, data, exception.Wrap(response.ExceptionDatabase, tx.Error)
 }
@@ -114,11 +120,11 @@ type ListCountModel struct {
 }
 
 // 统计数量 未开工、开工建设、 竣工
-func (igi *ImplementGovRepoImpl) ListStatusCount(db *gorm.DB, params *vo.ImplementGovCountFilter, user string) ([]ListCountModel, exception.Exception) {
+func (igi *ImplementGovRepoImpl) ListStatusCount(db *gorm.DB, params *vo.ImplementGovCountFilter, isAdmin bool, user string) ([]ListCountModel, exception.Exception) {
 	res := make([]ListCountModel, 0)
 	subTx := db.Table(tables.ImplementGov).Select("status, create_at").
 		Where("status in (?, ?, ?)", constant.UnStart, constant.Started, constant.Finished)
-	if user != "admin" {
+	if !isAdmin {
 		subTx = subTx.Where("create_by = ?", user)
 	}
 	if params.Name != "" {
@@ -141,6 +147,12 @@ func (igi *ImplementGovRepoImpl) ListStatusCount(db *gorm.DB, params *vo.Impleme
 	}
 	if params.StartTime != "" && params.EndTime != "" {
 		subTx = subTx.Where("start_time <= ? and start_time >= ?", params.PlanEnd, params.PlanBegin)
+	}
+	if params.BeginInvest != nil && params.EndInvest != nil {
+		subTx = subTx.Where("total_investment <= ? and total_investment >= ?", params.EndInvest, params.BeginInvest)
+	}
+	if params.DutyUnit != "" {
+		subTx = subTx.Where("duty_unit = ?", params.DutyUnit)
 	}
 	tx := db.Table("(?) AS sub", subTx).Select("sub.status AS status, count(*) AS count").Group("sub.status").Find(&res)
 	if tx.Error != nil {

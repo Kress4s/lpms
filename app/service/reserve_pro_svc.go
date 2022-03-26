@@ -20,17 +20,19 @@ var (
 )
 
 type reserveServiceImpl struct {
-	db      *gorm.DB
-	repo    repositories.ReserveRepo
-	objRepo repositories.ObjectRepo
+	db       *gorm.DB
+	repo     repositories.ReserveRepo
+	objRepo  repositories.ObjectRepo
+	userRepo repositories.UserRepo
 }
 
 func GetReserveService() ReserveService {
 	reserveOnce.Do(func() {
 		reserveServiceInstance = &reserveServiceImpl{
-			db:      database.GetDriver(),
-			repo:    repositories.GetReserveRepo(),
-			objRepo: repositories.GetObjectRepo(),
+			db:       database.GetDriver(),
+			repo:     repositories.GetReserveRepo(),
+			objRepo:  repositories.GetObjectRepo(),
+			userRepo: repositories.GetUserRepo(),
 		}
 	})
 	return reserveServiceInstance
@@ -73,7 +75,11 @@ func (rsi *reserveServiceImpl) Get(id int64) (*vo.ReserveResp, exception.Excepti
 }
 
 func (rsi *reserveServiceImpl) List(user string, params *vo.ReserveFilterParam, pageInfo *vo.PageInfo) (*vo.DataPagination, exception.Exception) {
-	count, projects, ex := rsi.repo.List(rsi.db, pageInfo, params, user)
+	userInfo, ex := rsi.userRepo.Get(rsi.db, user)
+	if ex != nil {
+		return nil, ex
+	}
+	count, projects, ex := rsi.repo.List(rsi.db, pageInfo, params, userInfo.IsAdmin, user)
 	if ex != nil {
 		return nil, ex
 	}
