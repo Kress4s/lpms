@@ -312,6 +312,8 @@ type ListImplementGovResp struct {
 	DutyUnit string `json:"duty_unit"`
 	// 项目本质类型 1:政府项目 2：产业项目
 	Type int `json:"type"`
+	// 投资额
+	TotalInvestment *float64 `json:"total_investment"`
 }
 
 type StatusCountResp struct {
