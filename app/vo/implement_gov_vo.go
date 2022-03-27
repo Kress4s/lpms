@@ -13,6 +13,8 @@ type ImplementGovFilterParam struct {
 	Name string `json:"name"`
 	// 项目级别
 	Level *int `json:"level"`
+	// 项目分类 1:政府投资项目 2：社会产业项目
+	Type *int `json:"type"`
 	// 项目类型
 	ProjectType *int `json:"project_type"`
 	// 建设主体  ***注意:（所有参数，有就传，无则不传）***

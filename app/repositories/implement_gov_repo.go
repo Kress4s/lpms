@@ -101,6 +101,9 @@ func (igi *ImplementGovRepoImpl) List(db *gorm.DB, pageInfo *vo.PageInfo, params
 	if params.DutyUnit != "" {
 		tx = tx.Where("duty_unit = ?", params.DutyUnit)
 	}
+	if params.Type != nil {
+		tx = tx.Where("type = ?", params.Type)
+	}
 	count := int64(0)
 	tx = tx.Limit(pageInfo.PageSize).Offset(pageInfo.Offset()).Order("type ASC").Order("project_code ASC").
 		Scan(&data).Limit(-1).Offset(-1).Count(&count)
