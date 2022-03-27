@@ -158,6 +158,9 @@ func (igi *ImplementGovRepoImpl) ListStatusCount(db *gorm.DB, params *vo.Impleme
 	if params.DutyUnit != "" {
 		subTx = subTx.Where("duty_unit = ?", params.DutyUnit)
 	}
+	if params.Type != nil {
+		subTx = subTx.Where("type = ?", params.Type)
+	}
 	tx := db.Table("(?) AS sub", subTx).Select("sub.status AS status, count(*) AS count").Group("sub.status").Find(&res)
 	if tx.Error != nil {
 		return nil, exception.Wrap(response.ExceptionDatabase, tx.Error)
