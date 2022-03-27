@@ -2827,6 +2827,10 @@ const docTemplate_swagger = `{
                 "status": {
                     "description": "状态(必传参数) -1: 当年全部(注意cur_year_all_begin和cur_year_all_end带上) 0:未开工, 2:开工建设; 4:竣工库(如果是 当年竣工，必须要带上cur_year_all_begin和cur_year_all_end参数)",
                     "type": "integer"
+                },
+                "type": {
+                    "description": "项目分类 1:政府投资项目 2：社会产业项目",
+                    "type": "integer"
                 }
             }
         },
