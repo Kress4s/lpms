@@ -68,6 +68,8 @@ type ImplementGovCountFilter struct {
 	EndInvest *float64 `json:"end_invest"`
 	// 责任单位
 	DutyUnit string `json:"duty_unit"`
+	// 项目分类 1:政府投资项目 2：社会产业项目
+	Type *int `json:"type"`
 }
 
 type ImplementGovReq struct {
