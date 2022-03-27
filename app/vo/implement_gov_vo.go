@@ -296,6 +296,8 @@ type ListImplementGovResp struct {
 	ConstructSubject string `json:"construct_subject"`
 	// 计划开工时间
 	PlanBegin *time.Time `json:"plan_begin"`
+	// 开工时间
+	BeginImpl *time.Time `json:"begin_impl"`
 	// 竣工时间
 	FinishTime *time.Time `json:"finish_time"`
 	// 状态

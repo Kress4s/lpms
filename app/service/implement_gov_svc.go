@@ -85,6 +85,7 @@ func (isi *implementGovServiceImpl) List(user string, params *vo.ImplementGovFil
 			ProjectType:      projects[i].ProjectType,
 			ConstructSubject: projects[i].ConstructSubject,
 			PlanBegin:        projects[i].PlanBegin,
+			BeginImpl:        projects[i].BeginImpl,
 			FinishTime:       projects[i].FinishTime,
 			Status:           projects[i].Status,
 			StartTime:        projects[i].StartTime,

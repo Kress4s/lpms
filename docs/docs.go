@@ -3165,6 +3165,10 @@ const docTemplate = `{
         "vo.ListImplementGovResp": {
             "type": "object",
             "properties": {
+                "begin_impl": {
+                    "description": "开工时间",
+                    "type": "string"
+                },
                 "construct_subject": {
                     "description": "建设主体",
                     "type": "string"

@@ -726,6 +726,9 @@ definitions:
     type: object
   vo.ListImplementGovResp:
     properties:
+      begin_impl:
+        description: 开工时间
+        type: string
       construct_subject:
         description: 建设主体
         type: string
