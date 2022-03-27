@@ -3217,6 +3217,10 @@ const docTemplate_swagger = `{
                     "description": "状态",
                     "type": "integer"
                 },
+                "total_investment": {
+                    "description": "投资额",
+                    "type": "number"
+                },
                 "type": {
                     "description": "项目本质类型 1:政府项目 2：产业项目",
                     "type": "integer"

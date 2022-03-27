@@ -92,6 +92,7 @@ func (isi *implementGovServiceImpl) List(user string, params *vo.ImplementGovFil
 			ProjectCode:      projects[i].ProjectCode,
 			DutyUnit:         projects[i].DutyUint,
 			Type:             projects[i].Type,
+			TotalInvestment:  projects[i].TotalInvestment,
 		})
 	}
 	return vo.NewDataPagination(count, resp, pageInfo), nil
