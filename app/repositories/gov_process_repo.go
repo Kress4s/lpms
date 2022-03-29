@@ -35,6 +35,7 @@ type GovProgressRepo interface {
 	DeleteByProjectID(db *gorm.DB, projectID ...int64) exception.Exception
 	ListInvested(db *gorm.DB, projectID int64, year int) ([]models.GovProgress, exception.Exception)
 	FormNowInvested(db *gorm.DB, projectID int64, year, month int) (float64, exception.Exception)
+	BetchCreate(db *gorm.DB, govProgress []models.GovProgress) exception.Exception
 	StartFormNowInvestedAndFixed(db *gorm.DB, projectID int64, startYear, startMonth, year, month int) (float64, float64, exception.Exception)
 }
 
@@ -43,6 +44,10 @@ func (grr *GovProgressRepoImpl) Create(db *gorm.DB, govProgress []models.GovProg
 		Columns:   []clause.Column{{Name: "id"}},
 		DoUpdates: clause.AssignmentColumns([]string{"plan_invest", "plan_progress"}),
 	}).Create(&govProgress).Error)
+}
+
+func (grr *GovProgressRepoImpl) BetchCreate(db *gorm.DB, govProgress []models.GovProgress) exception.Exception {
+	return exception.Wrap(response.ExceptionDatabase, db.Create(&govProgress).Error)
 }
 
 func (grr *GovProgressRepoImpl) ListProgressPlan(db *gorm.DB, projectID int64, year int) ([]models.ListGovProgressPlan, exception.Exception) {

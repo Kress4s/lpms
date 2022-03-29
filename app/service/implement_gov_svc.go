@@ -50,8 +50,23 @@ type ImplementGovService interface {
 }
 
 func (isi *implementGovServiceImpl) Create(openID string, param *vo.ImplementGovReq) exception.Exception {
+	tx := isi.db.Begin()
+	if tx.Error != nil {
+		return exception.Wrap(response.ExceptionDatabase, tx.Error)
+	}
+	defer tx.Rollback()
 	res := param.ToModel(openID)
-	return isi.repo.Create(isi.db, res)
+	if ex := isi.repo.Create(tx, res); ex != nil {
+		return ex
+	}
+	progress := vo.MultiAddProcess(res.ID)
+	if ex := isi.GovProcessRepo.BetchCreate(tx, progress); ex != nil {
+		return ex
+	}
+	if ex := tx.Commit().Error; ex != nil {
+		return exception.Wrap(response.ExceptionDatabase, ex)
+	}
+	return nil
 }
 
 func (isi *implementGovServiceImpl) Get(id int64) (*vo.ImplementGovResp, exception.Exception) {

@@ -2,6 +2,7 @@ package vo
 
 import (
 	"lpms/app/models"
+	"time"
 
 	"github.com/goccy/go-json"
 )
@@ -197,4 +198,17 @@ type GovProgressCompare struct {
 	ActualProgress string `json:"actual_progress"`
 	// 完成度
 	Completeness float64 `json:"completeness"`
+}
+
+func MultiAddProcess(projectID int64) []models.GovProgress {
+	res := make([]models.GovProgress, 0, 12)
+	now := time.Now()
+	for i := 1; i <= 12; i++ {
+		res = append(res, models.GovProgress{
+			ProjectID: projectID,
+			Year:      now.Year(),
+			Month:     i,
+		})
+	}
+	return res
 }

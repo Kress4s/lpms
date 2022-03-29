@@ -16,7 +16,7 @@ type GovProgress struct {
 	ProjectID              int64           `gorm:"column:project_id;type:bigint;not null;comment:项目ID"`
 	Year                   int             `gorm:"column:year;type:integer;not null;comment:年份"`
 	Month                  int             `gorm:"column:month;type:integer;not null;comment:月份"`
-	PlanInvest             *float64        `gorm:"column:plan_invest;type:numeric;not null;comment:本月计划投资额(万)"`
+	PlanInvest             *float64        `gorm:"column:plan_invest;type:numeric;comment:本月计划投资额(万)"`
 	PlanProgress           string          `gorm:"column:plan_progress;type:text;not null;comment:本月计划形象进度"`
 	PlanInvested           *float64        `gorm:"column:plan_invested;type:numeric;comment:本月完成投资额(万)"`
 	YearSumInvested        *float64        `gorm:"column:year_sum_invested;type:numeric;comment:当年累计投资额(万)"`
