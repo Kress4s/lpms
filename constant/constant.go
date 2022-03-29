@@ -68,3 +68,9 @@ const (
 	DateTimeFormat = "2006-01-02 15:04:05"
 	DateFormat     = "2006-01-02"
 )
+
+// progress
+const (
+	Red   = 1
+	Green = 2
+)

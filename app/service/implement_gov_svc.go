@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -76,8 +77,15 @@ func (isi *implementGovServiceImpl) List(user string, params *vo.ImplementGovFil
 	if ex != nil {
 		return nil, ex
 	}
+	now := time.Now()
+	year := now.Year()
+	month := int(now.Month())
 	resp := make([]vo.ListImplementGovResp, 0, len(projects))
 	for i := range projects {
+		light, ex := isi.repo.ProgressLight(isi.db, projects[i].ID, year, month)
+		if ex != nil {
+			return nil, ex
+		}
 		resp = append(resp, vo.ListImplementGovResp{
 			ID:               projects[i].ID,
 			Name:             projects[i].Name,
@@ -93,6 +101,7 @@ func (isi *implementGovServiceImpl) List(user string, params *vo.ImplementGovFil
 			DutyUnit:         projects[i].DutyUint,
 			Type:             projects[i].Type,
 			TotalInvestment:  projects[i].TotalInvestment,
+			Progress:         light,
 		})
 	}
 	return vo.NewDataPagination(count, resp, pageInfo), nil

@@ -35,10 +35,24 @@ type ImplementGovRepo interface {
 	Delete(db *gorm.DB, id int64) exception.Exception
 	MultiDelete(db *gorm.DB, ids []int64) exception.Exception
 	ListStatusCount(db *gorm.DB, params *vo.ImplementGovCountFilter, isAdmin bool, user string) ([]ListCountModel, exception.Exception)
+	ProgressLight(db *gorm.DB, projectID int64, year, month int) (int, exception.Exception)
 }
 
 func (igi *ImplementGovRepoImpl) Create(db *gorm.DB, impl *models.ImplementGov) exception.Exception {
 	return exception.Wrap(response.ExceptionDatabase, db.Create(impl).Error)
+}
+
+func (igi *ImplementGovRepoImpl) ProgressLight(db *gorm.DB, projectID int64, year, month int) (int, exception.Exception) {
+	count := int64(0)
+	tx := db.Table(tables.GovProgress).Where("project_id = ? and year = ? and month <= ? and status = ?", projectID, year, month, 1).
+		Count(&count)
+	if tx.Error != nil {
+		return 0, exception.Wrap(response.ExceptionDatabase, tx.Error)
+	}
+	if int(count) == month {
+		return constant.Green, nil
+	}
+	return constant.Red, nil
 }
 
 func (igi *ImplementGovRepoImpl) Get(db *gorm.DB, id int64) (*models.ImplementGov, exception.Exception) {

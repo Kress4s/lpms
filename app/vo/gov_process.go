@@ -48,6 +48,7 @@ func (g *GovProgressReq) ToModel(openID string) []models.GovProgress {
 				Month:        g.Info[i].Month,
 				PlanInvest:   g.Info[i].PlanInvest,
 				PlanProgress: g.Info[i].PlanProgress,
+				Status:       0,
 				Base: models.Base{
 					UpdateBy: openID,
 					CreateBy: openID,
@@ -95,6 +96,8 @@ type GovProgressResp struct {
 	StartSumInvested float64 `json:"start_sum_invest"`
 	// 开工至今累计固投
 	StartFixedInvested float64 `json:"start_fixed_invested"`
+	// 填报状态  0:未提交，1:已提交
+	Status int `json:"status"`
 }
 
 func NewGovProgressResponse(r *models.GovProgress, total_plan_invested, start_sum, start_fixed float64) (*GovProgressResp, error) {
@@ -117,6 +120,7 @@ func NewGovProgressResponse(r *models.GovProgress, total_plan_invested, start_su
 		TotalPlanInvested:      total_plan_invested,
 		StartSumInvested:       start_sum,
 		StartFixedInvested:     start_fixed,
+		Status:                 r.Status,
 	}, nil
 }
 
@@ -139,9 +143,15 @@ type GovProgressUpdateReq struct {
 	Contracts string `json:"contracts"`
 	//备注
 	Comment string `json:"comment"`
+	// 操作方式：1：保存 2：提交
+	Method int `json:"method"`
 }
 
 func (g *GovProgressUpdateReq) ToMap(openID string) map[string]interface{} {
+	status := int(0)
+	if g.Method == 2 {
+		status = 1
+	}
 	return map[string]interface{}{
 		"plan_invested":             g.PlanInvested,
 		"year_sum_invested":         g.YearSumInvested,
@@ -153,6 +163,7 @@ func (g *GovProgressUpdateReq) ToMap(openID string) map[string]interface{} {
 		"contracts":                 json.RawMessage([]byte(g.Contracts)),
 		"comment":                   g.Comment,
 		"update_by":                 openID,
+		"status":                    status,
 	}
 }
 
@@ -167,6 +178,8 @@ type ListGovProgressPlan struct {
 	PlanInvest *float64 `json:"plan_invest"`
 	//本月计划形象进度
 	PlanProgress string `json:"plan_progress"`
+	// 计划提交状态 0:未提交，1:已提交
+	Status int `json:"status"`
 }
 
 type GovProgressCompare struct {

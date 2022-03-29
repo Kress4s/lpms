@@ -26,6 +26,7 @@ type GovProgress struct {
 	ProblemDetail          json.RawMessage `gorm:"column:problem_detail;type:jsonb;comment:需协调问题详情"`
 	ChangeContent          json.RawMessage `gorm:"column:change_content;type:jsonb;comment:本月产生联系单变更"`
 	Contracts              json.RawMessage `gorm:"column:contracts;type:jsonb;comment:本月新增合同信息"`
+	Status                 int             `gorm:"column:status;type:integer;default(0);comment:填报状态 0:未提交, 1:已提交"`
 	Comment                string          `gorm:"column:comment;type:text;comment:备注"`
 }
 

@@ -316,6 +316,8 @@ type ListImplementGovResp struct {
 	Type int `json:"type"`
 	// 投资额
 	TotalInvestment *float64 `json:"total_investment"`
+	// 进度 1：红灯 2绿灯
+	Progress int `json:"progress"`
 }
 
 type StatusCountResp struct {

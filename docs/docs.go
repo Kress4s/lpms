@@ -2366,6 +2366,10 @@ const docTemplate_swagger = `{
                     "description": "开工至今累计投资额",
                     "type": "number"
                 },
+                "status": {
+                    "description": "填报状态  0:未提交，1:已提交",
+                    "type": "integer"
+                },
                 "total_plan_invested": {
                     "description": "一月至本月计划累计完成投资额",
                     "type": "number"
@@ -2406,6 +2410,10 @@ const docTemplate_swagger = `{
                 "last_month_fixed_invested": {
                     "description": "上月完成固投(万)",
                     "type": "number"
+                },
+                "method": {
+                    "description": "操作方式：1：保存 2：提交",
+                    "type": "integer"
                 },
                 "plan_invested": {
                     "description": "本月完成投资额(万)",
@@ -2762,6 +2770,10 @@ const docTemplate_swagger = `{
                 "start_time": {
                     "description": "开工开始时间",
                     "type": "string"
+                },
+                "type": {
+                    "description": "项目分类 1:政府投资项目 2：社会产业项目",
+                    "type": "integer"
                 }
             }
         },
@@ -3119,6 +3131,10 @@ const docTemplate_swagger = `{
                     "description": "本月计划形象进度",
                     "type": "string"
                 },
+                "status": {
+                    "description": "计划提交状态 0:未提交，1:已提交",
+                    "type": "integer"
+                },
                 "year": {
                     "description": "年份",
                     "type": "integer"
@@ -3200,6 +3216,10 @@ const docTemplate_swagger = `{
                 "plan_begin": {
                     "description": "计划开工时间",
                     "type": "string"
+                },
+                "progress": {
+                    "description": "进度 1：红灯 2绿灯",
+                    "type": "integer"
                 },
                 "project_code": {
                     "description": "项目编码",
